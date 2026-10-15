@@ -93,3 +93,23 @@ that way if a cloud model is ever added:
   `git config core.hooksPath scripts/githooks` (once per clone).
 - Real keys belong in environment variables or the OS keychain, never in a file in this folder; `.gitignore`
   already excludes `.env*`, `*.key`, `*.pem` and similar.
+
+## The golden-set gate in CI
+
+`.github/workflows/golden-gate.yml` runs the golden set against the real local models and fails on any drop from
+`golden_baseline.json` or on any invented answer. It runs on a **self-hosted runner** (a Mac with Ollama and the
+models), nightly, on pushes to `main` that touch the answering code, and on demand (Actions tab → "Golden-set
+gate" → Run workflow). GitHub's hosted runners have neither Ollama nor a GPU.
+
+One-time setup on the Mac that has the models:
+
+1. Repository → Settings → Actions → Runners → **New self-hosted runner** → macOS, ARM64. Run the download
+   commands it shows, then configure with the extra label `ollama`:
+   `./config.sh --url https://github.com/<you>/legallens --token <one-time token from that page> --labels ollama`
+   (the token is single-use and expires within the hour; never paste it anywhere else).
+2. Keep it running: `./svc.sh install && ./svc.sh start` from the runner folder.
+3. Keep Ollama running: `brew services start ollama`, with `qwen2.5:7b-instruct` and `llama3.2:3b` pulled and
+   `legallens models download --what embeddings` done.
+
+Safety: a self-hosted runner runs whatever a workflow says, so keep the repository private and do not add
+`pull_request` triggers for outside contributors. The job fails early, with the fix, if Ollama or a model is missing.

@@ -1,0 +1,78 @@
+# The golden-set release gate (NFR-06): runs the 37-question set against the real local models and fails on any
+# drop from golden_baseline.json or on any invented answer.
+#
+# Needs a machine with Ollama and the models, so it runs on a SELF-HOSTED runner (your Mac), never on GitHub's
+# hosted runners. Until a runner with the labels below is registered, this job simply waits in the queue.
+# Safety: a self-hosted runner executes whatever a workflow tells it to. Keep this repository private, and never
+# trigger it from pull requests by strangers (this file does not use the pull_request event for that reason).
+name: Golden-set gate
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 7 * * *" # every day, 07:00 UTC
+  push:
+    branches: [main]
+    paths:
+      - "backend/src/legallens/orchestrator/**"
+      - "backend/src/legallens/search/**"
+      - "backend/src/legallens/models/**"
+      - "backend/src/legallens/drafting/**"
+      - "backend/src/legallens/ingestion/**"
+      - "backend/src/legallens/config.py"
+      - "backend/tests/slow/test_golden_set.py"
+      - "golden_baseline.json"
+      - ".github/workflows/golden-gate.yml"
+
+concurrency:
+  group: golden-gate
+  cancel-in-progress: false
+
+env:
+  ANSWER_MODEL: qwen2.5:7b-instruct
+
+jobs:
+  golden:
+    name: Golden set on the local models
+    runs-on: [self-hosted, macOS, ARM64, ollama]
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ollama is up and has the models
+        run: |
+          curl -sf http://127.0.0.1:11434/api/tags > /tmp/ollama-tags.json \
+            || { echo "Ollama is not running: start it (brew services start ollama)"; exit 1; }
+          for model in "$ANSWER_MODEL" llama3.2:3b; do
+            grep -q "\"$model\"" /tmp/ollama-tags.json \
+              || { echo "Model $model is not pulled: ollama pull $model"; exit 1; }
+          done
+
+      - name: Embedding models are downloaded
+        run: |
+          test -d "$HOME/Library/Application Support/LegalLens/models/hf/BAAI--bge-m3" \
+            || { echo "Run: legallens models download --what embeddings"; exit 1; }
+
+      - name: Install
+        working-directory: backend
+        run: uv sync --frozen
+
+      - name: Run the golden set
+        working-directory: backend
+        env:
+          LEGALLENS_COMPARE_MODELS: ${{ env.ANSWER_MODEL }}
+        run: uv run pytest -m llm tests/slow/test_golden_set.py -q
+
+      - name: Compare with the baseline
+        run: python3 scripts/release_gate.py --model "$ANSWER_MODEL"
+
+      - name: Keep the results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-set-results
+          path: |
+            GOLDEN_SET.md
+            GOLDEN_SET.json
+            GOLDEN_UNVERIFIED.json
+          retention-days: 30
