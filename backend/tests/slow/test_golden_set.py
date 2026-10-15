@@ -115,7 +115,7 @@ def test_golden_set(tmp_path: Path) -> None:
         api.ingest(matter["id"], *DOCS)
         # File names of every document in the matter, attachments included.
         listing = client.get(f"/api/v1/matters/{matter['id']}/documents").json()
-        names = {d["id"]: d["filename"] for d in listing["items"]}
+        doc_names = {d["id"]: d["filename"] for d in listing["items"]}
         for model in names:
             settings.llm_answer_model = model
             right = cited = verified = refused = invented = 0
@@ -130,7 +130,7 @@ def test_golden_set(tmp_path: Path) -> None:
                 if case.must:
                     low = content.lower()
                     ok_text = all(any(alt in low for alt in group) for group in case.must)
-                    ok_doc = any(case.doc in names.get(c["document_id"], "") for c in citations)
+                    ok_doc = any(case.doc in doc_names.get(c["document_id"], "") for c in citations)
                     ok_ver = bool(citations) and all(c["verified"] for c in citations)
                     if not ok_ver:
                         unverified.append(
