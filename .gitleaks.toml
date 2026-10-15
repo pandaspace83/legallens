@@ -1,0 +1,26 @@
+# Secret scanning (CI job "secrets" and scripts/githooks/pre-commit). The default rules cover cloud, model-provider
+# and source-host credentials. LegalLens has no real secrets today; add an [allowlist] entry only for a documented
+# fake value, never to silence a real finding.
+title = "LegalLens"
+
+[extend]
+useDefault = true
+
+# Extra rules for the providers a future cloud model might use, in case the default set lags behind.
+[[rules]]
+id = "legallens-anthropic-key"
+description = "Anthropic API key"
+regex = '''sk-ant-[A-Za-z0-9_\-]{20,}'''
+keywords = ["sk-ant-"]
+
+[[rules]]
+id = "legallens-azure-openai-key"
+description = "Azure OpenAI or Cognitive Services key assigned in a file"
+regex = '''(?i)(azure[_-]?openai[_-]?(api[_-]?)?key|cognitive[_-]?services[_-]?key)\s*[:=]\s*['"]?[A-Za-z0-9]{32,}'''
+keywords = ["azure"]
+
+[[rules]]
+id = "legallens-db-key"
+description = "A LegalLens database key (64 hex characters) assigned to LEGALLENS_DB_KEY"
+regex = '''LEGALLENS_DB_KEY\s*[:=]\s*['"]?[0-9a-fA-F]{64}'''
+keywords = ["legallens_db_key"]

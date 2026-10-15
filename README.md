@@ -82,3 +82,14 @@ npm run api:fixtures                       # re-record contract fixtures (needs 
 lint, format, unit tests, build and the mock-data browser tests for the frontend; and a check that `openapi.json`
 matches the app. The real-model tests, the real-backend UAT and the golden-set gate need Ollama and run locally
 with `scripts/release_gate.sh`.
+
+## Secret scanning
+
+LegalLens uses no API keys today (all models are local), and nothing in the repository is a secret. To keep it
+that way if a cloud model is ever added:
+
+- CI job `secrets` scans the full git history with gitleaks (`.gitleaks.toml`) on every push and fails on a finding.
+- A local pre-commit hook blocks a commit that adds one: `brew install gitleaks`, then
+  `git config core.hooksPath scripts/githooks` (once per clone).
+- Real keys belong in environment variables or the OS keychain, never in a file in this folder; `.gitignore`
+  already excludes `.env*`, `*.key`, `*.pem` and similar.

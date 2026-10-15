@@ -97,3 +97,19 @@ jobs:
           fresh = json.load(open("/tmp/openapi.json"))
           sys.exit(0 if committed == fresh else "openapi.json is out of date: run `uv run legallens openapi`")
           PY
+
+  secrets:
+    name: Secret scan (gitleaks, full history)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # every commit, so a key that was committed and later deleted is still found
+      - name: Install gitleaks 8.21.2 (pinned, checked against its SHA-256)
+        run: |
+          curl -sSL -o gitleaks.tgz https://github.com/gitleaks/gitleaks/releases/download/v8.21.2/gitleaks_8.21.2_linux_x64.tar.gz
+          echo "5bc41815076e6ed6ef8fbecc9d9b75bcae31f39029ceb55da08086315316e3ba  gitleaks.tgz" | sha256sum -c -
+          tar xzf gitleaks.tgz gitleaks
+      - name: Scan
+        run: ./gitleaks detect --source . --config .gitleaks.toml --redact --no-banner --verbose
