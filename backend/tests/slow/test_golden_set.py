@@ -112,7 +112,7 @@ def test_golden_set(tmp_path: Path) -> None:
     try:
         api = Api(client, settings, samples)
         matter = api.create_matter()
-        ids = dict(zip(api.ingest(matter["id"], *DOCS), DOCS, strict=True))
+        api.ingest(matter["id"], *DOCS)
         # File names of every document in the matter, attachments included.
         listing = client.get(f"/api/v1/matters/{matter['id']}/documents").json()
         names = {d["id"]: d["filename"] for d in listing["items"]}
