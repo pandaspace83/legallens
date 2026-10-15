@@ -26,6 +26,8 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: backend/uv.lock
+      - name: Tesseract (the fast converter OCRs scanned pages with it)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends tesseract-ocr
       - name: Install (Python version comes from .python-version)
         run: uv sync --frozen
       - name: Lint
@@ -34,7 +36,7 @@ jobs:
         run: uv run ruff format --check .
       - name: Types
         run: uv run mypy src
-      - name: Tests (the default run: no real models)
+      - name: Tests (default run, no real models)
         run: uv run pytest -q
 
   frontend:
