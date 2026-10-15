@@ -4,7 +4,7 @@
 
 | Model | Correct | Right document cited | All citations verified | Correct 'not found' | Invented answers | Avg per question |
 |---|---|---|---|---|---|---|
-| qwen2.5:7b-instruct | 23/24 | 22/24 | 20/24 | 10/10 | 0 | 19.9 s |
+| qwen2.5:7b-instruct | 23/24 | 22/24 | 23/24 | 10/10 | 0 | 17.8 s |
 
 ## Per question
 
@@ -16,7 +16,7 @@
 | qwen2.5:7b-instruct | What is the monthly fee for warehousing? | ok | found | 1 | 'The monthly fee for warehousing is $8,500 [1]. "Warehousing $8,500 Monthly in advance" [1]' |
 | qwen2.5:7b-instruct | How much is the freight brokerage fee? | ok | found | 1 | 'The freight brokerage fee is $12,000 per month. [1] "Freight brokerage $12,000 Monthly in ' |
 | qwen2.5:7b-instruct | What is the charge for expedited handling? | ok | found | 1 | 'The charge for expedited handling is $450 per load [1]. "Expedited handling $450 per load ' |
-| qwen2.5:7b-instruct | How must a termination notice be delivered? | ok | partial | 1 | 'Notice must be delivered by courier or certified mail to the address in Schedule 2, and: “' |
+| qwen2.5:7b-instruct | How must a termination notice be delivered? | ok | found | 1 | 'Notice must be delivered by courier or certified mail to the address in Schedule 2 [1]' |
 | qwen2.5:7b-instruct | How long does a party have to cure a material breach? | ok | found | 1 | '[1] "Acme shall pay each invoice within thirty (30) days of receipt. Late amounts accrue i' |
 | qwen2.5:7b-instruct | Within how many days must Confidential Information be returned? | ok | found | 1 | "Each party shall return or destroy the other party's Confidential Information within ten (" |
 | qwen2.5:7b-instruct | How long does the agreement last? | ok | found | 1 | 'The agreement lasts for three (3) years from the Effective Date unless terminated earlier.' |
@@ -27,9 +27,9 @@
 | qwen2.5:7b-instruct | Is either side liable for consequential damages? | ok | found | 1 | 'Neither party is liable for indirect or consequential damages. [1] "7.1 Neither party is l' |
 | qwen2.5:7b-instruct | How many days does Acme have to pay an invoice? | ok | found | 1 | 'Acme has thirty (30) days from receipt of an invoice to pay it [1]. "Acme shall pay each i' |
 | qwen2.5:7b-instruct | What is the total unpaid amount on the invoices? | ok | found | 1 | 'The total unpaid amount on the invoices is $48,500.\n\n[1] "Total unpaid as of September 1, ' |
-| qwen2.5:7b-instruct | Which invoices are unpaid? | ok | partial | 1 | 'Unpaid invoices are INV-2077 and INV-2103 [1]. "Status\\nUnpaid" is noted for both invoices' |
+| qwen2.5:7b-instruct | Which invoices are unpaid? | ok | found | 1 | 'Unpaid invoices are INV-2077 and INV-2103 [1].' |
 | qwen2.5:7b-instruct | How much was invoice INV-2103 for? | ok | found | 1 | 'Invoice INV-2103 was for $24,500 [1].' |
-| qwen2.5:7b-instruct | Which invoice has been paid? | ok | partial | 1 | 'INV-2041 has been paid. [1] "Invoice Status: Paid" [1]' |
+| qwen2.5:7b-instruct | Which invoice has been paid? | ok | found | 1 | 'INV-2041 has been paid. [1]' |
 | qwen2.5:7b-instruct | Why is Acme withholding payment of INV-2077? | ok | found | 1 | 'Payment of invoice INV-2077 is withheld pending resolution of the late delivery dispute. [' |
 | qwen2.5:7b-instruct | What settlement amount did Acme's counsel propose, and by when? | ok | found | 1 | "Acme's counsel proposed a settlement amount of $40,000 [1]. The payment was to be made by " |
 | qwen2.5:7b-instruct | Who sent the settlement email? | MISS | not_found | 0 | 'Not found in your documents. I searched all 4 documents in this matter for: sent, settleme' |
