@@ -259,6 +259,16 @@ class StubOrchestrator:
         yield AnswerStateEvent("not_found", r.outside_law)
         yield UsageEvent(len(r.question.split()), len(text.split()), MODEL_ID, PROMPT_VERSION)
 
+    async def _authority_note(self, ctx: RunContext, document_ids: list[str]) -> str:
+        """FR-ASK-04: an answer that rests on uploaded law says its later history was not checked."""
+        from legallens.drafting.checks import AUTHORITY_NOTE
+
+        found = await ctx.services.authority_documents(sorted(set(document_ids)))
+        if not found:
+            return ""
+        names = ", ".join(display_name(name) for name in found.values())
+        return "\n\n" + AUTHORITY_NOTE.format(names=names)
+
     async def _extractive(self, ctx: RunContext, r: Retrieval) -> AsyncIterator[OrchestratorEvent]:
         """The answer made of verbatim quotes with [n] markers: no model involved."""
         terms, outside_law, reranked = r.terms, r.outside_law, r.reranked
@@ -287,7 +297,7 @@ class StubOrchestrator:
             parts.append(f"- {_where(hit, page, para_ref)}: “{quote}” [{n}]\n")
         if missing and not outside_law:
             parts.append(f"\nNot found in your documents: {', '.join(missing[:6])}.")
-        text = "".join(parts).rstrip()
+        text = "".join(parts).rstrip() + await self._authority_note(ctx, [h.document_id for _, h, _ in quoted])
         async for event in self._stream(text):
             yield event
 

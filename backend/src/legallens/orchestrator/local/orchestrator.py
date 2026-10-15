@@ -112,7 +112,11 @@ class LocalOrchestrator(StubOrchestrator):
                 yield event
             return
 
-        body = (outside_law_notice(ctx) if found.outside_law else "") + checked.text
+        body = (
+            (outside_law_notice(ctx) if found.outside_law else "")
+            + checked.text
+            + await self._authority_note(ctx, [c.hit.document_id for c in checked.citations])
+        )
         if body != result.text:
             yield AnswerTextEvent(body)
 

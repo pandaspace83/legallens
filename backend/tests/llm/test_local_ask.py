@@ -351,3 +351,33 @@ def test_summarize_and_draft_still_start_their_jobs(local) -> None:  # type: ign
     turn = api.ask(chat, "Summarize smith_msa_v3")
     assert turn.first("intent")["intent"] == "summarize"
     assert turn.first("job")["kind"] == "summarize"
+
+
+OPINION_TEXT = """UNITED STATES COURT OF APPEALS FOR THE NINTH CIRCUIT
+
+Acme Corp. v. Beta Transport, 512 F.3d 1201 (9th Cir. 2008)
+
+Argued and submitted March 3, 2008. Decided June 9, 2008. Before the court: Circuit Judge Marlow.
+
+OPINION
+
+Late performance of a freight contract is a material breach when time is of the essence, and the carrier owes
+damages for each day of delay. The judgment of the district court is affirmed.
+"""
+
+
+def test_an_answer_resting_on_uploaded_law_says_its_later_history_was_not_checked(local) -> None:  # type: ignore[no-untyped-def]
+    """FR-ASK-04: uploaded authority carries a good-law-not-checked note; a contract does not."""
+    api, _, matter, chat = local()
+    response = api.upload(matter, "acme_v_beta_opinion.txt", "client", OPINION_TEXT.encode())
+    assert response.status_code == 202
+    api.run_jobs()
+    turn = api.ask(chat, "Is late performance of a freight contract a material breach?")
+    assert "Good law not checked" in turn.answer["content"]
+    assert "acme_v_beta_opinion" in turn.answer["content"]
+
+
+def test_an_answer_from_a_contract_has_no_good_law_note(local) -> None:  # type: ignore[no-untyped-def]
+    api, _, _, chat = local()
+    turn = api.ask(chat, QUESTION)
+    assert "Good law not checked" not in turn.answer["content"]

@@ -134,6 +134,10 @@ class RunServices(Protocol):
         """Cross-encoder rerank: scores every hit (Hit.rerank_score), returns the best top_n with their context."""
         ...
 
+    async def authority_documents(self, document_ids: list[str]) -> dict[str, str]:
+        """Of these documents, the ones that are uploaded law (opinions, statutes): {document_id: file name}."""
+        ...
+
     async def start_summary(self, document_id: str, template: str, audience: str) -> tuple[str, str]: ...
 
     async def start_draft(

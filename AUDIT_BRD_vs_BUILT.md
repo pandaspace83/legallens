@@ -10,8 +10,8 @@ and local models); **GS** is `GOLDEN_SET.md`; **GB** is `GATE_BENCHMARK.md`; **p
 | | Count |
 |---|---|
 | Requirements audited (FR and NFR) | 26 |
-| Met | 25 |
-| Partly met | 1 |
+| Met | 26 |
+| Partly met | 0 |
 | Not met | 0 |
 | Targets (§4) met | 8 of 9; one partly (citation verification) |
 
@@ -25,7 +25,7 @@ The four non-negotiables hold: answers only from the documents (TC-07, GS 10/10 
 | FR-ASK-01 | Answer only from the matter; label found, not found, partial | Met | Router, hybrid search, reranker gate, local model, checker; states on every answer | TC-04, TC-07, GS |
 | FR-ASK-02 | Scope: one document or all; follow-ups keep context | Met | Scope selector; llama3.2:3b rewrites follow-ups with the last 6 turns | TC-06, TC-14 |
 | FR-ASK-03 | Pinpoint cite; click opens the highlighted passage | Met | Page, paragraph and clause per citation; viewer highlight; previous/next citation | TC-05 |
-| FR-ASK-04 | Outside law: say so, suggest uploading; "good law not checked" on uploads | Partly | Notice and flag built; the "good law not checked" note is on the citation checklist, not shown in Ask | TC-08 |
+| FR-ASK-04 | Outside law: say so, suggest uploading; "good law not checked" on uploads | Met | Outside-law notice and flag; an answer that cites an uploaded opinion or statute ends with "Good law not checked: …" | TC-08, pytest llm/test_local_ask |
 | FR-SUM-01 | Three templates, every field cited or "Not found" | Met | letter/demand, pleading, opinion; per-field retrieval and check | TC-14, pytest llm/test_local_summary |
 | FR-SUM-02 | Three audience presets | Met | one paragraph, detailed, plain English (backend); UI preset | pytest llm/test_local_summary |
 | FR-SUM-03 | Coverage report with OCR confidence | Met | pages read, unreadable, OCR confidence | TC-03, TC-14 |
@@ -70,14 +70,12 @@ The four non-negotiables hold: answers only from the documents (TC-07, GS 10/10 
 
 ## 5. What is left
 
-1. **FR-ASK-04:** show the "good law not checked" note on an answer that rests on uploaded authority (today it is on
-   the citation checklist only).
-2. **Citation verification (95% target):** 87.5% of answerable golden-set questions are fully verified on the 14B and
+1. **Citation verification (95% target):** 87.5% of answerable golden-set questions are fully verified on the 14B and
    20 of 24 on the 7B; the misses are quote-formatting, not wrong facts. Review them and tune the checker.
-3. **The golden-set gate in CI** needs a runner with Ollama and the models; the fast checks already run in GitHub Actions.
-4. **A lawyer's review of the golden set** (OPEN-01), and Application and Rule text in memos stay with the lawyer by
+2. **The golden-set gate in CI** needs a runner with Ollama and the models; the fast checks already run in GitHub Actions.
+3. **A lawyer's review of the golden set** (OPEN-01), and Application and Rule text in memos stay with the lawyer by
    design (DEC-45).
-5. **The BRD page count** was not re-measured after one sentence was added to FR-DRF-05.
+4. **The BRD page count** was not re-measured after one sentence was added to FR-DRF-05.
 
 ## 6. Layer connections verified (for the question "is everything wired?")
 

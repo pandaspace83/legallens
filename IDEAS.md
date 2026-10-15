@@ -420,6 +420,9 @@ Recorded at closeout (`CLOSEOUT_TODO.md`); the evidence is in `GATE_BENCHMARK.md
   of the incoming document under the same checks as a letter paragraph (literal quotes, figures in the passages, no
   authority); on any failure the quoted passages stand in. Question, Brief Answer, Rule and Application stay the
   lawyer's: law comes only from uploaded authority (DEC-45). Decided 2026-10-15.
+- **DEC-93 Uploaded law carries a good-law note in Ask.** An answer that cites a document that names itself as a
+  court opinion or statute ends with "Good law not checked: …" (FR-ASK-04, DEC-39). Contracts, letters and exhibits
+  never match, even when they cite a case. Decided 2026-10-15.
 - **DEC-88 Drafts take facts from the client's own documents.** When none are named and the whole matter is in
   scope, supporting documents default to the client's documents; the draft type is fixed only by Draft mode, so
   "a memo" in plain words gives a memo. Found by the UAT run, 2026-10-14.

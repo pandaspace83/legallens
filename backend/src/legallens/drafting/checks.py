@@ -55,6 +55,29 @@ def _is_the_authority(db: Session, authority: authorities.Authority, document: D
     return bool(markers.search(opening[:1500]))
 
 
+_CASE_CAPTION = re.compile(r"\bv\.\s|\bIn re\b|\bUnited States of America\b", re.I)
+_STATUTE_CAPTION = re.compile(
+    r"§|\bU\.S\.C\.|\bC\.F\.R\.|\b(Civil|Penal|Business|Labor|Family) Code\b|\bStatutes?\b", re.I
+)
+AUTHORITY_NOTE = (
+    "Good law not checked: {names} is law you uploaded, and LegalLens has not checked whether it is still good law "
+    "(later history is not checked). Confirm it in your citator before you rely on it."
+)
+
+
+def looks_like_authority(db: Session, document: Document) -> bool:
+    """An uploaded court opinion, statute or rule (FR-ASK-04): the document names itself as one at its opening.
+    Contracts, letters and exhibits never match, even when they cite a case further down."""
+    opening = _opening(db, document.id)
+    caption = opening[:CAPTION_CHARS]
+    if _STATUTE_CAPTION.search(caption):
+        return True
+    return (
+        bool(_CASE_CAPTION.search(caption))
+        and len(set(m.lower() for m in _OPINION_MARKERS.findall(opening[:1500]))) >= 3
+    )
+
+
 def classify(db: Session, matter_id: str, authority: authorities.Authority) -> tuple[str, dict[str, Any] | None]:
     """full_text_uploaded if a document in the matter *is* this authority; only_mentioned if documents only cite
     it (e.g. opposing counsel's letter, RISK-02); otherwise not_in_documents."""

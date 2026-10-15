@@ -144,6 +144,19 @@ class BackendRunServices:
     async def rerank(self, query: str, hits: list[Hit], top_n: int) -> list[Hit]:
         return await anyio.to_thread.run_sync(self._rerank_sync, query, hits, top_n)
 
+    def _authority_documents_sync(self, document_ids: list[str]) -> dict[str, str]:
+        from legallens.drafting.checks import looks_like_authority
+
+        if not document_ids:
+            return {}
+        with self.database.read() as db:
+            set_scope(db, self.matter_id)
+            docs = db.execute(select(Document).where(Document.id.in_(document_ids))).scalars().all()
+            return {d.id: d.filename for d in docs if looks_like_authority(db, d)}
+
+    async def authority_documents(self, document_ids: list[str]) -> dict[str, str]:
+        return await anyio.to_thread.run_sync(self._authority_documents_sync, document_ids)
+
     def _start_summary_sync(self, document_id: str, template: str, audience: str) -> tuple[str, str]:
         with self.database.write() as db:
             set_scope(db, self.matter_id)
