@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "oxc.oxc-vscode",
+    "vitest.explorer",
+    "ms-playwright.playwright",
+    "pomdtr.excalidraw-editor"
+  ]
+}

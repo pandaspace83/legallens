@@ -1,0 +1,207 @@
+{
+  "id": "sum_01M4MQDFPPZ70ESX7W4A8ES926",
+  "matter_id": "mat_01M4MQAQE9R6CXNE4D5AWWEXBD",
+  "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+  "document_name": "acme_demand_letter_scanned.pdf",
+  "conversation_id": null,
+  "template": "letter_demand",
+  "audience": "detailed",
+  "status": "ready",
+  "job_id": "job_01M4MQDFPQB0KRN2DCVBF1S2VY",
+  "sections": [
+    {
+      "field": "sender",
+      "title": "Who sent it",
+      "found": true,
+      "content": "- “Sincerely, Dana Whitfield & Grant counsel for Acme” [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": 17,
+          "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+          "document_name": "acme_demand_letter_scanned.pdf",
+          "page": 1,
+          "para_ref": "¶1",
+          "quote": "Sincerely, Dana Whitfield & Grant counsel for Acme",
+          "bbox": [
+            {
+              "page": 1,
+              "bbox": [72.33, 101.33, 534.67, 538.33],
+              "ref": "¶1",
+              "start": 23,
+              "end": 1005
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "field": "recipient",
+      "title": "Who it is addressed to",
+      "found": true,
+      "content": "- “100 Market Street, Suite 400, San Francisco, CA 94105 September 15, 2026 Smith Logistics LLC, 200 Harbor Way, Oakland, CA 94607 Re: Master Services Agreement dated March 1, 2025 Dear Sir or Madam: We represent Acme Corp in connection with the Master Services Agreement.” [2]",
+      "citations": [
+        {
+          "n": 2,
+          "chunk_id": 17,
+          "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+          "document_name": "acme_demand_letter_scanned.pdf",
+          "page": 1,
+          "para_ref": "¶1",
+          "quote": "100 Market Street, Suite 400, San Francisco, CA 94105 September 15, 2026 Smith Logistics LLC, 200 Harbor Way, Oakland, CA 94607 Re: Master Services Agreement dated March 1, 2025 Dear Sir or Madam: We represent Acme Corp in connection with the Master Services Agreement.",
+          "bbox": [
+            {
+              "page": 1,
+              "bbox": [72.33, 101.33, 534.67, 538.33],
+              "ref": "¶1",
+              "start": 23,
+              "end": 1005
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "field": "demands",
+      "title": "What they demand",
+      "found": true,
+      "content": "- “Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.” [3]",
+      "citations": [
+        {
+          "n": 3,
+          "chunk_id": 17,
+          "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+          "document_name": "acme_demand_letter_scanned.pdf",
+          "page": 1,
+          "para_ref": "¶1",
+          "quote": "Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.",
+          "bbox": [
+            {
+              "page": 1,
+              "bbox": [72.33, 101.33, 534.67, 538.33],
+              "ref": "¶1",
+              "start": 23,
+              "end": 1005
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "field": "deadlines",
+      "title": "Deadlines",
+      "found": true,
+      "content": "- “Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.” [4]",
+      "citations": [
+        {
+          "n": 4,
+          "chunk_id": 17,
+          "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+          "document_name": "acme_demand_letter_scanned.pdf",
+          "page": 1,
+          "para_ref": "¶1",
+          "quote": "Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.",
+          "bbox": [
+            {
+              "page": 1,
+              "bbox": [72.33, 101.33, 534.67, 538.33],
+              "ref": "¶1",
+              "start": 23,
+              "end": 1005
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "field": "claims",
+      "title": "Each claim made",
+      "found": true,
+      "content": "- “Smith failed to deliver the Services on time in July and August 2026, which is a material breach.” [5]",
+      "citations": [
+        {
+          "n": 5,
+          "chunk_id": 17,
+          "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+          "document_name": "acme_demand_letter_scanned.pdf",
+          "page": 1,
+          "para_ref": "¶1",
+          "quote": "Smith failed to deliver the Services on time in July and August 2026, which is a material breach.",
+          "bbox": [
+            {
+              "page": 1,
+              "bbox": [72.33, 101.33, 534.67, 538.33],
+              "ref": "¶1",
+              "start": 23,
+              "end": 1005
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "field": "threats",
+      "title": "Threats and consequences",
+      "found": true,
+      "content": "- “If Smith does not comply by September 29, 2026, Acme will file suit and seek its attorneys' fees.” [6]",
+      "citations": [
+        {
+          "n": 6,
+          "chunk_id": 17,
+          "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+          "document_name": "acme_demand_letter_scanned.pdf",
+          "page": 1,
+          "para_ref": "¶1",
+          "quote": "If Smith does not comply by September 29, 2026, Acme will file suit and seek its attorneys' fees.",
+          "bbox": [
+            {
+              "page": 1,
+              "bbox": [72.33, 101.33, 534.67, 538.33],
+              "ref": "¶1",
+              "start": 23,
+              "end": 1005
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "field": "amounts",
+      "title": "Amounts",
+      "found": true,
+      "content": "- “Under Acme Corp. v. Beta Transport, 512 F.3d 1201 (9th Cir. 2008), late performance of this kind entitles Acme to damages.” [7]",
+      "citations": [
+        {
+          "n": 7,
+          "chunk_id": 17,
+          "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+          "document_name": "acme_demand_letter_scanned.pdf",
+          "page": 1,
+          "para_ref": "¶1",
+          "quote": "Under Acme Corp. v. Beta Transport, 512 F.3d 1201 (9th Cir. 2008), late performance of this kind entitles Acme to damages.",
+          "bbox": [
+            {
+              "page": 1,
+              "bbox": [72.33, 101.33, 534.67, 538.33],
+              "ref": "¶1",
+              "start": 23,
+              "end": 1005
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "coverage": {
+    "pages_total": 1,
+    "pages_read": 1,
+    "pages_unreadable": [],
+    "ocr_pages": [1],
+    "low_confidence_pages": [],
+    "text": "1 of 1 page read; OCR on p. 1"
+  },
+  "model_id": "stub-orchestrator",
+  "prompt_version": "stub-0",
+  "error": null,
+  "created_at": "2026-10-11T05:36:50.391314Z"
+}

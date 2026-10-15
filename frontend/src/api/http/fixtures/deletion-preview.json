@@ -1,0 +1,16 @@
+{
+  "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+  "dry_run": true,
+  "removed": {
+    "documents": 1,
+    "pages": 1,
+    "chunks": 2,
+    "fts_rows": 1,
+    "vectors": 1,
+    "citations": 0,
+    "conversations": 0,
+    "defined_terms": 0,
+    "summaries": 1,
+    "file_bytes": 78374
+  }
+}

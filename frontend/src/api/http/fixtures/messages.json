@@ -1,0 +1,90 @@
+{
+  "items": [
+    {
+      "id": "msg_01M4MQDFMR9A0BQB3CFNP6AFGA",
+      "conversation_id": "cnv_01M4MQDFM89RFZRNM8Q9JQ3Y1M",
+      "role": "user",
+      "content": "How must a termination notice be delivered?",
+      "status": "complete",
+      "mode": "ask",
+      "intent": null,
+      "answer_state": null,
+      "outside_law": false,
+      "scope_label": "All 6 documents in this matter",
+      "citations": [],
+      "searched": null,
+      "run_id": "run_01M4MQDFMR9A0BQB3CFNP6AFG9",
+      "job_id": null,
+      "job": null,
+      "model_id": null,
+      "prompt_version": null,
+      "tokens_in": null,
+      "tokens_out": null,
+      "latency_ms": null,
+      "feedback": null,
+      "created_at": "2026-10-11T05:36:50.328323Z"
+    },
+    {
+      "id": "msg_01M4MQDFMR9A0BQB3CFNP6AFGB",
+      "conversation_id": "cnv_01M4MQDFM89RFZRNM8Q9JQ3Y1M",
+      "role": "assistant",
+      "content": "From your documents:\n\n- smith_msa_v3, p. 1, 4.2(b): “(b) Notice must be delivered by courier or certified mail to the address in Schedule 2, and:” [1]\n- acme_redline_other_side, p. 1, 1: “Section 4.2(a) is amended so that either party may terminate on ten (10) days' written notice.” [2]\n- smith_msa_v3, p. 2, Schedule 2: “Smith Logistics LLC, 200 Harbor Way, Oakland, CA 94607.” [3]",
+      "status": "complete",
+      "mode": "ask",
+      "intent": "ask",
+      "answer_state": "found",
+      "outside_law": false,
+      "scope_label": "All 6 documents in this matter",
+      "citations": [
+        {
+          "id": 4,
+          "n": 1,
+          "document_id": "doc_01M4MQAQR6RE3FNMVXHX756FXM",
+          "document_name": "smith_msa_v3.pdf",
+          "page": 1,
+          "para_ref": "4.2(b)",
+          "quote": "(b) Notice must be delivered by courier or certified mail to the address in Schedule 2, and:",
+          "verified": true
+        },
+        {
+          "id": 5,
+          "n": 2,
+          "document_id": "doc_01M4MQAR384X7WQ6SD9RBA7Q1A",
+          "document_name": "acme_redline_other_side.docx",
+          "page": 1,
+          "para_ref": "1",
+          "quote": "Section 4.2(a) is amended so that either party may terminate on ten (10) days' written notice.",
+          "verified": true
+        },
+        {
+          "id": 6,
+          "n": 3,
+          "document_id": "doc_01M4MQAQR6RE3FNMVXHX756FXM",
+          "document_name": "smith_msa_v3.pdf",
+          "page": 2,
+          "para_ref": "Schedule 2",
+          "quote": "Smith Logistics LLC, 200 Harbor Way, Oakland, CA 94607.",
+          "verified": true
+        }
+      ],
+      "searched": {
+        "scope_label": "All 6 documents in this matter",
+        "rewritten_question": "How must a termination notice be delivered?",
+        "documents_searched": 6,
+        "passages_reviewed": 18,
+        "passages_used": 8
+      },
+      "run_id": "run_01M4MQDFMR9A0BQB3CFNP6AFG9",
+      "job_id": null,
+      "job": null,
+      "model_id": "stub-orchestrator",
+      "prompt_version": "stub-0",
+      "tokens_in": 442,
+      "tokens_out": 64,
+      "latency_ms": 25,
+      "feedback": null,
+      "created_at": "2026-10-11T05:36:50.328463Z"
+    }
+  ],
+  "next_cursor": null
+}

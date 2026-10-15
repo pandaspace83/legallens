@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.venv.nosync/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Node
+node_modules
+node_modules */
+node_modules.nosync/
+frontend/dist/
+frontend/playwright-report/
+frontend/test-results/
+frontend/.vite/
+*.tsbuildinfo
+
+# Local state, secrets and generated evidence
+.env
+.env.*
+!.env.example
+db.key
+secret.key
+tls/
+*.db
+*.db-wal
+*.db-shm
+*.llbackup
+feedback_cases.jsonl
+GOLDEN_SET.json
+test-evidence/screenshots/
+test-evidence/*.xlsx
+
+# macOS
+.DS_Store
+*.thumb.png

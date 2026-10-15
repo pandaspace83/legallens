@@ -1,0 +1,173 @@
+{
+  "items": [
+    {
+      "id": "doc_01M4MQAQR6RE3FNMVXHX756FXM",
+      "matter_id": "mat_01M4MQAQE9R6CXNE4D5AWWEXBD",
+      "filename": "smith_msa_v3.pdf",
+      "mime": "application/pdf",
+      "size_bytes": 12450,
+      "sha256": "b5a8fc310ba3120e271fb6cb68d947feffcd88bacd99d6c3f9e447c099a87729",
+      "origin": "client",
+      "status": "ready",
+      "scan_status": "clean",
+      "pages_total": 2,
+      "pages_processed": 2,
+      "ocr_conf_avg": null,
+      "hidden_content": {
+        "kinds": ["metadata"],
+        "count": 1
+      },
+      "parent_document_id": null,
+      "error": null,
+      "uploaded_at": "2026-10-11T05:35:20.328197Z",
+      "ready_at": "2026-10-11T05:35:32.139632Z",
+      "coverage": {
+        "pages_total": 2,
+        "pages_read": 2,
+        "pages_unreadable": [],
+        "ocr_pages": [],
+        "low_confidence_pages": [],
+        "text": "2 of 2 pages read"
+      }
+    },
+    {
+      "id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+      "matter_id": "mat_01M4MQAQE9R6CXNE4D5AWWEXBD",
+      "filename": "acme_demand_letter_scanned.pdf",
+      "mime": "application/pdf",
+      "size_bytes": 78374,
+      "sha256": "03e4dc51867780db5246115546787f9e09883b32939ef053cea127b860c45559",
+      "origin": "other_party",
+      "status": "ready",
+      "scan_status": "clean",
+      "pages_total": 1,
+      "pages_processed": 1,
+      "ocr_conf_avg": 0.956,
+      "hidden_content": null,
+      "parent_document_id": null,
+      "error": null,
+      "uploaded_at": "2026-10-11T05:35:20.419348Z",
+      "ready_at": "2026-10-11T05:35:33.967531Z",
+      "coverage": {
+        "pages_total": 1,
+        "pages_read": 1,
+        "pages_unreadable": [],
+        "ocr_pages": [1],
+        "low_confidence_pages": [],
+        "text": "1 of 1 page read; OCR on p. 1"
+      }
+    },
+    {
+      "id": "doc_01M4MQAQYA9VQSN0PENG0MXQ6H",
+      "matter_id": "mat_01M4MQAQE9R6CXNE4D5AWWEXBD",
+      "filename": "exhibit_b_invoices.pdf",
+      "mime": "application/pdf",
+      "size_bytes": 25832,
+      "sha256": "8718e8f269f13d8d186a99afdbc9382d2b956a1dbbae01141e3404f4dc50607a",
+      "origin": "client",
+      "status": "ready",
+      "scan_status": "clean",
+      "pages_total": 2,
+      "pages_processed": 2,
+      "ocr_conf_avg": 0.955,
+      "hidden_content": null,
+      "parent_document_id": null,
+      "error": null,
+      "uploaded_at": "2026-10-11T05:35:20.522796Z",
+      "ready_at": "2026-10-11T05:35:35.713008Z",
+      "coverage": {
+        "pages_total": 2,
+        "pages_read": 2,
+        "pages_unreadable": [],
+        "ocr_pages": [2],
+        "low_confidence_pages": [],
+        "text": "2 of 2 pages read; OCR on p. 2"
+      }
+    },
+    {
+      "id": "doc_01M4MQAR384X7WQ6SD9RBA7Q1A",
+      "matter_id": "mat_01M4MQAQE9R6CXNE4D5AWWEXBD",
+      "filename": "acme_redline_other_side.docx",
+      "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "size_bytes": 37652,
+      "sha256": "a348d49bb88e73ccc4f925871a3babd65d903a7785139283886bff0d34b5aecd",
+      "origin": "other_party",
+      "status": "ready",
+      "scan_status": "clean",
+      "pages_total": 1,
+      "pages_processed": 1,
+      "ocr_conf_avg": null,
+      "hidden_content": {
+        "kinds": ["comments", "metadata", "tracked_changes", "white_text"],
+        "count": 5
+      },
+      "parent_document_id": null,
+      "error": null,
+      "uploaded_at": "2026-10-11T05:35:20.681305Z",
+      "ready_at": "2026-10-11T05:35:35.767775Z",
+      "coverage": {
+        "pages_total": 1,
+        "pages_read": 1,
+        "pages_unreadable": [],
+        "ocr_pages": [],
+        "low_confidence_pages": [],
+        "text": "1 of 1 page read"
+      }
+    },
+    {
+      "id": "doc_01M4MQAR4RG9S8W777JEEZ71R2",
+      "matter_id": "mat_01M4MQAQE9R6CXNE4D5AWWEXBD",
+      "filename": "email_from_acme_counsel.eml",
+      "mime": "message/rfc822",
+      "size_bytes": 2703,
+      "sha256": "384695526a4c8c063bd6bb0c5ec208c09fd174eba64fe5cd876bb337b3d35e30",
+      "origin": "other_party",
+      "status": "ready",
+      "scan_status": "clean",
+      "pages_total": 1,
+      "pages_processed": 1,
+      "ocr_conf_avg": null,
+      "hidden_content": null,
+      "parent_document_id": null,
+      "error": null,
+      "uploaded_at": "2026-10-11T05:35:20.729223Z",
+      "ready_at": "2026-10-11T05:35:35.787529Z",
+      "coverage": {
+        "pages_total": 1,
+        "pages_read": 1,
+        "pages_unreadable": [],
+        "ocr_pages": [],
+        "low_confidence_pages": [],
+        "text": "1 of 1 page read"
+      }
+    },
+    {
+      "id": "doc_01M4MQB6V4CGJETV5SDYEYN1JP",
+      "matter_id": "mat_01M4MQAQE9R6CXNE4D5AWWEXBD",
+      "filename": "settlement_terms.pdf",
+      "mime": "application/pdf",
+      "size_bytes": 1392,
+      "sha256": "4b3ae460bfcd30adce286c101f1e95ed8829b8f7e2395ff8ded1a987f6096dea",
+      "origin": "other_party",
+      "status": "ready",
+      "scan_status": "clean",
+      "pages_total": 1,
+      "pages_processed": 1,
+      "ocr_conf_avg": null,
+      "hidden_content": null,
+      "parent_document_id": "doc_01M4MQAR4RG9S8W777JEEZ71R2",
+      "error": null,
+      "uploaded_at": "2026-10-11T05:35:35.780871Z",
+      "ready_at": "2026-10-11T05:35:36.077360Z",
+      "coverage": {
+        "pages_total": 1,
+        "pages_read": 1,
+        "pages_unreadable": [],
+        "ocr_pages": [],
+        "low_confidence_pages": [],
+        "text": "1 of 1 page read"
+      }
+    }
+  ],
+  "next_cursor": null
+}

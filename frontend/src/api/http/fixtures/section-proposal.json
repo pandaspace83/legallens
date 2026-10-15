@@ -1,0 +1,20 @@
+{
+  "proposal_id": "prp_01M4MQDGR58P5WP5SYQVASAXT4",
+  "section_id": "s4",
+  "base_version": 1,
+  "body": "Your letter states: “Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.” [2]\n\n[PLACEHOLDER: our response to point 1]\n\n[CITE NEEDED: authority supporting our position on point 1]\n\n[PLACEHOLDER: revise this section: Make this firmer.]",
+  "diff": [
+    {
+      "op": "equal",
+      "text": "Your letter states: “Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.” [2]\n\n[PLACEHOLDER: our response to point 1]\n\n[CITE NEEDED: authority supporting our position on point"
+    },
+    {
+      "op": "delete",
+      "text": "1]"
+    },
+    {
+      "op": "insert",
+      "text": "1]\n\n[PLACEHOLDER: revise this section: Make this firmer.]"
+    }
+  ]
+}

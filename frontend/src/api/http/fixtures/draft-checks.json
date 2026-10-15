@@ -1,0 +1,345 @@
+{
+  "draft_id": "drf_01M4MQDG7FXB2Y6C6F4DJB7T2G",
+  "version": 1,
+  "point_by_point": [
+    {
+      "claim_id": "c1",
+      "claim": "Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.",
+      "source": {
+        "n": 0,
+        "chunk_id": 17,
+        "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+        "document_name": "acme_demand_letter_scanned.pdf",
+        "page": 1,
+        "para_ref": "¶1",
+        "quote": "Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.",
+        "bbox": [
+          {
+            "page": 1,
+            "bbox": [72.33, 101.33, 534.67, 538.33],
+            "ref": "¶1",
+            "start": 23,
+            "end": 1005
+          }
+        ]
+      },
+      "status": "flagged",
+      "section_ids": ["s4"]
+    },
+    {
+      "claim_id": "c2",
+      "claim": "Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice.",
+      "source": {
+        "n": 0,
+        "chunk_id": 17,
+        "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+        "document_name": "acme_demand_letter_scanned.pdf",
+        "page": 1,
+        "para_ref": "¶1",
+        "quote": "Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice.",
+        "bbox": [
+          {
+            "page": 1,
+            "bbox": [72.33, 101.33, 534.67, 538.33],
+            "ref": "¶1",
+            "start": 23,
+            "end": 1005
+          }
+        ]
+      },
+      "status": "flagged",
+      "section_ids": ["s5"]
+    },
+    {
+      "claim_id": "c3",
+      "claim": "Smith failed to deliver the Services on time in July and August 2026, which is a material breach.",
+      "source": {
+        "n": 0,
+        "chunk_id": 17,
+        "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+        "document_name": "acme_demand_letter_scanned.pdf",
+        "page": 1,
+        "para_ref": "¶1",
+        "quote": "Smith failed to deliver the Services on time in July and August 2026, which is a material breach.",
+        "bbox": [
+          {
+            "page": 1,
+            "bbox": [72.33, 101.33, 534.67, 538.33],
+            "ref": "¶1",
+            "start": 23,
+            "end": 1005
+          }
+        ]
+      },
+      "status": "flagged",
+      "section_ids": ["s6"]
+    },
+    {
+      "claim_id": "c4",
+      "claim": "Under Acme Corp. v. Beta Transport, 512 F.3d 1201 (9th Cir. 2008), late performance of this kind entitles Acme to damages.",
+      "source": {
+        "n": 0,
+        "chunk_id": 17,
+        "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+        "document_name": "acme_demand_letter_scanned.pdf",
+        "page": 1,
+        "para_ref": "¶1",
+        "quote": "Under Acme Corp. v. Beta Transport, 512 F.3d 1201 (9th Cir. 2008), late performance of this kind entitles Acme to damages.",
+        "bbox": [
+          {
+            "page": 1,
+            "bbox": [72.33, 101.33, 534.67, 538.33],
+            "ref": "¶1",
+            "start": 23,
+            "end": 1005
+          }
+        ]
+      },
+      "status": "flagged",
+      "section_ids": ["s7"]
+    },
+    {
+      "claim_id": "c5",
+      "claim": "Interest also accrues under Cal. Civ. Code § 3289.",
+      "source": {
+        "n": 0,
+        "chunk_id": 17,
+        "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+        "document_name": "acme_demand_letter_scanned.pdf",
+        "page": 1,
+        "para_ref": "¶1",
+        "quote": "Interest also accrues under Cal. Civ. Code § 3289.",
+        "bbox": [
+          {
+            "page": 1,
+            "bbox": [72.33, 101.33, 534.67, 538.33],
+            "ref": "¶1",
+            "start": 23,
+            "end": 1005
+          }
+        ]
+      },
+      "status": "flagged",
+      "section_ids": ["s8"]
+    },
+    {
+      "claim_id": "c6",
+      "claim": "If Smith does not comply by September 29, 2026, Acme will file suit and seek its attorneys' fees.",
+      "source": {
+        "n": 0,
+        "chunk_id": 17,
+        "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+        "document_name": "acme_demand_letter_scanned.pdf",
+        "page": 1,
+        "para_ref": "¶1",
+        "quote": "If Smith does not comply by September 29, 2026, Acme will file suit and seek its attorneys' fees.",
+        "bbox": [
+          {
+            "page": 1,
+            "bbox": [72.33, 101.33, 534.67, 538.33],
+            "ref": "¶1",
+            "start": 23,
+            "end": 1005
+          }
+        ]
+      },
+      "status": "flagged",
+      "section_ids": ["s9"]
+    }
+  ],
+  "citation_checklist": [
+    {
+      "id": "auth_4d6a1b7b8375",
+      "authority": "Acme Corp. v. Beta Transport, 512 F.3d 1201 (9th Cir. 2008)",
+      "kind": "case",
+      "status": "only_mentioned",
+      "unverified": true,
+      "supporting": {
+        "n": 0,
+        "chunk_id": 17,
+        "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+        "document_name": "acme_demand_letter_scanned.pdf",
+        "page": 1,
+        "para_ref": "¶1",
+        "quote": "WHITFIELD & GRANT LLP 100 Market Street, Suite 400, San Francisco, CA 94105 September 15, 2026 Smith Logistics LLC, 200 Harbor Way, Oakland, CA 94607 Re: Master Services Agreement dated March 1, 2025 Dear Sir or Madam: We represent Acme Corp in connection with the Master Services",
+        "bbox": [
+          {
+            "page": 1,
+            "bbox": [72.33, 75, 221, 84.33],
+            "ref": "WHITFIELD & GRANT LLP",
+            "start": 0,
+            "end": 21
+          },
+          {
+            "page": 1,
+            "bbox": [72.33, 101.33, 534.67, 538.33],
+            "ref": "¶1",
+            "start": 23,
+            "end": 1005
+          },
+          {
+            "page": 1,
+            "bbox": [104.33, 529, 400.33, 540.67],
+            "ref": "¶2",
+            "start": 1007,
+            "end": 1027
+          }
+        ]
+      },
+      "section_ids": ["s7"],
+      "acknowledged": false,
+      "note": "Later history not checked. Confirm it is still good law in your citator."
+    },
+    {
+      "id": "auth_c73f334ffd21",
+      "authority": "Cal. Civ. Code § 3289",
+      "kind": "statute",
+      "status": "only_mentioned",
+      "unverified": true,
+      "supporting": {
+        "n": 0,
+        "chunk_id": 17,
+        "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+        "document_name": "acme_demand_letter_scanned.pdf",
+        "page": 1,
+        "para_ref": "¶1",
+        "quote": "WHITFIELD & GRANT LLP 100 Market Street, Suite 400, San Francisco, CA 94105 September 15, 2026 Smith Logistics LLC, 200 Harbor Way, Oakland, CA 94607 Re: Master Services Agreement dated March 1, 2025 Dear Sir or Madam: We represent Acme Corp in connection with the Master Services",
+        "bbox": [
+          {
+            "page": 1,
+            "bbox": [72.33, 75, 221, 84.33],
+            "ref": "WHITFIELD & GRANT LLP",
+            "start": 0,
+            "end": 21
+          },
+          {
+            "page": 1,
+            "bbox": [72.33, 101.33, 534.67, 538.33],
+            "ref": "¶1",
+            "start": 23,
+            "end": 1005
+          },
+          {
+            "page": 1,
+            "bbox": [104.33, 529, 400.33, 540.67],
+            "ref": "¶2",
+            "start": 1007,
+            "end": 1027
+          }
+        ]
+      },
+      "section_ids": ["s8"],
+      "acknowledged": false,
+      "note": "Later history not checked. Confirm it is still good law in your citator."
+    }
+  ],
+  "placeholders": [
+    {
+      "token": "[LETTER DATE]",
+      "kind": "placeholder",
+      "section_id": "s3",
+      "offset": 152
+    },
+    {
+      "token": "[PLACEHOLDER: our response to point 1]",
+      "kind": "placeholder",
+      "section_id": "s4",
+      "offset": 120
+    },
+    {
+      "token": "[CITE NEEDED: authority supporting our position on point 1]",
+      "kind": "cite_needed",
+      "section_id": "s4",
+      "offset": 160
+    },
+    {
+      "token": "[PLACEHOLDER: our response to point 2]",
+      "kind": "placeholder",
+      "section_id": "s5",
+      "offset": 123
+    },
+    {
+      "token": "[CITE NEEDED: authority supporting our position on point 2]",
+      "kind": "cite_needed",
+      "section_id": "s5",
+      "offset": 163
+    },
+    {
+      "token": "[PLACEHOLDER: our response to point 3]",
+      "kind": "placeholder",
+      "section_id": "s6",
+      "offset": 125
+    },
+    {
+      "token": "[CITE NEEDED: authority supporting our position on point 3]",
+      "kind": "cite_needed",
+      "section_id": "s6",
+      "offset": 165
+    },
+    {
+      "token": "[UNVERIFIED: Acme Corp. v. Beta Transport, 512 F.3d 1201 (9th Cir. 2008)]",
+      "kind": "unverified",
+      "section_id": "s7",
+      "offset": 27
+    },
+    {
+      "token": "[PLACEHOLDER: our response to point 4]",
+      "kind": "placeholder",
+      "section_id": "s7",
+      "offset": 164
+    },
+    {
+      "token": "[CITE NEEDED: authority supporting our position on point 4]",
+      "kind": "cite_needed",
+      "section_id": "s7",
+      "offset": 204
+    },
+    {
+      "token": "[UNVERIFIED: Cal. Civ. Code § 3289]",
+      "kind": "unverified",
+      "section_id": "s8",
+      "offset": 49
+    },
+    {
+      "token": "[PLACEHOLDER: our response to point 5]",
+      "kind": "placeholder",
+      "section_id": "s8",
+      "offset": 92
+    },
+    {
+      "token": "[CITE NEEDED: authority supporting our position on point 5]",
+      "kind": "cite_needed",
+      "section_id": "s8",
+      "offset": 132
+    },
+    {
+      "token": "[PLACEHOLDER: our response to point 6]",
+      "kind": "placeholder",
+      "section_id": "s9",
+      "offset": 125
+    },
+    {
+      "token": "[CITE NEEDED: authority supporting our position on point 6]",
+      "kind": "cite_needed",
+      "section_id": "s9",
+      "offset": 165
+    }
+  ],
+  "export": {
+    "clean_allowed": false,
+    "blockers": [
+      {
+        "code": "placeholders",
+        "message": "13 placeholder(s) still need filling, e.g. [LETTER DATE], [PLACEHOLDER: our response to point 1], [CITE NEEDED: authority supporting our position on point 1]."
+      },
+      {
+        "code": "unacknowledged_citations",
+        "message": "Acknowledge 2 citation(s) in the citation checklist."
+      },
+      {
+        "code": "not_reviewed",
+        "message": "Mark the draft \"Reviewed and adopted\" first."
+      }
+    ]
+  }
+}

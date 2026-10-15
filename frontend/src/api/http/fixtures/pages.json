@@ -1,0 +1,39 @@
+{
+  "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+  "pages_total": 1,
+  "pages": [
+    {
+      "page_no": 1,
+      "width": 612,
+      "height": 792,
+      "has_text_layer": false,
+      "ocr_conf": 0.956,
+      "blocks": [
+        {
+          "id": 0,
+          "kind": "heading",
+          "text": "WHITFIELD & GRANT LLP",
+          "bbox": [72.33, 75, 221, 84.33],
+          "section_path": "WHITFIELD & GRANT LLP",
+          "ref": "WHITFIELD & GRANT LLP"
+        },
+        {
+          "id": 1,
+          "kind": "text",
+          "text": "100 Market Street, Suite 400, San Francisco, CA 94105 September 15, 2026 Smith Logistics LLC, 200 Harbor Way, Oakland, CA 94607 Re: Master Services Agreement dated March 1, 2025 Dear Sir or Madam: We represent Acme Corp in connection with the Master Services Agreement. Acme demands the following: 1. Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter. 2. Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice. 3. Return of all Acme Confidential Information within ten (10) days. Smith failed to deliver the Services on time in July and August 2026, which is a material breach. Under Acme Corp. v. Beta Transport, 512 F.3d 1201 (9th Cir. 2008), late performance of this kind entitles Acme to damages. Interest also accrues under Cal. Civ. Code § 3289. If Smith does not comply by September 29, 2026, Acme will file suit and seek its attorneys' fees. Sincerely, Dana Whitfield & Grant counsel for Acme",
+          "bbox": [72.33, 101.33, 534.67, 538.33],
+          "section_path": "WHITFIELD & GRANT LLP",
+          "ref": "¶1"
+        },
+        {
+          "id": 2,
+          "kind": "text",
+          "text": "Whitfield, LLP, Corp",
+          "bbox": [104.33, 529, 400.33, 540.67],
+          "section_path": "WHITFIELD & GRANT LLP",
+          "ref": "¶2"
+        }
+      ]
+    }
+  ]
+}

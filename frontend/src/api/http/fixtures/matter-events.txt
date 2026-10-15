@@ -1,0 +1,360 @@
+id: 1
+event: job.progress
+data: {"job_id":"job_01M4MQAQR8XYYWVQVTXMHN4PCW","kind":"ingest","pct":5,"step":"Checking file","step_code":"checking","detail":"Checking file","document_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM"}
+
+id: 2
+event: job.progress
+data: {"job_id":"job_01M4MQAQR8XYYWVQVTXMHN4PCW","kind":"ingest","pct":10,"step":"Checking for hidden content","step_code":"checking","detail":"Checking for hidden content","document_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM"}
+
+id: 3
+event: job.progress
+data: {"job_id":"job_01M4MQAQR8XYYWVQVTXMHN4PCW","kind":"ingest","pct":20,"step":"Reading pages","step_code":"reading","detail":"Reading pages","document_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM"}
+
+id: 4
+event: job.progress
+data: {"job_id":"job_01M4MQAQR8XYYWVQVTXMHN4PCW","kind":"ingest","pct":25,"step":"Reading pages 1 of 2","step_code":"reading","detail":"Reading pages 1 of 2","document_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM"}
+
+id: 5
+event: job.progress
+data: {"job_id":"job_01M4MQAQR8XYYWVQVTXMHN4PCW","kind":"ingest","pct":55,"step":"Reading pages 2 of 2","step_code":"reading","detail":"Reading pages 2 of 2","document_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM"}
+
+id: 6
+event: job.progress
+data: {"job_id":"job_01M4MQAQR8XYYWVQVTXMHN4PCW","kind":"ingest","pct":60,"step":"Finding structure","step_code":"indexing","detail":"Finding structure","document_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM"}
+
+id: 7
+event: job.progress
+data: {"job_id":"job_01M4MQAQR8XYYWVQVTXMHN4PCW","kind":"ingest","pct":70,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM"}
+
+id: 8
+event: job.progress
+data: {"job_id":"job_01M4MQAQR8XYYWVQVTXMHN4PCW","kind":"ingest","pct":90,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM"}
+
+id: 9
+event: document.ready
+data: {"document_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM","name":"smith_msa_v3.pdf","coverage":{"pages_total":2,"pages_read":2,"pages_unreadable":[],"ocr_pages":[],"low_confidence_pages":[],"text":"2 of 2 pages read"}}
+
+id: 10
+event: job.done
+data: {"job_id":"job_01M4MQAQR8XYYWVQVTXMHN4PCW","kind":"ingest","result_url":"/api/v1/documents/doc_01M4MQAQR6RE3FNMVXHX756FXM","entity_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM"}
+
+id: 11
+event: job.progress
+data: {"job_id":"job_01M4MQAQV3N0Q59F9Q2NTW8HZ1","kind":"ingest","pct":5,"step":"Checking file","step_code":"checking","detail":"Checking file","document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ"}
+
+id: 12
+event: job.progress
+data: {"job_id":"job_01M4MQAQV3N0Q59F9Q2NTW8HZ1","kind":"ingest","pct":10,"step":"Checking for hidden content","step_code":"checking","detail":"Checking for hidden content","document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ"}
+
+id: 13
+event: job.progress
+data: {"job_id":"job_01M4MQAQV3N0Q59F9Q2NTW8HZ1","kind":"ingest","pct":20,"step":"Reading pages","step_code":"reading","detail":"Reading pages","document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ"}
+
+id: 14
+event: job.progress
+data: {"job_id":"job_01M4MQAQV3N0Q59F9Q2NTW8HZ1","kind":"ingest","pct":22,"step":"OCR on 1 scanned page","step_code":"ocr","detail":"OCR on 1 scanned page","document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ"}
+
+id: 15
+event: job.progress
+data: {"job_id":"job_01M4MQAQV3N0Q59F9Q2NTW8HZ1","kind":"ingest","pct":25,"step":"Reading pages 1 of 1","step_code":"reading","detail":"Reading pages 1 of 1","document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ"}
+
+id: 16
+event: job.progress
+data: {"job_id":"job_01M4MQAQV3N0Q59F9Q2NTW8HZ1","kind":"ingest","pct":55,"step":"Reading pages 1 of 1","step_code":"reading","detail":"Reading pages 1 of 1","document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ"}
+
+id: 17
+event: job.progress
+data: {"job_id":"job_01M4MQAQV3N0Q59F9Q2NTW8HZ1","kind":"ingest","pct":60,"step":"Finding structure","step_code":"indexing","detail":"Finding structure","document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ"}
+
+id: 18
+event: job.progress
+data: {"job_id":"job_01M4MQAQV3N0Q59F9Q2NTW8HZ1","kind":"ingest","pct":70,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ"}
+
+id: 19
+event: job.progress
+data: {"job_id":"job_01M4MQAQV3N0Q59F9Q2NTW8HZ1","kind":"ingest","pct":90,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ"}
+
+id: 20
+event: document.ready
+data: {"document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ","name":"acme_demand_letter_scanned.pdf","coverage":{"pages_total":1,"pages_read":1,"pages_unreadable":[],"ocr_pages":[1],"low_confidence_pages":[],"text":"1 of 1 page read; OCR on p. 1"}}
+
+id: 21
+event: job.done
+data: {"job_id":"job_01M4MQAQV3N0Q59F9Q2NTW8HZ1","kind":"ingest","result_url":"/api/v1/documents/doc_01M4MQAQV2KVS03VYKFMSTBWVQ","entity_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ"}
+
+id: 22
+event: job.progress
+data: {"job_id":"job_01M4MQAQYA9VQSN0PENG0MXQ6J","kind":"ingest","pct":5,"step":"Checking file","step_code":"checking","detail":"Checking file","document_id":"doc_01M4MQAQYA9VQSN0PENG0MXQ6H"}
+
+id: 23
+event: job.progress
+data: {"job_id":"job_01M4MQAQYA9VQSN0PENG0MXQ6J","kind":"ingest","pct":10,"step":"Checking for hidden content","step_code":"checking","detail":"Checking for hidden content","document_id":"doc_01M4MQAQYA9VQSN0PENG0MXQ6H"}
+
+id: 24
+event: job.progress
+data: {"job_id":"job_01M4MQAQYA9VQSN0PENG0MXQ6J","kind":"ingest","pct":20,"step":"Reading pages","step_code":"reading","detail":"Reading pages","document_id":"doc_01M4MQAQYA9VQSN0PENG0MXQ6H"}
+
+id: 25
+event: job.progress
+data: {"job_id":"job_01M4MQAQYA9VQSN0PENG0MXQ6J","kind":"ingest","pct":22,"step":"OCR on 1 scanned page","step_code":"ocr","detail":"OCR on 1 scanned page","document_id":"doc_01M4MQAQYA9VQSN0PENG0MXQ6H"}
+
+id: 26
+event: job.progress
+data: {"job_id":"job_01M4MQAQYA9VQSN0PENG0MXQ6J","kind":"ingest","pct":25,"step":"Reading pages 1 of 2","step_code":"reading","detail":"Reading pages 1 of 2","document_id":"doc_01M4MQAQYA9VQSN0PENG0MXQ6H"}
+
+id: 27
+event: job.progress
+data: {"job_id":"job_01M4MQAQYA9VQSN0PENG0MXQ6J","kind":"ingest","pct":55,"step":"Reading pages 2 of 2","step_code":"reading","detail":"Reading pages 2 of 2","document_id":"doc_01M4MQAQYA9VQSN0PENG0MXQ6H"}
+
+id: 28
+event: job.progress
+data: {"job_id":"job_01M4MQAQYA9VQSN0PENG0MXQ6J","kind":"ingest","pct":60,"step":"Finding structure","step_code":"indexing","detail":"Finding structure","document_id":"doc_01M4MQAQYA9VQSN0PENG0MXQ6H"}
+
+id: 29
+event: job.progress
+data: {"job_id":"job_01M4MQAQYA9VQSN0PENG0MXQ6J","kind":"ingest","pct":70,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQAQYA9VQSN0PENG0MXQ6H"}
+
+id: 30
+event: job.progress
+data: {"job_id":"job_01M4MQAQYA9VQSN0PENG0MXQ6J","kind":"ingest","pct":90,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQAQYA9VQSN0PENG0MXQ6H"}
+
+id: 31
+event: document.ready
+data: {"document_id":"doc_01M4MQAQYA9VQSN0PENG0MXQ6H","name":"exhibit_b_invoices.pdf","coverage":{"pages_total":2,"pages_read":2,"pages_unreadable":[],"ocr_pages":[2],"low_confidence_pages":[],"text":"2 of 2 pages read; OCR on p. 2"}}
+
+id: 32
+event: job.done
+data: {"job_id":"job_01M4MQAQYA9VQSN0PENG0MXQ6J","kind":"ingest","result_url":"/api/v1/documents/doc_01M4MQAQYA9VQSN0PENG0MXQ6H","entity_id":"doc_01M4MQAQYA9VQSN0PENG0MXQ6H"}
+
+id: 33
+event: job.progress
+data: {"job_id":"job_01M4MQAR39ZVCTEAY7MPFE0GK1","kind":"ingest","pct":5,"step":"Checking file","step_code":"checking","detail":"Checking file","document_id":"doc_01M4MQAR384X7WQ6SD9RBA7Q1A"}
+
+id: 34
+event: job.progress
+data: {"job_id":"job_01M4MQAR39ZVCTEAY7MPFE0GK1","kind":"ingest","pct":10,"step":"Checking for hidden content","step_code":"checking","detail":"Checking for hidden content","document_id":"doc_01M4MQAR384X7WQ6SD9RBA7Q1A"}
+
+id: 35
+event: job.progress
+data: {"job_id":"job_01M4MQAR39ZVCTEAY7MPFE0GK1","kind":"ingest","pct":20,"step":"Reading pages","step_code":"reading","detail":"Reading pages","document_id":"doc_01M4MQAR384X7WQ6SD9RBA7Q1A"}
+
+id: 36
+event: job.progress
+data: {"job_id":"job_01M4MQAR39ZVCTEAY7MPFE0GK1","kind":"ingest","pct":25,"step":"Reading the document","step_code":"reading","detail":"Reading the document","document_id":"doc_01M4MQAR384X7WQ6SD9RBA7Q1A"}
+
+id: 37
+event: job.progress
+data: {"job_id":"job_01M4MQAR39ZVCTEAY7MPFE0GK1","kind":"ingest","pct":55,"step":"Reading the document","step_code":"reading","detail":"Reading the document","document_id":"doc_01M4MQAR384X7WQ6SD9RBA7Q1A"}
+
+id: 38
+event: job.progress
+data: {"job_id":"job_01M4MQAR39ZVCTEAY7MPFE0GK1","kind":"ingest","pct":60,"step":"Finding structure","step_code":"indexing","detail":"Finding structure","document_id":"doc_01M4MQAR384X7WQ6SD9RBA7Q1A"}
+
+id: 39
+event: job.progress
+data: {"job_id":"job_01M4MQAR39ZVCTEAY7MPFE0GK1","kind":"ingest","pct":70,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQAR384X7WQ6SD9RBA7Q1A"}
+
+id: 40
+event: job.progress
+data: {"job_id":"job_01M4MQAR39ZVCTEAY7MPFE0GK1","kind":"ingest","pct":90,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQAR384X7WQ6SD9RBA7Q1A"}
+
+id: 41
+event: document.ready
+data: {"document_id":"doc_01M4MQAR384X7WQ6SD9RBA7Q1A","name":"acme_redline_other_side.docx","coverage":{"pages_total":1,"pages_read":1,"pages_unreadable":[],"ocr_pages":[],"low_confidence_pages":[],"text":"1 of 1 page read"}}
+
+id: 42
+event: job.done
+data: {"job_id":"job_01M4MQAR39ZVCTEAY7MPFE0GK1","kind":"ingest","result_url":"/api/v1/documents/doc_01M4MQAR384X7WQ6SD9RBA7Q1A","entity_id":"doc_01M4MQAR384X7WQ6SD9RBA7Q1A"}
+
+id: 43
+event: job.progress
+data: {"job_id":"job_01M4MQAR4SABF7Y7KFJB31HNW1","kind":"ingest","pct":5,"step":"Checking file","step_code":"checking","detail":"Checking file","document_id":"doc_01M4MQAR4RG9S8W777JEEZ71R2"}
+
+id: 44
+event: job.progress
+data: {"job_id":"job_01M4MQAR4SABF7Y7KFJB31HNW1","kind":"ingest","pct":10,"step":"Reading the email","step_code":"reading","detail":"Reading the email","document_id":"doc_01M4MQAR4RG9S8W777JEEZ71R2"}
+
+id: 45
+event: job.progress
+data: {"job_id":"job_01M4MQAR4SABF7Y7KFJB31HNW1","kind":"ingest","pct":60,"step":"Finding structure","step_code":"indexing","detail":"Finding structure","document_id":"doc_01M4MQAR4RG9S8W777JEEZ71R2"}
+
+id: 46
+event: job.progress
+data: {"job_id":"job_01M4MQAR4SABF7Y7KFJB31HNW1","kind":"ingest","pct":70,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQAR4RG9S8W777JEEZ71R2"}
+
+id: 47
+event: job.progress
+data: {"job_id":"job_01M4MQAR4SABF7Y7KFJB31HNW1","kind":"ingest","pct":90,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQAR4RG9S8W777JEEZ71R2"}
+
+id: 48
+event: document.ready
+data: {"document_id":"doc_01M4MQAR4RG9S8W777JEEZ71R2","name":"email_from_acme_counsel.eml","coverage":{"pages_total":1,"pages_read":1,"pages_unreadable":[],"ocr_pages":[],"low_confidence_pages":[],"text":"1 of 1 page read"}}
+
+id: 49
+event: job.done
+data: {"job_id":"job_01M4MQAR4SABF7Y7KFJB31HNW1","kind":"ingest","result_url":"/api/v1/documents/doc_01M4MQAR4RG9S8W777JEEZ71R2","entity_id":"doc_01M4MQAR4RG9S8W777JEEZ71R2"}
+
+id: 56
+event: job.progress
+data: {"job_id":"job_01M4MQB6V5BMX2DPD43NXA73W5","kind":"ingest","pct":5,"step":"Checking file","step_code":"checking","detail":"Checking file","document_id":"doc_01M4MQB6V4CGJETV5SDYEYN1JP"}
+
+id: 57
+event: job.progress
+data: {"job_id":"job_01M4MQB6V5BMX2DPD43NXA73W5","kind":"ingest","pct":10,"step":"Checking for hidden content","step_code":"checking","detail":"Checking for hidden content","document_id":"doc_01M4MQB6V4CGJETV5SDYEYN1JP"}
+
+id: 58
+event: job.progress
+data: {"job_id":"job_01M4MQB6V5BMX2DPD43NXA73W5","kind":"ingest","pct":20,"step":"Reading pages","step_code":"reading","detail":"Reading pages","document_id":"doc_01M4MQB6V4CGJETV5SDYEYN1JP"}
+
+id: 59
+event: job.progress
+data: {"job_id":"job_01M4MQB6V5BMX2DPD43NXA73W5","kind":"ingest","pct":25,"step":"Reading pages 1 of 1","step_code":"reading","detail":"Reading pages 1 of 1","document_id":"doc_01M4MQB6V4CGJETV5SDYEYN1JP"}
+
+id: 60
+event: job.progress
+data: {"job_id":"job_01M4MQB6V5BMX2DPD43NXA73W5","kind":"ingest","pct":55,"step":"Reading pages 1 of 1","step_code":"reading","detail":"Reading pages 1 of 1","document_id":"doc_01M4MQB6V4CGJETV5SDYEYN1JP"}
+
+id: 61
+event: job.progress
+data: {"job_id":"job_01M4MQB6V5BMX2DPD43NXA73W5","kind":"ingest","pct":60,"step":"Finding structure","step_code":"indexing","detail":"Finding structure","document_id":"doc_01M4MQB6V4CGJETV5SDYEYN1JP"}
+
+id: 62
+event: job.progress
+data: {"job_id":"job_01M4MQB6V5BMX2DPD43NXA73W5","kind":"ingest","pct":70,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQB6V4CGJETV5SDYEYN1JP"}
+
+id: 63
+event: job.progress
+data: {"job_id":"job_01M4MQB6V5BMX2DPD43NXA73W5","kind":"ingest","pct":90,"step":"Indexing","step_code":"indexing","detail":"Indexing","document_id":"doc_01M4MQB6V4CGJETV5SDYEYN1JP"}
+
+id: 64
+event: document.ready
+data: {"document_id":"doc_01M4MQB6V4CGJETV5SDYEYN1JP","name":"settlement_terms.pdf","coverage":{"pages_total":1,"pages_read":1,"pages_unreadable":[],"ocr_pages":[],"low_confidence_pages":[],"text":"1 of 1 page read"}}
+
+id: 65
+event: job.done
+data: {"job_id":"job_01M4MQB6V5BMX2DPD43NXA73W5","kind":"ingest","result_url":"/api/v1/documents/doc_01M4MQB6V4CGJETV5SDYEYN1JP","entity_id":"doc_01M4MQB6V4CGJETV5SDYEYN1JP"}
+
+id: 66
+event: conversation.updated
+data: {"conversation_id":"cnv_01M4MQBCMXRZA9VMPN9RRDH1BB","title":"How must a termination notice be delivered"}
+
+id: 67
+event: job.progress
+data: {"job_id":"job_01M4MQBCPKD0ET2431FBT0CMYV","kind":"summarize","pct":3,"step":"Reading acme_demand_letter_scanned.pdf","step_code":"reading","detail":"Reading acme_demand_letter_scanned.pdf","summary_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J"}
+
+id: 68
+event: job.progress
+data: {"job_id":"job_01M4MQBCPKD0ET2431FBT0CMYV","kind":"summarize","pct":5,"step":"Field 1 of 7: Who sent it","step_code":"extracting","detail":"Field 1 of 7: Who sent it","summary_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J"}
+
+id: 69
+event: job.progress
+data: {"job_id":"job_01M4MQBCPKD0ET2431FBT0CMYV","kind":"summarize","pct":16,"step":"Field 2 of 7: Who it is addressed to","step_code":"extracting","detail":"Field 2 of 7: Who it is addressed to","summary_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J"}
+
+id: 70
+event: job.progress
+data: {"job_id":"job_01M4MQBCPKD0ET2431FBT0CMYV","kind":"summarize","pct":27,"step":"Field 3 of 7: What they demand","step_code":"extracting","detail":"Field 3 of 7: What they demand","summary_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J"}
+
+id: 71
+event: job.progress
+data: {"job_id":"job_01M4MQBCPKD0ET2431FBT0CMYV","kind":"summarize","pct":39,"step":"Field 4 of 7: Deadlines","step_code":"extracting","detail":"Field 4 of 7: Deadlines","summary_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J"}
+
+id: 72
+event: job.progress
+data: {"job_id":"job_01M4MQBCPKD0ET2431FBT0CMYV","kind":"summarize","pct":50,"step":"Field 5 of 7: Each claim made","step_code":"extracting","detail":"Field 5 of 7: Each claim made","summary_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J"}
+
+id: 73
+event: job.progress
+data: {"job_id":"job_01M4MQBCPKD0ET2431FBT0CMYV","kind":"summarize","pct":62,"step":"Field 6 of 7: Threats and consequences","step_code":"extracting","detail":"Field 6 of 7: Threats and consequences","summary_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J"}
+
+id: 74
+event: job.progress
+data: {"job_id":"job_01M4MQBCPKD0ET2431FBT0CMYV","kind":"summarize","pct":73,"step":"Field 7 of 7: Amounts","step_code":"extracting","detail":"Field 7 of 7: Amounts","summary_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J"}
+
+id: 75
+event: job.progress
+data: {"job_id":"job_01M4MQBCPKD0ET2431FBT0CMYV","kind":"summarize","pct":88,"step":"Writing the summary","step_code":"writing","detail":"Writing the summary","summary_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J"}
+
+id: 76
+event: job.progress
+data: {"job_id":"job_01M4MQBCPKD0ET2431FBT0CMYV","kind":"summarize","pct":95,"step":"Adding the coverage report","step_code":"verifying","detail":"Adding the coverage report","summary_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J"}
+
+id: 77
+event: job.done
+data: {"job_id":"job_01M4MQBCPKD0ET2431FBT0CMYV","kind":"summarize","result_url":"/api/v1/summaries/sum_01M4MQBCPJJ28CKQF0TFXJ8M2J","entity_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J","document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ","document_name":"acme_demand_letter_scanned.pdf","summary_id":"sum_01M4MQBCPJJ28CKQF0TFXJ8M2J"}
+
+id: 78
+event: conversation.updated
+data: {"conversation_id":"cnv_01M4MQDFM89RFZRNM8Q9JQ3Y1M","title":"How must a termination notice be delivered"}
+
+id: 79
+event: job.progress
+data: {"job_id":"job_01M4MQDFPQB0KRN2DCVBF1S2VY","kind":"summarize","pct":3,"step":"Reading acme_demand_letter_scanned.pdf","step_code":"reading","detail":"Reading acme_demand_letter_scanned.pdf","summary_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926"}
+
+id: 80
+event: job.progress
+data: {"job_id":"job_01M4MQDFPQB0KRN2DCVBF1S2VY","kind":"summarize","pct":5,"step":"Field 1 of 7: Who sent it","step_code":"extracting","detail":"Field 1 of 7: Who sent it","summary_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926"}
+
+id: 81
+event: job.progress
+data: {"job_id":"job_01M4MQDFPQB0KRN2DCVBF1S2VY","kind":"summarize","pct":16,"step":"Field 2 of 7: Who it is addressed to","step_code":"extracting","detail":"Field 2 of 7: Who it is addressed to","summary_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926"}
+
+id: 82
+event: job.progress
+data: {"job_id":"job_01M4MQDFPQB0KRN2DCVBF1S2VY","kind":"summarize","pct":27,"step":"Field 3 of 7: What they demand","step_code":"extracting","detail":"Field 3 of 7: What they demand","summary_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926"}
+
+id: 83
+event: job.progress
+data: {"job_id":"job_01M4MQDFPQB0KRN2DCVBF1S2VY","kind":"summarize","pct":39,"step":"Field 4 of 7: Deadlines","step_code":"extracting","detail":"Field 4 of 7: Deadlines","summary_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926"}
+
+id: 84
+event: job.progress
+data: {"job_id":"job_01M4MQDFPQB0KRN2DCVBF1S2VY","kind":"summarize","pct":50,"step":"Field 5 of 7: Each claim made","step_code":"extracting","detail":"Field 5 of 7: Each claim made","summary_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926"}
+
+id: 85
+event: job.progress
+data: {"job_id":"job_01M4MQDFPQB0KRN2DCVBF1S2VY","kind":"summarize","pct":62,"step":"Field 6 of 7: Threats and consequences","step_code":"extracting","detail":"Field 6 of 7: Threats and consequences","summary_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926"}
+
+id: 86
+event: job.progress
+data: {"job_id":"job_01M4MQDFPQB0KRN2DCVBF1S2VY","kind":"summarize","pct":73,"step":"Field 7 of 7: Amounts","step_code":"extracting","detail":"Field 7 of 7: Amounts","summary_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926"}
+
+id: 87
+event: job.progress
+data: {"job_id":"job_01M4MQDFPQB0KRN2DCVBF1S2VY","kind":"summarize","pct":88,"step":"Writing the summary","step_code":"writing","detail":"Writing the summary","summary_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926"}
+
+id: 88
+event: job.progress
+data: {"job_id":"job_01M4MQDFPQB0KRN2DCVBF1S2VY","kind":"summarize","pct":95,"step":"Adding the coverage report","step_code":"verifying","detail":"Adding the coverage report","summary_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926"}
+
+id: 89
+event: job.done
+data: {"job_id":"job_01M4MQDFPQB0KRN2DCVBF1S2VY","kind":"summarize","result_url":"/api/v1/summaries/sum_01M4MQDFPPZ70ESX7W4A8ES926","entity_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926","document_id":"doc_01M4MQAQV2KVS03VYKFMSTBWVQ","document_name":"acme_demand_letter_scanned.pdf","summary_id":"sum_01M4MQDFPPZ70ESX7W4A8ES926"}
+
+id: 90
+event: job.progress
+data: {"job_id":"job_01M4MQDG7HDRKH7QV01E8V52BH","kind":"draft","pct":5,"step":"Reading the incoming document","step_code":"reading","detail":"Reading the incoming document","draft_id":"drf_01M4MQDG7FXB2Y6C6F4DJB7T2G"}
+
+id: 91
+event: job.progress
+data: {"job_id":"job_01M4MQDG7HDRKH7QV01E8V52BH","kind":"draft","pct":10,"step":"Listing each point in the letter","step_code":"claims","detail":"Listing each point in the letter","draft_id":"drf_01M4MQDG7FXB2Y6C6F4DJB7T2G"}
+
+id: 92
+event: job.progress
+data: {"job_id":"job_01M4MQDG7HDRKH7QV01E8V52BH","kind":"draft","pct":30,"step":"Finding supporting facts","step_code":"retrieving","detail":"Finding supporting facts","draft_id":"drf_01M4MQDG7FXB2Y6C6F4DJB7T2G"}
+
+id: 93
+event: job.progress
+data: {"job_id":"job_01M4MQDG7HDRKH7QV01E8V52BH","kind":"draft","pct":50,"step":"Drafting the response","step_code":"drafting","detail":"Drafting the response","draft_id":"drf_01M4MQDG7FXB2Y6C6F4DJB7T2G"}
+
+id: 94
+event: job.progress
+data: {"job_id":"job_01M4MQDG7HDRKH7QV01E8V52BH","kind":"draft","pct":80,"step":"Applying the safeguards","step_code":"safeguards","detail":"Applying the safeguards","draft_id":"drf_01M4MQDG7FXB2Y6C6F4DJB7T2G"}
+
+id: 95
+event: job.progress
+data: {"job_id":"job_01M4MQDG7HDRKH7QV01E8V52BH","kind":"draft","pct":90,"step":"Checking citations","step_code":"verifying","detail":"Checking citations","draft_id":"drf_01M4MQDG7FXB2Y6C6F4DJB7T2G"}
+
+id: 96
+event: job.done
+data: {"job_id":"job_01M4MQDG7HDRKH7QV01E8V52BH","kind":"draft","result_url":"/api/v1/drafts/drf_01M4MQDG7FXB2Y6C6F4DJB7T2G","entity_id":"drf_01M4MQDG7FXB2Y6C6F4DJB7T2G","title":"Response letter: acme_demand_letter_scanned.pdf","draft_id":"drf_01M4MQDG7FXB2Y6C6F4DJB7T2G"}
+

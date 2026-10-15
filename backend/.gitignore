@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.venv
+.venv.nosync/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Local settings and runtime data. Data lives in the OS app-data folder by default; `var/` only if you point
+# LEGALLENS_DATA_DIR here. Never commit either: it holds client documents.
+.env
+var/

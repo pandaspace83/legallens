@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "id": "mat_01M4MQAQE9R6CXNE4D5AWWEXBD",
+      "name": "Smith v. Acme Corp",
+      "client_name": "Smith Logistics LLC",
+      "our_side": "defendant",
+      "status": "open",
+      "document_count": 6,
+      "last_activity_at": "2026-10-11T05:35:41.737599Z",
+      "court": "Superior Court of California, County of San Francisco",
+      "practice_area": "Commercial litigation",
+      "opposing_party": "Acme Corp",
+      "opposing_counsel": {
+        "name": "Dana Whitfield",
+        "firm": "Whitfield & Grant LLP"
+      }
+    },
+    {
+      "id": "mat_01M4MQAR4V7QCGJN8Q0GFW1D3R",
+      "name": "Rivera lease dispute",
+      "client_name": "Maria Rivera",
+      "our_side": "tenant",
+      "status": "open",
+      "document_count": 1,
+      "last_activity_at": "2026-10-11T05:35:20.736750Z",
+      "court": null,
+      "practice_area": "Real estate",
+      "opposing_party": "Northgate Properties",
+      "opposing_counsel": null
+    },
+    {
+      "id": "mat_01M4MQAR511QR21RZDW5H208MN",
+      "name": "Henderson estate",
+      "client_name": "Henderson family",
+      "our_side": "executor",
+      "status": "closed",
+      "document_count": 0,
+      "last_activity_at": "2026-10-11T05:35:20.737505Z",
+      "court": null,
+      "practice_area": "Probate",
+      "opposing_party": null,
+      "opposing_counsel": null
+    }
+  ],
+  "next_cursor": null
+}

@@ -1,0 +1,30 @@
+{
+  "id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+  "matter_id": "mat_01M4MQAQE9R6CXNE4D5AWWEXBD",
+  "filename": "acme_demand_letter_scanned.pdf",
+  "mime": "application/pdf",
+  "size_bytes": 78374,
+  "sha256": "03e4dc51867780db5246115546787f9e09883b32939ef053cea127b860c45559",
+  "origin": "other_party",
+  "status": "ready",
+  "scan_status": "clean",
+  "pages_total": 1,
+  "pages_processed": 1,
+  "ocr_conf_avg": 0.956,
+  "hidden_content": null,
+  "parent_document_id": null,
+  "error": null,
+  "uploaded_at": "2026-10-11T05:35:20.419348Z",
+  "ready_at": "2026-10-11T05:35:33.967531Z",
+  "coverage": {
+    "pages_total": 1,
+    "pages_read": 1,
+    "pages_unreadable": [],
+    "ocr_pages": [1],
+    "low_confidence_pages": [],
+    "text": "1 of 1 page read; OCR on p. 1"
+  },
+  "chunk_count": 1,
+  "defined_term_count": 0,
+  "job_id": "job_01M4MQAQV3N0Q59F9Q2NTW8HZ1"
+}

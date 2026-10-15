@@ -1,0 +1,133 @@
+/*
+ * LegalLens design tokens: warm neutral + ink navy, light theme (FRONTEND_TODO.md §2.2).
+ * Tailwind's default palette is switched off, so only these colours exist in the codebase.
+ * Text pairs are measured against WCAG 2.1 AA; ratios are in the plan.
+ */
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Surfaces */
+  --color-app: #fbfbfa;
+  --color-sidebar: #f4f3f0;
+  --color-surface: #ffffff;
+  --color-hover: #efeeea;
+
+  /* Lines */
+  --color-line: #e6e4df;
+  --color-line-strong: #d4d1ca;
+  --color-control: #8f8b84;
+
+  /* Text */
+  --color-fg: #1f1e1c;
+  --color-fg-muted: #5c5a55;
+  --color-fg-subtle: #6f6c66;
+
+  /* Brand */
+  --color-primary: #1e3a5f;
+  --color-primary-hover: #172e4c;
+  --color-primary-deep: #11233b;
+  --color-primary-tint: #ebf0f6;
+  --color-link: #2b5c94;
+  --color-focus: #2f6fb3;
+  --color-highlight: #fdf0c4;
+
+  /* Status */
+  --color-success: #1c6b3a;
+  --color-success-tint: #eaf6ee;
+  --color-warning: #8a5a00;
+  --color-warning-tint: #fdf4e1;
+  --color-danger: #a8261f;
+  --color-danger-tint: #fcedec;
+  --color-info: #475467;
+  --color-info-tint: #eef1f5;
+
+  /* Type: fonts are bundled locally, never fetched (DEC-56) */
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Source Serif 4 Variable', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Shape and depth */
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --shadow-raised: 0 1px 2px rgb(31 30 28 / 0.06), 0 1px 3px rgb(31 30 28 / 0.04);
+  --shadow-overlay: 0 8px 24px rgb(31 30 28 / 0.12), 0 2px 6px rgb(31 30 28 / 0.06);
+
+  /* Layout */
+  --width-sidebar: 280px;
+  --width-reading: 720px;
+  --height-topbar: 52px;
+
+  /* Motion: short and calm; everything is switched off under prefers-reduced-motion */
+  --animate-pop-in: pop-in 140ms ease-out;
+  --animate-fade-in: fade-in 160ms ease-out;
+  --animate-rise-in: rise-in 220ms ease-out;
+  --animate-flash: flash 2.4s ease-out;
+  --animate-caret: caret 1s steps(2, start) infinite;
+  --animate-slide-in-left: slide-in-left 200ms ease-out;
+  --animate-slide-in-right: slide-in-right 200ms ease-out;
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97) translateY(-2px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes flash {
+    0%,
+    30% {
+      box-shadow: 0 0 0 4px rgb(245 196 81 / 0.55);
+    }
+    100% {
+      box-shadow: 0 0 0 4px rgb(245 196 81 / 0);
+    }
+  }
+  @keyframes slide-in-left {
+    from {
+      transform: translateX(-24px);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(24px);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+  @keyframes caret {
+    to {
+      visibility: hidden;
+    }
+  }
+}

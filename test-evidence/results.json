@@ -1,0 +1,1203 @@
+[
+  {
+    "id": "TC-01",
+    "title": "Sign in with email, password and the 6-digit code",
+    "category": "A · Access",
+    "layers": "UI → API (auth) → SQLite sessions",
+    "steps": [
+      "Open the app",
+      "Enter email and password, Continue",
+      "Enter the 6-digit code"
+    ],
+    "expected": "The matters list opens; the session cookie is set and /auth/me answers 200.",
+    "actual": "✓ Backend reports the signed-in user",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Backend reports the signed-in user",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Sign-in screen",
+        "file": "TC-01-01.png"
+      },
+      {
+        "label": "Code step",
+        "file": "TC-01-02.png"
+      },
+      {
+        "label": "Signed in: matters list",
+        "file": "TC-01-03.png"
+      }
+    ],
+    "backend": {
+      "GET /auth/me": {
+        "user": {
+          "id": "usr_01M4ZZNQC605KR4913XFYWJR1Z",
+          "email": "lawyer@legallens.local",
+          "name": "Dev Lawyer",
+          "licensing_states": [
+            "CA",
+            "NY"
+          ],
+          "created_at": "2026-10-15T14:32:47.750862Z",
+          "last_login_at": "2026-10-15T14:32:52.476939Z"
+        },
+        "session": {
+          "expires_at": "2026-10-16T02:32:52.307660Z",
+          "idle_timeout_s": 1800
+        },
+        "auth_mode": "dev",
+        "app": {
+          "version": "0.1.0",
+          "orchestrator": "local",
+          "embedder": "bge-m3",
+          "converter": "fast",
+          "scanner": "clamd",
+          "model_id": null,
+          "prompt_version": null
+        }
+      }
+    },
+    "seconds": 1
+  },
+  {
+    "id": "TC-02",
+    "title": "Open a matter from the matters list",
+    "category": "A · Access",
+    "layers": "UI → API (matters)",
+    "steps": [
+      "Click \"Smith v. Acme Corp\""
+    ],
+    "expected": "The matter workspace opens with the new-chat prompt.",
+    "actual": "✓ A matter id is in the URL",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "A matter id is in the URL",
+        "ok": true,
+        "detail": "mat_01M4ZZNQC87JDQH35XD5DDBASS"
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Matter workspace",
+        "file": "TC-02-01.png"
+      }
+    ],
+    "backend": {},
+    "seconds": 0
+  },
+  {
+    "id": "TC-03",
+    "title": "Upload three documents with who each came from; ingestion completes",
+    "category": "B · Documents",
+    "layers": "UI → API (upload) → worker (scan, convert, chunk, embed) → SQLite FTS5 + vectors",
+    "steps": [
+      "Documents → Upload documents",
+      "Choose the MSA, the demand letter and the invoices",
+      "Tag each (our client / other side)",
+      "Upload and wait for \"Documents processed\""
+    ],
+    "expected": "All three show as Ready with page counts; the backend lists them with status ready.",
+    "actual": "✓ Three documents are stored; ✓ Every document is ready",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Three documents are stored",
+        "ok": true,
+        "detail": "3"
+      },
+      {
+        "desc": "Every document is ready",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Files chosen and tagged",
+        "file": "TC-03-01.png"
+      },
+      {
+        "label": "Processing finished",
+        "file": "TC-03-02.png"
+      },
+      {
+        "label": "Documents library",
+        "file": "TC-03-03.png"
+      }
+    ],
+    "backend": {
+      "GET /matters/{id}/documents": [
+        {
+          "name": "smith_msa_v3.pdf",
+          "status": "ready"
+        },
+        {
+          "name": "acme_demand_letter_scanned.pdf",
+          "status": "ready"
+        },
+        {
+          "name": "exhibit_b_invoices.pdf",
+          "status": "ready"
+        }
+      ]
+    },
+    "seconds": 17
+  },
+  {
+    "id": "TC-04",
+    "title": "Create a conversation and ask a question: the answer is cited and verified",
+    "category": "C · Conversations (scenario 1)",
+    "layers": "UI → API (POST message, SSE) → router → rewrite? → hybrid search → bge reranker → gate → qwen2.5:14b → checker → SQLite",
+    "steps": [
+      "New chat",
+      "Ask \"What notice is required to terminate the agreement?\"",
+      "Wait for the answer to finish streaming"
+    ],
+    "expected": "A new conversation appears in the sidebar; the answer cites the MSA (60 days) with verified citations; the backend record names the local model and state \"found\".",
+    "actual": "✓ Conversation exists in the backend; ✓ Answer was written by the local model; ✓ Answer text mentions sixty / 60 days; ✓ At least one citation; ✓ Every citation is verified; ✓ Model tokens were used (the LLM ran)",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Conversation exists in the backend",
+        "ok": true,
+        "detail": "cnv_01M4ZZPD50PE4C4SY0WV32EA97"
+      },
+      {
+        "desc": "Answer was written by the local model",
+        "ok": true,
+        "detail": "qwen2.5:7b-instruct"
+      },
+      {
+        "desc": "Answer text mentions sixty / 60 days",
+        "ok": true
+      },
+      {
+        "desc": "At least one citation",
+        "ok": true,
+        "detail": "1"
+      },
+      {
+        "desc": "Every citation is verified",
+        "ok": true
+      },
+      {
+        "desc": "Model tokens were used (the LLM ran)",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "New chat",
+        "file": "TC-04-01.png"
+      },
+      {
+        "label": "Answer with citations",
+        "file": "TC-04-02.png"
+      }
+    ],
+    "backend": {
+      "assistant message": {
+        "model_id": "qwen2.5:7b-instruct",
+        "prompt_version": "ask-local-1",
+        "answer_state": "found",
+        "tokens_in": 1278,
+        "tokens_out": 71,
+        "latency_ms": 40953,
+        "citations": 1
+      }
+    },
+    "seconds": 47
+  },
+  {
+    "id": "TC-05",
+    "title": "Open a citation: the document viewer highlights the cited passage",
+    "category": "C · Conversations",
+    "layers": "UI → API (document pages, citation) → viewer",
+    "steps": [
+      "Click source 1 under the answer",
+      "Check the highlighted passage and the page header"
+    ],
+    "expected": "The viewer opens at the cited page with the passage highlighted.",
+    "actual": "✓ Highlighted passage is visible; ✓ The highlighted passage is about notice",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Highlighted passage is visible",
+        "ok": true
+      },
+      {
+        "desc": "The highlighted passage is about notice",
+        "ok": true,
+        "detail": "(b) notice must be delivered by courier or certified mail to the address in sche"
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Cited passage highlighted",
+        "file": "TC-05-01.png"
+      }
+    ],
+    "backend": {},
+    "seconds": 0
+  },
+  {
+    "id": "TC-06",
+    "title": "Follow-up question: the question is rewritten with the chat history",
+    "category": "C · Conversations",
+    "layers": "UI → router → llama3.2:3b rewrite → search → answer",
+    "steps": [
+      "In the same chat ask \"And how must it be delivered?\"",
+      "Open \"What was searched\""
+    ],
+    "expected": "The answer covers courier or certified mail; the searched query is a standalone question.",
+    "actual": "✓ Mentions courier or certified mail; ✓ Rewrite + answer both used the model (tokens recorded)",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Mentions courier or certified mail",
+        "ok": true
+      },
+      {
+        "desc": "Rewrite + answer both used the model (tokens recorded)",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Follow-up answer with the searched query",
+        "file": "TC-06-01.png"
+      }
+    ],
+    "backend": {
+      "second answer": {
+        "model_id": "qwen2.5:7b-instruct",
+        "tokens_in": 1614,
+        "state": "partial"
+      }
+    },
+    "seconds": 38
+  },
+  {
+    "id": "TC-07",
+    "title": "A question the documents cannot answer returns \"Not found\" without a model answer",
+    "category": "C · Conversations",
+    "layers": "UI → search → rerank → gate (blocks) → fixed answer (no LLM)",
+    "steps": [
+      "New chat",
+      "Ask \"What is the weather forecast for Tokyo tomorrow?\""
+    ],
+    "expected": "\"Not found in your documents\", no citations, and the answer model is not called.",
+    "actual": "✓ State is not_found; ✓ No citations",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "State is not_found",
+        "ok": true,
+        "detail": "not_found"
+      },
+      {
+        "desc": "No citations",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Not found",
+        "file": "TC-07-01.png"
+      }
+    ],
+    "backend": {
+      "assistant message": {
+        "answer_state": "not_found",
+        "model_id": "stub-orchestrator",
+        "tokens_out": 18
+      }
+    },
+    "seconds": 3
+  },
+  {
+    "id": "TC-08",
+    "title": "A question that needs outside law is answered with the notice",
+    "category": "C · Conversations",
+    "layers": "UI → router → search → answer → outside-law flag",
+    "steps": [
+      "New chat",
+      "Ask \"Is the late fee clause enforceable under California law?\""
+    ],
+    "expected": "The answer carries the \"needs law that isn’t in your documents\" notice.",
+    "actual": "✓ outside_law flag is set",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "outside_law flag is set",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Outside-law notice",
+        "file": "TC-08-01.png"
+      }
+    ],
+    "backend": {
+      "assistant message": {
+        "outside_law": true,
+        "answer_state": "not_found"
+      }
+    },
+    "seconds": 2
+  },
+  {
+    "id": "TC-09",
+    "title": "Rename a conversation",
+    "category": "C · Conversations (scenario 2)",
+    "layers": "UI → API (PATCH conversation) → SQLite",
+    "steps": [
+      "Open the chat menu in the sidebar",
+      "Rename",
+      "Type a new title, Enter",
+      "Reload the page"
+    ],
+    "expected": "The new title shows in the sidebar, survives a reload, and the backend returns it.",
+    "actual": "✓ Backend has the new title for this chat; ✓ The old title is no longer on this chat",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Backend has the new title for this chat",
+        "ok": true,
+        "detail": "Termination notice - UAT rename"
+      },
+      {
+        "desc": "The old title is no longer on this chat",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Chat menu",
+        "file": "TC-09-01.png"
+      },
+      {
+        "label": "Renamed in the sidebar",
+        "file": "TC-09-02.png"
+      }
+    ],
+    "backend": {
+      "conversation titles": [
+        "Is the late fee clause enforceable under California law",
+        "What is the weather forecast for Tokyo tomorrow",
+        "Termination notice - UAT rename"
+      ]
+    },
+    "seconds": 1
+  },
+  {
+    "id": "TC-10",
+    "title": "Pin a conversation to the top and search the chat list",
+    "category": "C · Conversations",
+    "layers": "UI → API (PATCH pinned, list with q=)",
+    "steps": [
+      "Menu → Pin to top",
+      "Type \"weather\" in Search chats"
+    ],
+    "expected": "The chat moves to Pinned; search narrows the list to matching titles.",
+    "actual": "✓ Backend marks it pinned; ✓ Search hides non-matching chats",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Backend marks it pinned",
+        "ok": true
+      },
+      {
+        "desc": "Search hides non-matching chats",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Pinned section",
+        "file": "TC-10-01.png"
+      },
+      {
+        "label": "Search narrows the list",
+        "file": "TC-10-02.png"
+      }
+    ],
+    "backend": {},
+    "seconds": 0
+  },
+  {
+    "id": "TC-11",
+    "title": "Feedback: \"Not helpful\" opens the form and the note is stored",
+    "category": "C · Conversations",
+    "layers": "UI → API (POST /messages/{id}/feedback) → SQLite feedback + audit",
+    "steps": [
+      "Open the renamed chat",
+      "Not helpful → Missed something + note → Send"
+    ],
+    "expected": "A \"Feedback saved\" toast; the backend accepts the feedback (204).",
+    "actual": "✓ Toast shown",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Toast shown",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Feedback form filled",
+        "file": "TC-11-01.png"
+      },
+      {
+        "label": "Feedback saved",
+        "file": "TC-11-02.png"
+      }
+    ],
+    "backend": {},
+    "seconds": 0
+  },
+  {
+    "id": "TC-12",
+    "title": "Ask again re-sends the question",
+    "category": "C · Conversations",
+    "layers": "UI → API → orchestrator",
+    "steps": [
+      "Click \"Ask again\" under the first answer"
+    ],
+    "expected": "A new answer to the same question is added to the chat.",
+    "actual": "✓ A new assistant message was stored; ✓ The new answer has text; ✓ The new answer has a state; ✓ The new answer states 60 days",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "A new assistant message was stored",
+        "ok": true,
+        "detail": "3 vs 2+1"
+      },
+      {
+        "desc": "The new answer has text",
+        "ok": true,
+        "detail": "To terminate the agreement for convenience, either party mus"
+      },
+      {
+        "desc": "The new answer has a state",
+        "ok": true,
+        "detail": "found"
+      },
+      {
+        "desc": "The new answer states 60 days",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "New answer to the same question",
+        "file": "TC-12-01.png"
+      }
+    ],
+    "backend": {
+      "assistant answers in the chat": [
+        {
+          "state": "found",
+          "model": "qwen2.5:7b-instruct",
+          "status": "complete",
+          "chars": 253
+        },
+        {
+          "state": "partial",
+          "model": "qwen2.5:7b-instruct",
+          "status": "complete",
+          "chars": 153
+        },
+        {
+          "state": "found",
+          "model": "qwen2.5:7b-instruct",
+          "status": "complete",
+          "chars": 253
+        }
+      ]
+    },
+    "seconds": 46
+  },
+  {
+    "id": "TC-13",
+    "title": "Delete a conversation",
+    "category": "C · Conversations (scenario 3)",
+    "layers": "UI → API (DELETE conversation) → SQLite (messages, citations, traces cascade)",
+    "steps": [
+      "Chat menu → Delete",
+      "Confirm"
+    ],
+    "expected": "The chat disappears from the list; the backend no longer returns it.",
+    "actual": "✓ Backend answers 404 for the deleted chat",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Backend answers 404 for the deleted chat",
+        "ok": true,
+        "detail": "404"
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Deleted, with Undo offered for five seconds",
+        "file": "TC-13-01.png"
+      },
+      {
+        "label": "Chat removed from the list",
+        "file": "TC-13-02.png"
+      }
+    ],
+    "backend": {
+      "GET deleted conversation → status": 404
+    },
+    "seconds": 7
+  },
+  {
+    "id": "TC-13b",
+    "title": "Delete then Undo keeps the conversation",
+    "category": "C · Conversations (scenario 3)",
+    "layers": "UI (optimistic delete) → no API delete when undone",
+    "steps": [
+      "Delete another chat",
+      "Click Undo within five seconds"
+    ],
+    "expected": "The chat returns to the list and the backend still has it.",
+    "actual": "✓ Backend still has the chat (200)",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Backend still has the chat (200)",
+        "ok": true,
+        "detail": "200"
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Deleted: Undo toast",
+        "file": "TC-13b-01.png"
+      },
+      {
+        "label": "Restored in the list",
+        "file": "TC-13b-02.png"
+      }
+    ],
+    "backend": {},
+    "seconds": 7
+  },
+  {
+    "id": "TC-14",
+    "title": "New conversation: pick an existing document and summarize it",
+    "category": "D · Summarize (existing document)",
+    "layers": "UI scope selector → router (summarize) → job queue → worker → per-field retrieval → qwen2.5:14b → checker → summary record",
+    "steps": [
+      "New chat",
+      "Scope → acme_demand_letter_scanned",
+      "Ask \"Summarize this document\"",
+      "Wait for the summary card, Open summary"
+    ],
+    "expected": "A summary job card appears and completes; the summary lists sender, recipient, demands, deadlines, claims, threats, amounts with citations; model id is the local model.",
+    "actual": "✓ Summary is ready; ✓ Written by the local model; ✓ Seven template fields; ✓ Amounts field has the $48,500 demand",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Summary is ready",
+        "ok": true,
+        "detail": "ready"
+      },
+      {
+        "desc": "Written by the local model",
+        "ok": true,
+        "detail": "qwen2.5:14b-instruct"
+      },
+      {
+        "desc": "Seven template fields",
+        "ok": true,
+        "detail": "7"
+      },
+      {
+        "desc": "Amounts field has the $48,500 demand",
+        "ok": true,
+        "detail": "- $48,500 in overdue invoices [7]\n“Payment of $48,500 in overdue invoices within"
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Scope selector open",
+        "file": "TC-14-01.png"
+      },
+      {
+        "label": "Document selected as the scope",
+        "file": "TC-14-02.png"
+      },
+      {
+        "label": "Summary job card (running)",
+        "file": "TC-14-03.png"
+      },
+      {
+        "label": "Summary panel",
+        "file": "TC-14-04.png"
+      }
+    ],
+    "backend": {
+      "summary": {
+        "model_id": "qwen2.5:14b-instruct",
+        "prompt_version": "summary-local-1",
+        "fields": [
+          {
+            "field": "sender",
+            "citations": 1
+          },
+          {
+            "field": "recipient",
+            "citations": 1
+          },
+          {
+            "field": "demands",
+            "citations": 1
+          },
+          {
+            "field": "deadlines",
+            "citations": 1
+          },
+          {
+            "field": "claims",
+            "citations": 1
+          },
+          {
+            "field": "threats",
+            "citations": 1
+          },
+          {
+            "field": "amounts",
+            "citations": 1
+          }
+        ]
+      }
+    },
+    "seconds": 414
+  },
+  {
+    "id": "TC-15",
+    "title": "Summary: export to Word",
+    "category": "D · Summarize (existing document)",
+    "layers": "UI → API (export job) → python-docx → file",
+    "steps": [
+      "In the summary panel click \"Export to Word\""
+    ],
+    "expected": "A .docx file downloads.",
+    "actual": "✓ File is .docx",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "File is .docx",
+        "ok": true,
+        "detail": "summary-acme-demand-letter-scanned.docx"
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "After export",
+        "file": "TC-15-01.png"
+      }
+    ],
+    "backend": {
+      "download": "summary-acme-demand-letter-scanned.docx"
+    },
+    "seconds": 0
+  },
+  {
+    "id": "TC-16",
+    "title": "New conversation: upload a new document from the chat and summarize it",
+    "category": "D · Summarize (new document)",
+    "layers": "UI attach → API upload → worker ingest → router (summarize) → summary job → local model",
+    "steps": [
+      "New chat",
+      "Attach → upload email_from_acme_counsel.eml",
+      "Wait for ingestion",
+      "Ask \"Summarize email_from_acme_counsel\""
+    ],
+    "expected": "The document is ingested and a summary job completes for it.",
+    "actual": "✓ New document is stored and ready",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "New document is stored and ready",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Upload from the chat",
+        "file": "TC-16-01.png"
+      },
+      {
+        "label": "Summary of the uploaded document",
+        "file": "TC-16-02.png"
+      }
+    ],
+    "backend": {},
+    "seconds": 153
+  },
+  {
+    "id": "TC-17",
+    "title": "Draft an internal memo",
+    "category": "E · Draft (memo)",
+    "layers": "UI → router (draft) → draft job → templates (no model for memos) → checks",
+    "steps": [
+      "New chat",
+      "Mode → Draft",
+      "Choose Internal memo",
+      "Ask for a memo about the demand letter",
+      "Open draft"
+    ],
+    "expected": "A memo skeleton opens: Question Presented, Brief Answer, Statement of Facts (quoted from the document, cited), Discussion with [RULE NEEDED]; marked \"AI draft · not reviewed\".",
+    "actual": "✓ A memo draft exists; ✓ Statement of Facts is cited; ✓ Statement of Facts was written by the local model; ✓ Has Question Presented and Discussion",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "A memo draft exists",
+        "ok": true
+      },
+      {
+        "desc": "Statement of Facts is cited",
+        "ok": true
+      },
+      {
+        "desc": "Statement of Facts was written by the local model",
+        "ok": true,
+        "detail": "qwen2.5:14b-instruct"
+      },
+      {
+        "desc": "Has Question Presented and Discussion",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Draft type menu",
+        "file": "TC-17-01.png"
+      },
+      {
+        "label": "Draft mode, Internal memo chosen",
+        "file": "TC-17-02.png"
+      },
+      {
+        "label": "Memo draft",
+        "file": "TC-17-03.png"
+      }
+    ],
+    "backend": {
+      "memo": {
+        "headings": [
+          "Memorandum",
+          "Question Presented",
+          "Brief Answer",
+          "Statement of Facts",
+          "Discussion",
+          "Conclusion"
+        ],
+        "model_id": "qwen2.5:14b-instruct",
+        "facts_start": "On September 15, 2026, Whitfield & Grant LLP, representing Acme Corp, sent a demand letter to Smith Logistics LLC regarding the Master Services Agreement dated ",
+        "facts_citations": 1
+      }
+    },
+    "seconds": 84
+  },
+  {
+    "id": "TC-17b",
+    "title": "Auto mode: asking for \"a memo\" in words produces a memo, not a letter",
+    "category": "E · Draft (memo)",
+    "layers": "UI (no forced draft type in Auto) → router keywords → draft job → memo template",
+    "steps": [
+      "New chat (mode Auto)",
+      "Ask \"Write a memo on the demand in acme_demand_letter_scanned\""
+    ],
+    "expected": "The draft type is memo.",
+    "actual": "✓ The newest draft is a memo",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "The newest draft is a memo",
+        "ok": true,
+        "detail": "memo"
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Draft opened from a plain-words request",
+        "file": "TC-17b-01.png"
+      }
+    ],
+    "backend": {
+      "drafts": [
+        {
+          "type": "memo",
+          "title": "Memo: acme_demand_letter_scanned.pdf"
+        },
+        {
+          "type": "memo",
+          "title": "Memo: acme_demand_letter_scanned.pdf"
+        }
+      ]
+    },
+    "seconds": 70
+  },
+  {
+    "id": "TC-18",
+    "title": "Draft a response letter to the demand letter (model-written paragraphs)",
+    "category": "E · Draft (response letter)",
+    "layers": "UI → router → draft job → claim extraction → retrieval → qwen2.5:14b per point → checker → safeguards",
+    "steps": [
+      "New chat",
+      "Ask \"Draft a reply to acme_demand_letter_scanned\"",
+      "Open draft"
+    ],
+    "expected": "A letter addresses each claim; paragraphs cite the MSA; unverified authority is flagged [UNVERIFIED]; placeholders and [CITE NEEDED] lock the clean export; model id is recorded.",
+    "actual": "✓ A response letter exists; ✓ Model-written (draft model recorded); ✓ Marked as not reviewed; ✓ Claims are tracked; ✓ Supporting facts come from the MSA",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "A response letter exists",
+        "ok": true
+      },
+      {
+        "desc": "Model-written (draft model recorded)",
+        "ok": true,
+        "detail": "qwen2.5:14b-instruct"
+      },
+      {
+        "desc": "Marked as not reviewed",
+        "ok": true
+      },
+      {
+        "desc": "Claims are tracked",
+        "ok": true,
+        "detail": "7"
+      },
+      {
+        "desc": "Supporting facts come from the MSA",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Response letter draft",
+        "file": "TC-18-01.png"
+      },
+      {
+        "label": "Checks: export checklist and point by point",
+        "file": "TC-18-02.png"
+      }
+    ],
+    "backend": {
+      "letter": {
+        "model_id": "qwen2.5:14b-instruct",
+        "prompt_version": "draft-local-1",
+        "claims": 7,
+        "placeholders": [
+          "placeholder",
+          "placeholder",
+          "cite_needed",
+          "placeholder",
+          "cite_needed",
+          "cite_needed",
+          "placeholder",
+          "cite_needed",
+          "unverified",
+          "placeholder",
+          "cite_needed",
+          "unverified",
+          "cite_needed",
+          "cite_needed"
+        ],
+        "watermark": "AI draft · not reviewed"
+      }
+    },
+    "seconds": 243
+  },
+  {
+    "id": "TC-19",
+    "title": "Draft review gate: resolve placeholders, acknowledge citations, adopt, export clean copy",
+    "category": "E · Draft (response letter)",
+    "layers": "UI → API (PATCH draft, review, export) → python-docx clean export",
+    "steps": [
+      "Export is locked and says why",
+      "Fill or remove every placeholder",
+      "Acknowledge each citation row",
+      "Review and adopt",
+      "Export the clean copy"
+    ],
+    "expected": "The clean copy stays locked until every safeguard is met; afterwards a .docx downloads.",
+    "actual": "✓ Clean copy is locked at first; ✓ Clean .docx downloaded",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Clean copy is locked at first",
+        "ok": true
+      },
+      {
+        "desc": "Clean .docx downloaded",
+        "ok": true,
+        "detail": "response-letter-v13.docx"
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Export locked",
+        "file": "TC-19-01.png"
+      },
+      {
+        "label": "Placeholders resolved",
+        "file": "TC-19-02.png"
+      },
+      {
+        "label": "Citations acknowledged",
+        "file": "TC-19-03.png"
+      },
+      {
+        "label": "Review and adopt dialog",
+        "file": "TC-19-04.png"
+      },
+      {
+        "label": "After clean export",
+        "file": "TC-19-05.png"
+      }
+    ],
+    "backend": {
+      "download": "response-letter-v13.docx"
+    },
+    "seconds": 7
+  },
+  {
+    "id": "TC-20",
+    "title": "Settings → About: every layer reports healthy and names the model",
+    "category": "F · System and layers",
+    "layers": "UI → GET /health → db, vectors, FTS5, worker, scanner, embedder, converter, orchestrator (Ollama)",
+    "steps": [
+      "Open Settings → About",
+      "Read the component list"
+    ],
+    "expected": "All components OK; AI engine shows the model and prompt version.",
+    "actual": "✓ Overall status ok; ✓ AI engine names the local model",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Overall status ok",
+        "ok": true,
+        "detail": "ok"
+      },
+      {
+        "desc": "AI engine names the local model",
+        "ok": true,
+        "detail": "qwen2.5:7b-instruct · prompt ask-local-1"
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "About: components",
+        "file": "TC-20-01.png"
+      }
+    ],
+    "backend": {
+      "GET /health": {
+        "status": "ok",
+        "version": "0.1.0",
+        "db": {
+          "kind": "sqlite",
+          "ok": true,
+          "detail": "legallens.db"
+        },
+        "sqlite_vec": {
+          "kind": "sqlite-vec",
+          "ok": true,
+          "detail": "v0.1.9"
+        },
+        "fts5": {
+          "kind": "fts5",
+          "ok": true,
+          "detail": null
+        },
+        "worker": {
+          "kind": "worker",
+          "ok": true,
+          "detail": "last heartbeat 0s ago"
+        },
+        "scanner": {
+          "kind": "clamd",
+          "ok": true,
+          "detail": null
+        },
+        "embedder": {
+          "kind": "bge-m3",
+          "ok": true,
+          "detail": "1024 dimensions · BAAI/bge-reranker-v2-m3"
+        },
+        "converter": {
+          "kind": "fast",
+          "ok": true,
+          "detail": "PyMuPDF + python-docx + Tesseract"
+        },
+        "orchestrator": {
+          "kind": "local",
+          "ok": true,
+          "detail": "qwen2.5:7b-instruct · prompt ask-local-1"
+        },
+        "storage": {
+          "kind": "disk",
+          "ok": true,
+          "detail": "100 GB free"
+        }
+      }
+    },
+    "seconds": 1
+  },
+  {
+    "id": "TC-21",
+    "title": "\"Where your data goes\" explains what stays on the computer",
+    "category": "F · System and layers",
+    "layers": "UI",
+    "steps": [
+      "Open the data-flow page"
+    ],
+    "expected": "The page loads with the local-only explanation and no accessibility violations.",
+    "actual": "✓ No WCAG 2.1 AA violations",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "No WCAG 2.1 AA violations",
+        "ok": true,
+        "detail": ""
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Where your data goes",
+        "file": "TC-21-01.png"
+      }
+    ],
+    "backend": {},
+    "seconds": 2
+  },
+  {
+    "id": "TC-22",
+    "title": "Command palette (⌘K) finds a chat and a document",
+    "category": "F · System and layers",
+    "layers": "UI",
+    "steps": [
+      "Press ⌘K",
+      "Type \"invoices\""
+    ],
+    "expected": "The palette lists the invoices document.",
+    "actual": "✓ Document is listed",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Document is listed",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Command palette",
+        "file": "TC-22-01.png"
+      }
+    ],
+    "backend": {},
+    "seconds": 1
+  },
+  {
+    "id": "TC-23",
+    "title": "Matter isolation: another matter shows none of this matter’s documents or answers",
+    "category": "G · Security",
+    "layers": "UI → API (matter scope guard) → SQL filters on both search legs",
+    "steps": [
+      "Open the Rivera matter",
+      "List documents",
+      "Ask the termination-notice question"
+    ],
+    "expected": "No Smith documents are listed; the answer is \"Not found\" or has no citation from Smith documents.",
+    "actual": "✓ No Smith/Acme document names appear",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "No Smith/Acme document names appear",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Rivera matter documents",
+        "file": "TC-23-01.png"
+      },
+      {
+        "label": "Answer in the other matter",
+        "file": "TC-23-02.png"
+      }
+    ],
+    "backend": {},
+    "seconds": 8
+  },
+  {
+    "id": "TC-24",
+    "title": "Delete a document: it disappears and its passages are no longer searchable",
+    "category": "B · Documents",
+    "layers": "UI → API (DELETE document) → cascade: chunks, FTS5 rows, vectors, files",
+    "steps": [
+      "Documents → delete email_from_acme_counsel",
+      "Confirm"
+    ],
+    "expected": "The document is gone from the list and the API.",
+    "actual": "✓ Backend no longer lists it",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "Backend no longer lists it",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Delete confirmation",
+        "file": "TC-24-01.png"
+      },
+      {
+        "label": "Document removed",
+        "file": "TC-24-02.png"
+      }
+    ],
+    "backend": {},
+    "seconds": 2
+  },
+  {
+    "id": "TC-25",
+    "title": "Phone-width layout: ask screen and document list stay usable",
+    "category": "F · System and layers",
+    "layers": "UI",
+    "steps": [
+      "Resize to 390×844",
+      "Open the matter"
+    ],
+    "expected": "No horizontal scroll; the composer is reachable.",
+    "actual": "✓ No horizontal page scroll",
+    "status": "PASS",
+    "checks": [
+      {
+        "desc": "No horizontal page scroll",
+        "ok": true
+      }
+    ],
+    "screenshots": [
+      {
+        "label": "Phone width",
+        "file": "TC-25-01.png"
+      }
+    ],
+    "backend": {},
+    "seconds": 0
+  }
+]

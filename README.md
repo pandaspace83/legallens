@@ -1,0 +1,77 @@
+# LegalLens
+
+A local-first assistant for lawyers: ask questions of a matter's documents with cited answers, summarize them, and draft replies the lawyer reviews and adopts. Everything runs on one computer; nothing leaves it (DEC-08).
+
+> **Synthetic documents only (DEC-73).** Sign-in runs in dev mode and the AI engine is a stand-in (the app shows a "Stand-in answers" badge). Don't put real client documents in yet.
+
+| Folder | What it is |
+| --- | --- |
+| [`backend/`](backend/README.md) | FastAPI + SQLite: matters, documents, chat over SSE, summaries, drafts, exports |
+| [`frontend/`](frontend/README.md) | React app: sign-in, chat, document viewer, summaries, drafts |
+| [`scripts/`](scripts/) | `dev.sh` starts both for development |
+| [`architecture/`](architecture/) | Technical architecture diagrams |
+
+Plans and their status: [`BACKEND_TODO.md`](BACKEND_TODO.md), [`FRONTEND_TODO.md`](FRONTEND_TODO.md), [`INTEGRATION_TODO.md`](INTEGRATION_TODO.md). Decisions: [`IDEAS.md`](IDEAS.md).
+
+## First-time setup
+
+macOS on Apple silicon. Backend setup (Python, ClamAV, the Docling models, a seeded database) is in [`backend/README.md`](backend/README.md#first-time-setup-macos-apple-silicon). Frontend:
+
+```bash
+cd frontend && npm install
+```
+
+## Run it as one app
+
+```bash
+cd frontend && npm run build:app          # builds the app for the real backend into frontend/dist
+cd ../backend && uv run legallens serve --worker
+```
+
+Open **http://127.0.0.1:8000**. The API serves the built app from the same origin, so there is no proxy and no CORS. `--worker` runs the background worker (ingestion, summaries, drafts, exports) inside the same process.
+
+Sign in with `lawyer@legallens.local`, any password, then any six digits.
+
+## Run it for development
+
+```bash
+scripts/dev.sh        # backend on :8000 (auto-reload + worker) and the app on http://localhost:5173
+```
+
+Or each side alone:
+
+| Command | Does |
+| --- | --- |
+| `cd backend && uv run legallens dev` | API with auto-reload and an in-process worker |
+| `cd frontend && npm run dev:http` | App against the backend, via Vite's proxy |
+| `cd frontend && npm run dev` | App on the in-browser mock, with its dev panel (⌘⇧D). No backend needed |
+
+## Tests
+
+| Command | Runs |
+| --- | --- |
+| `cd backend && uv run pytest` | Backend unit, API, streaming and security tests |
+| `cd frontend && npm test` | Frontend unit tests and the HTTP client's contract tests |
+| `cd frontend && npm run test:e2e` | Browser tests on the mock |
+| `cd frontend && npm run test:e2e:real` | The main flows against a throw-away real backend and the dev server |
+| `cd frontend && npm run test:e2e:single` | The same flows against the single app (builds first) |
+
+The real and single runs start their own backend on port 8100 in a temporary folder, use the machine's ClamAV if it is running, and stop it afterwards.
+
+## After an API change
+
+```bash
+cd backend && uv run legallens openapi     # regenerate openapi.json
+cd ../frontend && npm run api:types        # regenerate the typed wire schema
+npm run api:fixtures                       # re-record contract fixtures (needs a seeded backend with a worker on :8000)
+```
+
+## Security and release commands (2026-10-15)
+
+- Real sign-in: `LEGALLENS_AUTH_MODE=real`, then `legallens user create --email you@firm.com`.
+- Encrypt the database and files: `legallens db encrypt`; store the key from `legallens key show` apart from backups.
+- HTTPS on this computer: `legallens cert trust`, then `legallens serve --worker --https`.
+- Backups: `legallens backup create --to <folder>`, `backup verify <file>`, `backup prune --folder <folder>`.
+- Feedback to test cases: `legallens feedback export --to cases.jsonl`.
+- Release gate: `scripts/release_gate.sh [model]` (suites, golden set, comparison with `golden_baseline.json`).
+- What to do when something goes wrong: `INCIDENT_PLAN.md`.

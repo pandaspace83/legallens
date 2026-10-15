@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "id": "drf_01M4MQDG7FXB2Y6C6F4DJB7T2G",
+      "type": "response_letter",
+      "title": "Response letter: acme_demand_letter_scanned.pdf",
+      "status": "not_reviewed",
+      "incoming_document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+      "incoming_document_name": "acme_demand_letter_scanned.pdf",
+      "conversation_id": null,
+      "version": 1,
+      "reviewed_at": null,
+      "created_at": "2026-10-11T05:36:50.928320Z",
+      "updated_at": "2026-10-11T05:36:51.202696Z"
+    }
+  ],
+  "next_cursor": null
+}

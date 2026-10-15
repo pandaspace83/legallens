@@ -1,0 +1,24 @@
+{
+  "user": {
+    "id": "usr_01M4MQAQE6B8344J1716FP63EG",
+    "email": "lawyer@legallens.local",
+    "name": "Dev Lawyer",
+    "licensing_states": ["CA", "NY"],
+    "created_at": "2026-10-11T05:35:20.007421Z",
+    "last_login_at": "2026-10-11T05:36:50.240697Z"
+  },
+  "session": {
+    "expires_at": "2026-10-11T17:36:50.240586Z",
+    "idle_timeout_s": 1800
+  },
+  "auth_mode": "dev",
+  "app": {
+    "version": "0.1.0",
+    "orchestrator": "stub",
+    "embedder": "hash",
+    "converter": "docling",
+    "scanner": "clamd",
+    "model_id": "stub-orchestrator",
+    "prompt_version": "stub-0"
+  }
+}

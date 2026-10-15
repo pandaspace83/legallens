@@ -1,0 +1,5 @@
+{
+  "_note": "Release gate baseline (NFR-06). Scores of the golden set on 2026-10-14; raise a number only after a person has reviewed the change that earned it. Compared by scripts/release_gate.py.",
+  "qwen2.5:7b-instruct": {"correct": 23, "right_document": 22, "verified": 20, "refused": 10, "invented": 0},
+  "qwen2.5:14b-instruct": {"correct": 23, "right_document": 22, "verified": 21, "refused": 10, "invented": 0}
+}

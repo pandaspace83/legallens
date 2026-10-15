@@ -1,0 +1,308 @@
+id: 1
+event: run.started
+data: {"run_id":"run_01M4MQDFMR9A0BQB3CFNP6AFG9","message_id":"msg_01M4MQDFMR9A0BQB3CFNP6AFGB"}
+
+id: 2
+event: intent
+data: {"intent":"ask","confidence":1.0}
+
+id: 3
+event: scope
+data: {"searching":"All 6 documents in this matter"}
+
+id: 4
+event: status
+data: {"step":"rewriting"}
+
+id: 5
+event: status
+data: {"step":"searching"}
+
+id: 6
+event: status
+data: {"step":"reranking"}
+
+id: 7
+event: status
+data: {"step":"generating"}
+
+id: 8
+event: token
+data: {"delta":"From "}
+
+id: 9
+event: token
+data: {"delta":"your "}
+
+id: 10
+event: token
+data: {"delta":"documents:\n\n"}
+
+id: 11
+event: token
+data: {"delta":"- "}
+
+id: 12
+event: token
+data: {"delta":"smith_msa_v3, "}
+
+id: 13
+event: token
+data: {"delta":"p. "}
+
+id: 14
+event: token
+data: {"delta":"1, "}
+
+id: 15
+event: token
+data: {"delta":"4.2(b): "}
+
+id: 16
+event: token
+data: {"delta":"“(b) "}
+
+id: 17
+event: token
+data: {"delta":"Notice "}
+
+id: 18
+event: token
+data: {"delta":"must "}
+
+id: 19
+event: token
+data: {"delta":"be "}
+
+id: 20
+event: token
+data: {"delta":"delivered "}
+
+id: 21
+event: token
+data: {"delta":"by "}
+
+id: 22
+event: token
+data: {"delta":"courier "}
+
+id: 23
+event: token
+data: {"delta":"or "}
+
+id: 24
+event: token
+data: {"delta":"certified "}
+
+id: 25
+event: token
+data: {"delta":"mail "}
+
+id: 26
+event: token
+data: {"delta":"to "}
+
+id: 27
+event: token
+data: {"delta":"the "}
+
+id: 28
+event: token
+data: {"delta":"address "}
+
+id: 29
+event: token
+data: {"delta":"in "}
+
+id: 30
+event: token
+data: {"delta":"Schedule "}
+
+id: 31
+event: token
+data: {"delta":"2, "}
+
+id: 32
+event: token
+data: {"delta":"and:” "}
+
+id: 33
+event: token
+data: {"delta":"[1]\n"}
+
+id: 34
+event: token
+data: {"delta":"- "}
+
+id: 35
+event: token
+data: {"delta":"acme_redline_other_side, "}
+
+id: 36
+event: token
+data: {"delta":"p. "}
+
+id: 37
+event: token
+data: {"delta":"1, "}
+
+id: 38
+event: token
+data: {"delta":"1: "}
+
+id: 39
+event: token
+data: {"delta":"“Section "}
+
+id: 40
+event: token
+data: {"delta":"4.2(a) "}
+
+id: 41
+event: token
+data: {"delta":"is "}
+
+id: 42
+event: token
+data: {"delta":"amended "}
+
+id: 43
+event: token
+data: {"delta":"so "}
+
+id: 44
+event: token
+data: {"delta":"that "}
+
+id: 45
+event: token
+data: {"delta":"either "}
+
+id: 46
+event: token
+data: {"delta":"party "}
+
+id: 47
+event: token
+data: {"delta":"may "}
+
+id: 48
+event: token
+data: {"delta":"terminate "}
+
+id: 49
+event: token
+data: {"delta":"on "}
+
+id: 50
+event: token
+data: {"delta":"ten "}
+
+id: 51
+event: token
+data: {"delta":"(10) "}
+
+id: 52
+event: token
+data: {"delta":"days' "}
+
+id: 53
+event: token
+data: {"delta":"written "}
+
+id: 54
+event: token
+data: {"delta":"notice.” "}
+
+id: 55
+event: token
+data: {"delta":"[2]\n"}
+
+id: 56
+event: token
+data: {"delta":"- "}
+
+id: 57
+event: token
+data: {"delta":"smith_msa_v3, "}
+
+id: 58
+event: token
+data: {"delta":"p. "}
+
+id: 59
+event: token
+data: {"delta":"2, "}
+
+id: 60
+event: token
+data: {"delta":"Schedule "}
+
+id: 61
+event: token
+data: {"delta":"2: "}
+
+id: 62
+event: token
+data: {"delta":"“Smith "}
+
+id: 63
+event: token
+data: {"delta":"Logistics "}
+
+id: 64
+event: token
+data: {"delta":"LLC, "}
+
+id: 65
+event: token
+data: {"delta":"200 "}
+
+id: 66
+event: token
+data: {"delta":"Harbor "}
+
+id: 67
+event: token
+data: {"delta":"Way, "}
+
+id: 68
+event: token
+data: {"delta":"Oakland, "}
+
+id: 69
+event: token
+data: {"delta":"CA "}
+
+id: 70
+event: token
+data: {"delta":"94607.” "}
+
+id: 71
+event: token
+data: {"delta":"[3]"}
+
+id: 72
+event: status
+data: {"step":"verifying"}
+
+id: 73
+event: citation
+data: {"n":1,"citation_id":4,"document":"smith_msa_v3.pdf","document_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM","page":1,"para":"4.2(b)","quote":"(b) Notice must be delivered by courier or certified mail to the address in Schedule 2, and:","verified":true}
+
+id: 74
+event: citation
+data: {"n":2,"citation_id":5,"document":"acme_redline_other_side.docx","document_id":"doc_01M4MQAR384X7WQ6SD9RBA7Q1A","page":1,"para":"1","quote":"Section 4.2(a) is amended so that either party may terminate on ten (10) days' written notice.","verified":true}
+
+id: 75
+event: citation
+data: {"n":3,"citation_id":6,"document":"smith_msa_v3.pdf","document_id":"doc_01M4MQAQR6RE3FNMVXHX756FXM","page":2,"para":"Schedule 2","quote":"Smith Logistics LLC, 200 Harbor Way, Oakland, CA 94607.","verified":true}
+
+id: 76
+event: answer_state
+data: {"state":"found","outside_law":false,"searched":{"scope_label":"All 6 documents in this matter","rewritten_question":"How must a termination notice be delivered?","documents_searched":6,"passages_reviewed":18,"passages_used":8}}
+
+id: 77
+event: done
+data: {"message_id":"msg_01M4MQDFMR9A0BQB3CFNP6AFGB","tokens_in":442,"tokens_out":64,"latency_ms":25}
+

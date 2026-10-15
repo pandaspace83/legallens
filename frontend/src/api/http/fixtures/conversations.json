@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "id": "cnv_01M4MQDFM89RFZRNM8Q9JQ3Y1M",
+      "matter_id": "mat_01M4MQAQE9R6CXNE4D5AWWEXBD",
+      "title": "How must a termination notice be delivered",
+      "pinned": false,
+      "scope": {
+        "kind": "all",
+        "document_ids": []
+      },
+      "created_at": "2026-10-11T05:36:50.312229Z",
+      "updated_at": "2026-10-11T05:36:50.363285Z"
+    },
+    {
+      "id": "cnv_01M4MQBCMXRZA9VMPN9RRDH1BB",
+      "matter_id": "mat_01M4MQAQE9R6CXNE4D5AWWEXBD",
+      "title": "How must a termination notice be delivered",
+      "pinned": false,
+      "scope": {
+        "kind": "all",
+        "document_ids": []
+      },
+      "created_at": "2026-10-11T05:35:41.725365Z",
+      "updated_at": "2026-10-11T05:35:41.760252Z"
+    }
+  ],
+  "next_cursor": null
+}

@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "id": "sum_01M4MQDFPPZ70ESX7W4A8ES926",
+      "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+      "document_name": "acme_demand_letter_scanned.pdf",
+      "template": "letter_demand",
+      "audience": "detailed",
+      "status": "ready",
+      "conversation_id": null,
+      "created_at": "2026-10-11T05:36:50.391314Z"
+    },
+    {
+      "id": "sum_01M4MQBCPJJ28CKQF0TFXJ8M2J",
+      "document_id": "doc_01M4MQAQV2KVS03VYKFMSTBWVQ",
+      "document_name": "acme_demand_letter_scanned.pdf",
+      "template": "letter_demand",
+      "audience": "detailed",
+      "status": "ready",
+      "conversation_id": null,
+      "created_at": "2026-10-11T05:35:41.778840Z"
+    }
+  ],
+  "next_cursor": null
+}

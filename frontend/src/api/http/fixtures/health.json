@@ -1,0 +1,49 @@
+{
+  "status": "ok",
+  "version": "0.1.0",
+  "db": {
+    "kind": "sqlite",
+    "ok": true,
+    "detail": "legallens.db"
+  },
+  "sqlite_vec": {
+    "kind": "sqlite-vec",
+    "ok": true,
+    "detail": "v0.1.9"
+  },
+  "fts5": {
+    "kind": "fts5",
+    "ok": true,
+    "detail": null
+  },
+  "worker": {
+    "kind": "worker",
+    "ok": true,
+    "detail": "last heartbeat 0s ago"
+  },
+  "scanner": {
+    "kind": "clamd",
+    "ok": true,
+    "detail": null
+  },
+  "embedder": {
+    "kind": "hash",
+    "ok": true,
+    "detail": "1024 dimensions"
+  },
+  "converter": {
+    "kind": "docling",
+    "ok": true,
+    "detail": null
+  },
+  "orchestrator": {
+    "kind": "stub",
+    "ok": true,
+    "detail": "stub-orchestrator · prompt stub-0"
+  },
+  "storage": {
+    "kind": "disk",
+    "ok": true,
+    "detail": "113 GB free"
+  }
+}

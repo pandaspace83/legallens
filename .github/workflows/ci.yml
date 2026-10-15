@@ -1,0 +1,97 @@
+# Light CI: static checks and the fast test suites on every push and pull request.
+# Not run here: the real-model tests (`pytest -m llm`, `-m slow`), the real-backend UAT and the golden-set release
+# gate. They need Ollama and the models; run them with scripts/release_gate.sh on a machine that has them.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (ruff, mypy, pytest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - name: Install (Python version comes from .python-version)
+        run: uv sync --frozen
+      - name: Lint
+        run: uv run ruff check .
+      - name: Format
+        run: uv run ruff format --check .
+      - name: Types
+        run: uv run mypy src
+      - name: Tests (the default run: no real models)
+        run: uv run pytest -q
+
+  frontend:
+    name: Frontend (types, lint, unit, build, browser tests on mock data)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - name: Types
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Format
+        run: npx prettier --check src e2e e2e-real playwright.config.ts
+      - name: Unit tests
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Browser tests (mock API)
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:e2e
+      - name: Keep the report when a browser test fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: frontend/playwright-report
+          retention-days: 7
+
+  contract:
+    name: API contract (openapi.json matches the app)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - name: Regenerate and compare
+        working-directory: backend
+        run: |
+          uv sync --frozen
+          uv run legallens openapi --output /tmp/openapi.json
+          python3 - <<'PY'
+          import json, sys
+          committed = json.load(open("openapi.json"))
+          fresh = json.load(open("/tmp/openapi.json"))
+          sys.exit(0 if committed == fresh else "openapi.json is out of date: run `uv run legallens openapi`")
+          PY

@@ -1,0 +1,73 @@
+{
+  "name": "legallens-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:http": "VITE_API=http vite",
+    "build": "tsc -b && vite build",
+    "build:app": "tsc -b && VITE_API=http vite build",
+    "lint": "oxlint src e2e",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --noEmit",
+    "api:types": "openapi-typescript ../backend/openapi.json -o src/api/http/schema.d.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "node --preserve-symlinks --preserve-symlinks-main node_modules/@playwright/test/cli.js test",
+    "test:e2e:single": "npm run build:app && E2E_REAL=1 E2E_SINGLE=1 node --preserve-symlinks --preserve-symlinks-main node_modules/@playwright/test/cli.js test",
+    "test:e2e:real": "E2E_REAL=1 node --preserve-symlinks --preserve-symlinks-main node_modules/@playwright/test/cli.js test",
+    "postinstall": "node scripts/link-node-modules.mjs",
+    "screenshots": "node --preserve-symlinks --preserve-symlinks-main scripts/screenshots.mjs",
+    "api:fixtures": "node scripts/record-fixtures.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource-variable/source-serif-4": "5.3.0",
+    "@tanstack/react-query": "5.104.1",
+    "@tanstack/react-virtual": "3.14.13",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "cmdk": "1.1.1",
+    "lucide-react": "1.52.0",
+    "radix-ui": "1.7.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-markdown": "10.1.0",
+    "react-resizable-panels": "4.14.2",
+    "react-router": "8.4.0",
+    "remark-gfm": "4.0.1",
+    "sonner": "2.0.8",
+    "tailwind-merge": "3.7.0",
+    "zustand": "5.0.15"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/vite": "4.3.3",
+    "@tanstack/react-query-devtools": "5.104.1",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.7",
+    "@types/node": "24.19.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "jsdom": "30.1.2",
+    "openapi-typescript": "7.13.0",
+    "oxlint": "1.87.0",
+    "prettier": "3.9.9",
+    "prettier-plugin-tailwindcss": "0.8.1",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "vite": "8.3.3",
+    "vitest": "5.0.3"
+  },
+  "overrides": {
+    "openapi-typescript": {
+      "typescript": "$typescript"
+    }
+  }
+}
