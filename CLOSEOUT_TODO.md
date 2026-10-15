@@ -96,3 +96,9 @@ Edited the BRD (FR-DRF-05), switched Ask to the 7B (DEC-90) and built the remain
 Statement of Facts for memos (DEC-92), HTTPS on localhost, the incident plan, 35-day backup pruning, the release gate
 script and the feedback export (DEC-91). Open: a CI service to run the gate on every push (there is no remote), a
 lawyer's review of the golden set (OPEN-01), and the BRD page count (not re-measured after the one sentence added).
+
+## CI, 2026-10-15
+
+Repository created (private, `pandaspace83/legallens`) and `.github/workflows/ci.yml` runs backend, frontend and
+API-contract jobs on every push; all three green on the first corrected run. The golden-set gate stays local
+(`scripts/release_gate.sh`) because it needs Ollama.
