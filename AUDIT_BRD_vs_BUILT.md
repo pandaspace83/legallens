@@ -51,7 +51,7 @@ The four non-negotiables hold: answers only from the documents (TC-07, GS 10/10 
 | NFR-03 | MFA, session timeout, encryption in transit and at rest, incident plan | Met | Real mode: argon2id, TOTP, lockout, CSRF header; SQLCipher and sealed files; idle and absolute timeouts; `serve --https` with a local certificate; `INCIDENT_PLAN.md` | pytest security/test_real_auth, test_encryption |
 | NFR-04 | Encrypted backups under the lawyer's keys, restore tested | Met | `backup create / verify / restore`; the key is outside the backup | pytest security/test_encryption |
 | NFR-05 | Append-only audit; answers replayable | Met | Hash-chained audit; retrieval trace, model and prompt version per answer | pytest api/test_audit, TC-04 |
-| NFR-06 | 30 to 50 question set runs on every change and blocks release | Met | 34-question golden set; `scripts/release_gate.sh` runs the suites and the set and fails on any drop from `golden_baseline.json` or any invented answer. The fast checks run in GitHub Actions on every push (green since 2026-10-15); the golden-set gate needs Ollama and runs locally | GS |
+| NFR-06 | 30 to 50 question set runs on every change and blocks release | Met | 34-question golden set; `scripts/release_gate.sh` runs the suites and the set and fails on any drop from `golden_baseline.json` or any invented answer. The fast checks run in GitHub Actions on every push (green since 2026-10-15); the golden-set gate runs in GitHub Actions on a self-hosted runner (the Mac with Ollama) nightly and on changes to the answering code, and passed on 2026-10-15 | GS |
 | NFR-07 | Swappable model named on output; WCAG 2.1 AA; feedback feeds the test set | Met | Model id on every message; axe passes on every screen; `legallens feedback export` writes candidate cases for review | TC-04, TC-21, TC-11 |
 
 ## 4. Targets (DEC-14) and success measures
@@ -72,7 +72,8 @@ The four non-negotiables hold: answers only from the documents (TC-07, GS 10/10 
 
 1. **The golden set is small and made by us:** 37 questions on six synthetic documents. A lawyer's review and more
    real-world phrasings are what would move this from "passes" to "trusted" (OPEN-01).
-2. **The golden-set gate in CI** needs a runner with Ollama and the models; the fast checks already run in GitHub Actions.
+2. **The gate depends on one Mac.** It runs on a self-hosted runner there; a cloud VM with Ollama would remove
+   that dependency (a decision on cost, not on code).
 3. **A lawyer's review of the golden set** (OPEN-01), and Application and Rule text in memos stay with the lawyer by
    design (DEC-45).
 4. **The BRD page count** was not re-measured after one sentence was added to FR-DRF-05.

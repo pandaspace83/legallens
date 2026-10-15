@@ -102,3 +102,10 @@ lawyer's review of the golden set (OPEN-01), and the BRD page count (not re-meas
 Repository created (private, `pandaspace83/legallens`) and `.github/workflows/ci.yml` runs backend, frontend and
 API-contract jobs on every push; all three green on the first corrected run. The golden-set gate stays local
 (`scripts/release_gate.sh`) because it needs Ollama.
+
+## Golden-set gate in CI, 2026-10-15
+
+`.github/workflows/golden-gate.yml` runs on a self-hosted runner (`~/actions-runner` on the owner's Mac, label
+`ollama`) nightly, on demand and on pushes that touch the answering code. First green run after fixing a variable
+shadowing bug the gate itself caught. The runner must live outside `~/Desktop` (macOS blocks background services
+there). Remaining: a lawyer's review of the golden set (OPEN-01) and re-measuring the BRD page count.
