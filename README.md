@@ -75,3 +75,10 @@ npm run api:fixtures                       # re-record contract fixtures (needs 
 - Feedback to test cases: `legallens feedback export --to cases.jsonl`.
 - Release gate: `scripts/release_gate.sh [model]` (suites, golden set, comparison with `golden_baseline.json`).
 - What to do when something goes wrong: `INCIDENT_PLAN.md`.
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every push and pull request: ruff, mypy and pytest for the backend; types,
+lint, format, unit tests, build and the mock-data browser tests for the frontend; and a check that `openapi.json`
+matches the app. The real-model tests, the real-backend UAT and the golden-set gate need Ollama and run locally
+with `scripts/release_gate.sh`.
