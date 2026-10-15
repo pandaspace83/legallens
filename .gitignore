@@ -25,6 +25,20 @@ frontend/.vite/
 db.key
 secret.key
 tls/
+# Credentials of any kind, should one ever be added (LegalLens itself uses no API keys: no cloud models)
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+.envrc
+credentials*.json
+service-account*.json
+*secret*.json
+*.token
+.netrc
+id_rsa*
+id_ed25519*
 *.db
 *.db-wal
 *.db-shm
