@@ -78,6 +78,14 @@ The four non-negotiables hold: answers only from the documents (TC-07, GS 10/10 
    design (DEC-45).
 4. **The BRD page count** was not re-measured after one sentence was added to FR-DRF-05.
 
+## 5b. A real document (2026-10-15)
+
+*Mata v. Avianca* (S.D.N.Y. 2023), the 43-page sanctions opinion, fetched from CourtListener and run through
+ingestion and Ask on the 7B (`tests/slow/test_real_document.py`, `GOLDEN_REAL.md`): 11 of 12 answerable questions
+correct, 3 of 3 unanswerable refused, 0 invented, ingestion in about 50 s, and the good-law note on both answers
+that rest on the opinion. The 14B scored 9 of 12 on the same questions. Known miss: "Who is the judge in this
+case?" answers with the judge of a fake decision the opinion quotes (a verified but wrong answer).
+
 ## 6. Layer connections verified (for the question "is everything wired?")
 
 UI → API (REST, SSE) → run service → router (mode or keywords) → workflow:

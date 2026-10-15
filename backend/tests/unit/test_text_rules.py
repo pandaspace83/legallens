@@ -173,3 +173,36 @@ def test_point_by_point_and_export_gate_for_unanswered_claims() -> None:
     waived = checks.point_by_point(content, ["c2"])
     assert [p["status"] for p in waived] == ["addressed", "waived"]
     assert checks.export_gate("reviewed_adopted", [], [], waived)["clean_allowed"]
+
+
+def test_a_slip_opinion_with_no_v_in_its_caption_is_recognised_as_law() -> None:
+    """Found on a real document: Mata v. Avianca opens with its title and a '-against-' caption."""
+    from legallens.drafting.checks import opening_looks_like_authority
+
+    mata = (
+        "OPINION AND ORDER ON SANCTIONS In researching and drafting court submissions, good lawyers appropriately "
+        "obtain assistance from junior lawyers. 1 The potential mischief is demonstrated by an innocent mistake. "
+        "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK ROBERTO MATA, Plaintiff, -against- AVIANCA, "
+        "INC., Defendant. CASTEL, U.S.D.J."
+    )
+    assert opening_looks_like_authority(mata)
+    assert not opening_looks_like_authority(
+        "MASTER SERVICES AGREEMENT This Master Services Agreement is entered into as of March 1, 2025 between Smith"
+    )
+    assert not opening_looks_like_authority(
+        "WHITFIELD & GRANT LLP 100 Market Street San Francisco September 15, 2026 Dear Sir or Madam: We represent "
+        "Acme Corp. Under Acme Corp. v. Beta Transport, 512 F.3d 1201 (9th Cir. 2008), damages follow."
+    )
+
+
+def test_a_court_caption_alone_is_an_opinion_only_with_an_opinion_title() -> None:
+    from legallens.drafting.checks import opening_looks_like_authority
+
+    caption = (
+        "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK ROBERTO MATA, Plaintiff, -against- AVIANCA, INC."
+    )
+    assert opening_looks_like_authority(caption + "\nOPINION AND ORDER ON SANCTIONS\nCASTEL, U.S.D.J.")
+    assert not opening_looks_like_authority(
+        caption + "\nCOMPLAINT\nPlaintiff alleges the following. OPINION of counsel."
+    )
+    assert not opening_looks_like_authority(caption)

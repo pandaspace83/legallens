@@ -56,3 +56,6 @@ test-evidence/*.xlsx
 # A self-hosted runner folder holds registration credentials and 500 MB of binaries
 actions-runner/
 .vscode/
+
+# Public documents fetched by tests
+backend/tests/slow/_cache/

@@ -65,17 +65,43 @@ AUTHORITY_NOTE = (
 )
 
 
+def _first_chunks(db: Session, document_id: str, count: int = 4) -> str:
+    """The text of the document's first few chunks, headings included, in reading order."""
+    rows = db.execute(select(Chunk.text).where(Chunk.document_id == document_id).order_by(Chunk.seq).limit(count))
+    return "\n".join(rows.scalars())
+
+
 def looks_like_authority(db: Session, document: Document) -> bool:
     """An uploaded court opinion, statute or rule (FR-ASK-04): the document names itself as one at its opening.
     Contracts, letters and exhibits never match, even when they cite a case further down."""
-    opening = _opening(db, document.id)
+    return opening_looks_like_authority(_first_chunks(db, document.id))
+
+
+_OPINION_WORD = re.compile(r"\b(OPINION|DECISION AND ORDER|MEMORANDUM DECISION)\b", re.I)
+_FILING_WORD = re.compile(
+    r"\b(COMPLAINT|MOTION|ANSWER|PETITION|AFFIDAVIT|AFFIRMATION|MEMORANDUM OF LAW|BRIEF|DECLARATION|SUBPOENA)\b",
+    re.I,
+)
+_COURT_NAME = re.compile(
+    r"\b(UNITED STATES (DISTRICT|BANKRUPTCY) COURT|COURT OF APPEALS|SUPREME COURT|SUPERIOR COURT|CIRCUIT COURT)\b",
+    re.I,
+)
+
+
+def opening_looks_like_authority(opening: str) -> bool:
     caption = opening[:CAPTION_CHARS]
     if _STATUTE_CAPTION.search(caption):
         return True
-    return (
-        bool(_CASE_CAPTION.search(caption))
-        and len(set(m.lower() for m in _OPINION_MARKERS.findall(opening[:1500]))) >= 3
-    )
+    # A slip opinion's first lines are often only the court and the parties ("-against-"); its title follows.
+    # A complaint or motion has the same caption, so a filing title rules it out.
+    if (
+        _COURT_NAME.search(opening[:800])
+        and _OPINION_WORD.search(opening[:2500])
+        and not _FILING_WORD.search(opening[:1200])
+    ):
+        return True
+    markers = {m.lower() for m in _OPINION_MARKERS.findall(opening[:1500])}
+    return bool(_CASE_CAPTION.search(caption)) and len(markers) >= 3
 
 
 def classify(db: Session, matter_id: str, authority: authorities.Authority) -> tuple[str, dict[str, Any] | None]:
