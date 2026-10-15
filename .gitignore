@@ -52,3 +52,7 @@ test-evidence/*.xlsx
 # macOS
 .DS_Store
 *.thumb.png
+
+# A self-hosted runner folder holds registration credentials and 500 MB of binaries
+actions-runner/
+.vscode/
