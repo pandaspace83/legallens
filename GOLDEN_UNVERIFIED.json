@@ -1,0 +1,51 @@
+[
+  {
+    "model": "qwen2.5:7b-instruct",
+    "question": "How must a termination notice be delivered?",
+    "state": "partial",
+    "answer": "Notice must be delivered by courier or certified mail to the address in Schedule 2, and: “Notice must state the termination date.” [1]",
+    "citations": [
+      {
+        "n": 1,
+        "verified": false,
+        "quote": "(b) Notice must be delivered by courier or certified mail to the address in Schedule 2, and:",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "model": "qwen2.5:7b-instruct",
+    "question": "Which invoices are unpaid?",
+    "state": "partial",
+    "answer": "Unpaid invoices are INV-2077 and INV-2103 [1]. \"Status\\nUnpaid\" is noted for both invoices in Exhibit B [1].",
+    "citations": [
+      {
+        "n": 1,
+        "verified": false,
+        "quote": "Invoices issued by Smith Logistics LLC to Acme Corp under the Master Services Agreement.",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "model": "qwen2.5:7b-instruct",
+    "question": "Which invoice has been paid?",
+    "state": "partial",
+    "answer": "INV-2041 has been paid. [1] \"Invoice Status: Paid\" [1]",
+    "citations": [
+      {
+        "n": 1,
+        "verified": false,
+        "quote": "Invoices issued by Smith Logistics LLC to Acme Corp under the Master Services Agreement.",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "model": "qwen2.5:7b-instruct",
+    "question": "Who sent the settlement email?",
+    "state": "not_found",
+    "answer": "Not found in your documents. I searched all 4 documents in this matter for: sent, settlement, email.",
+    "citations": []
+  }
+]

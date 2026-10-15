@@ -103,6 +103,7 @@ def test_golden_set(tmp_path: Path) -> None:
     client = signed_in_client(settings)
     summary_rows: list[str] = []
     results: dict[str, dict[str, float]] = {}
+    unverified: list[dict[str, object]] = []
     detail_rows: list[str] = []
     try:
         api = Api(client, settings, samples)
@@ -124,6 +125,19 @@ def test_golden_set(tmp_path: Path) -> None:
                     ok_text = all(any(alt in low for alt in group) for group in case.must)
                     ok_doc = any(case.doc in ids.get(c["document_id"], "") for c in citations)
                     ok_ver = bool(citations) and all(c["verified"] for c in citations)
+                    if not ok_ver:
+                        unverified.append(
+                            {
+                                "model": model,
+                                "question": case.question,
+                                "state": state,
+                                "answer": content,
+                                "citations": [
+                                    {"n": c["n"], "verified": c["verified"], "quote": c["quote"], "page": c["page"]}
+                                    for c in citations
+                                ],
+                            }
+                        )
                     right += ok_text
                     cited += ok_doc
                     verified += ok_ver
@@ -168,4 +182,5 @@ def test_golden_set(tmp_path: Path) -> None:
     )
     OUT.write_text(table)
     OUT.with_suffix(".json").write_text(json.dumps(results, indent=2))
+    OUT.with_name("GOLDEN_UNVERIFIED.json").write_text(json.dumps(unverified, indent=2, ensure_ascii=False))
     print("\n" + table)

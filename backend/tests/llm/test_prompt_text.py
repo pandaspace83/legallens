@@ -70,3 +70,47 @@ def test_a_refusal_behind_a_marker_is_a_refusal_and_a_stray_one_is_dropped() -> 
     )
     assert mixed is not None and not mixed.not_found
     assert "Not found" not in mixed.text and "sixty (60) days [1]" in mixed.text
+
+
+def test_a_non_literal_quotation_is_cut_and_the_claim_is_still_judged() -> None:
+    """Golden-set finding: quotes the model reworded made correct answers 'not verified'."""
+    table = hit(
+        body=(
+            "INV-2077 July 31, 2026 $24,000 Unpaid\nINV-2103 August 31, 2026 $24,500 Unpaid\n"
+            "INV-2041 June 30, 2026 $20,500 Paid"
+        )
+    )
+    subject_quote = text.check_answer(
+        'Unpaid invoices are INV-2077 and INV-2103 [1]. "Status\\nUnpaid" is noted for both invoices [1].',
+        [table],
+        "Which invoices are unpaid?",
+    )
+    assert subject_quote is not None
+    assert "Status" not in subject_quote.text and "INV-2077 and INV-2103" in subject_quote.text
+    assert subject_quote.citations[0].verified
+
+    only_quote = text.check_answer(
+        'INV-2041 has been paid. [1] "Invoice Status: Paid" [1]', [table], "Which invoice has been paid?"
+    )
+    assert only_quote is not None and only_quote.text.count("[1]") == 1 and "Invoice Status" not in only_quote.text
+
+    msa = hit(
+        body=(
+            "(b) Notice must be delivered by courier or certified mail to the address in Schedule 2, and:\n"
+            "(ii) must state the termination date."
+        )
+    )
+    trailing = text.check_answer(
+        "Notice must be delivered by courier or certified mail to the address in Schedule 2, and: "
+        "“Notice must state the termination date.” [1]",
+        [msa],
+        "How must a termination notice be delivered?",
+    )
+    assert trailing is not None and "Notice must state" not in trailing.text and "and:" not in trailing.text
+    assert trailing.text.rstrip().endswith("[1]")
+
+
+def test_a_literal_quotation_is_kept_untouched() -> None:
+    passage = hit(body="Either party may terminate on sixty (60) days' notice.")
+    out = text.check_answer("Sixty days. “terminate on sixty (60) days' notice” [1]", [passage], "notice?")
+    assert out is not None and "terminate on sixty (60) days' notice" in out.text

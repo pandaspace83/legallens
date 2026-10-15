@@ -99,13 +99,13 @@ def test_a_marker_that_points_at_no_passage_is_removed(local) -> None:  # type: 
     assert [c["n"] for c in turn.answer["citations"]] == [1]
 
 
-def test_a_quote_that_is_not_in_the_passage_is_flagged_not_trusted(local) -> None:  # type: ignore[no-untyped-def]
+def test_a_quote_that_is_not_in_the_passage_never_reaches_the_lawyer(local) -> None:  # type: ignore[no-untyped-def]
+    """The reworded quotation is cut; its sentence carried the only citation, so the passages answer instead."""
     api, _, _, chat = local("Either party may leave at any time without notice. “We can walk away whenever.” [1]")
     turn = api.ask(chat, QUESTION)
-    [citation] = turn.answer["citations"]
-    assert citation["verified"] is False
-    assert "We can walk away" not in citation["quote"]  # the shown quote is the passage's own words
-    assert turn.answer["answer_state"] == "partial"
+    assert "walk away" not in turn.answer["content"]
+    assert turn.answer["content"].startswith("From your documents:")
+    assert turn.answer["citations"] and all("walk away" not in c["quote"] for c in turn.answer["citations"])
 
 
 def test_a_number_the_passage_does_not_contain_is_flagged(local) -> None:  # type: ignore[no-untyped-def]

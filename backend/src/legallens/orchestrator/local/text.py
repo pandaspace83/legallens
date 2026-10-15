@@ -151,6 +151,41 @@ class Citation:
     bbox: list | None  # type: ignore[type-arg]
 
 
+_SENTENCE_BREAK = re.compile(r"(?<=[.!?\]])\s+")
+_LEADING_BULLET = re.compile(r"^[\s\-*•]*")
+
+
+def drop_unverifiable_quotes(text: str, hits: list[Hit]) -> str:
+    """A quotation that is not literal in the passage it sits beside is never shown as evidence.
+
+    The model's sentence stands or falls on its own claim, which the later checks judge against the passage.
+    A sentence that opens with the bad quotation is dropped (the quotation was its subject); a bad quotation at
+    the end of a sentence is cut, with the dangling "and:" it leaves."""
+    lines_out: list[str] = []
+    for line in text.split("\n"):
+        kept: list[str] = []
+        for sentence in _SENTENCE_BREAK.split(line):
+            markers = [int(m) for m in MARKER.findall(sentence) if 1 <= int(m) <= len(hits)]
+            if not markers or not QUOTE.search(sentence):
+                kept.append(sentence)
+                continue
+            passages = [hits[m - 1].text for m in markers]
+            bad = [m for m in QUOTE.finditer(sentence) if not any(quote_in(m.group(1), p) for p in passages)]
+            if not bad:
+                kept.append(sentence)
+                continue
+            lead = _LEADING_BULLET.sub("", sentence)
+            if any(sentence[len(sentence) - len(lead) :].startswith(m.group(0)) for m in bad):
+                continue  # the quotation was the sentence's subject: nothing honest is left of it
+            cleaned = sentence
+            for m in reversed(bad):
+                cleaned = cleaned[: m.start()] + cleaned[m.end() :]
+            cleaned = re.sub(r"(?:,\s*(?:and|or))?\s*:\s*(?=\[\d+\])", " ", cleaned)
+            kept.append(re.sub(r"[ \t]{2,}", " ", cleaned).strip())
+        lines_out.append(" ".join(k for k in kept if k.strip()))
+    return "\n".join(lines_out).strip()
+
+
 def check_answer(raw: str, hits: list[Hit], question: str, *, also: str = "") -> Checked | None:
     """Verify what the model wrote against the passages it was given (DEC-21).
 
@@ -173,6 +208,7 @@ def check_answer(raw: str, hits: list[Hit], question: str, *, also: str = "") ->
     text = MARKER.sub(lambda m: m.group(0) if int(m.group(1)) in valid else "", text)
     text = re.sub(r"[ \t]+([.,;:])", r"\1", re.sub(r"[ \t]{2,}", " ", text))
 
+    text = drop_unverifiable_quotes(text, hits)
     order: list[int] = []
     for n in map(int, MARKER.findall(text)):
         if n not in order:
