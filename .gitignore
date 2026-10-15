@@ -45,6 +45,7 @@ id_ed25519*
 *.llbackup
 feedback_cases.jsonl
 GOLDEN_SET.json
+GOLDEN_UNVERIFIED.json
 test-evidence/screenshots/
 test-evidence/*.xlsx
 

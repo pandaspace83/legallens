@@ -4,7 +4,7 @@
 
 | Model | Correct | Right document cited | All citations verified | Correct 'not found' | Invented answers | Avg per question |
 |---|---|---|---|---|---|---|
-| qwen2.5:7b-instruct | 27/27 | 26/27 | 26/27 | 10/10 | 0 | 10.3 s |
+| qwen2.5:7b-instruct | 27/27 | 26/27 | 27/27 | 10/10 | 0 | 10.0 s |
 
 ## Per question
 
@@ -29,7 +29,7 @@
 | qwen2.5:7b-instruct | What is the total unpaid amount on the invoices? | ok | found | 1 | 'The total unpaid amount on the invoices is $48,500.\n\n[1] "Total unpaid as of September 1, ' |
 | qwen2.5:7b-instruct | Which invoices are unpaid? | ok | found | 1 | 'Unpaid invoices are INV-2077 and INV-2103. [1]' |
 | qwen2.5:7b-instruct | How much was invoice INV-2103 for? | ok | found | 1 | 'Invoice INV-2103 was for $24,500 [1].' |
-| qwen2.5:7b-instruct | Which invoice has been paid? | ok | partial | 1 | 'INV-2041 has been paid. [1] "Invoice INV-2041... Status: Paid" [1]' |
+| qwen2.5:7b-instruct | Which invoice has been paid? | ok | found | 1 | 'INV-2041 has been paid. [1]' |
 | qwen2.5:7b-instruct | Why is Acme withholding payment of INV-2077? | ok | found | 1 | 'Payment of invoice INV-2077 is withheld pending resolution of the late delivery dispute [1' |
 | qwen2.5:7b-instruct | What settlement amount did Acme's counsel propose, and by when? | ok | found | 1 | "Acme's counsel proposed a settlement of $40,000, which was to be paid by October 15, 2026 " |
 | qwen2.5:7b-instruct | Who sent the settlement email? | ok | found | 1 | 'The settlement email was sent by Dana Whitfield [1]. "From (sent by): Dana Whitfield <dwhi' |

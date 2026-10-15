@@ -62,7 +62,7 @@ The four non-negotiables hold: answers only from the documents (TC-07, GS 10/10 
 | Full answer | 30 s | Ask uses the 7B since 2026-10-15: 7 s average in the model comparison, 23 s average in the golden set including model swaps; the first UI answer after a model swap took 41 s (the 14B took 33 to 46 s in the UI cases) | Met |
 | 50-page summary | 5 min | 204 s on qwen2.5:7b (documents over 20 pages use it); 598 s on the 14B; the figure on page 37 was found (`tests/slow/test_long_document.py`) | Met |
 | Letter draft | 3 min | 74 s (TC-18) | Met |
-| Citations that exist and support their sentence | 95% | 23 of 24 answerable questions fully verified on the 7B (95.8%) after the quote-handling fix; the 24th is a "not found" for "Who sent the settlement email?"; 0 invented | Met |
+| Citations that exist and support their sentence | 95% | 27 of 27 answerable golden-set questions fully verified on the 7B (100%; 37 questions, 10 of 10 "not found" correct); 0 invented | Met |
 | Invented authority | 0 | 0 in the golden set and UI cases | Met |
 | Cross-matter leaks | 0 | 0 | Met |
 | Exports with metadata | 0 | 0 (checked on every export) | Met |
@@ -70,8 +70,8 @@ The four non-negotiables hold: answers only from the documents (TC-07, GS 10/10 
 
 ## 5. What is left
 
-1. **One known retrieval miss:** "Who sent the settlement email?" returns not found, because the reranker scores
-   the email's `From:` line low for that wording. Not a checker issue; a query-expansion or gate tweak could fix it.
+1. **The golden set is small and made by us:** 37 questions on six synthetic documents. A lawyer's review and more
+   real-world phrasings are what would move this from "passes" to "trusted" (OPEN-01).
 2. **The golden-set gate in CI** needs a runner with Ollama and the models; the fast checks already run in GitHub Actions.
 3. **A lawyer's review of the golden set** (OPEN-01), and Application and Rule text in memos stay with the lawyer by
    design (DEC-45).

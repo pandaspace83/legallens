@@ -1,9 +1,9 @@
 {
-  "_note": "Release gate baseline (NFR-06). Scores of the golden set; raise a number only after a person has reviewed the change that earned it. 7B verified raised 20 to 23 on 2026-10-15 (quote handling). Compared by scripts/release_gate.py.",
+  "_note": "Release gate baseline (NFR-06). Scores of the golden set (37 questions, 27 answerable); raise a number only after a person has reviewed the change that earned it. 7B updated 2026-10-15: 27/27 correct and verified. The 14B entry is from the 34-question set on 2026-10-14 and is not comparable. Compared by scripts/release_gate.py.",
   "qwen2.5:7b-instruct": {
-    "correct": 23,
-    "right_document": 22,
-    "verified": 23,
+    "correct": 27,
+    "right_document": 26,
+    "verified": 27,
     "refused": 10,
     "invented": 0
   },
