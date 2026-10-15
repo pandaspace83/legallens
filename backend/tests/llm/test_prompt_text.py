@@ -114,3 +114,35 @@ def test_a_literal_quotation_is_kept_untouched() -> None:
     passage = hit(body="Either party may terminate on sixty (60) days' notice.")
     out = text.check_answer("Sixty days. “terminate on sixty (60) days' notice” [1]", [passage], "notice?")
     assert out is not None and "terminate on sixty (60) days' notice" in out.text
+
+
+def test_a_marker_the_model_numbered_wrongly_is_moved_to_the_passage_that_supports_the_sentence() -> None:
+    email = hit(name="email.eml", body="From (sent by): Dana Whitfield. Subject: Acme v. Smith - settlement terms.")
+    msa = hit(
+        name="msa.pdf", body="Either party may terminate on thirty (30) days' notice if the other party breaches."
+    )
+    out = text.check_answer(
+        "A party has thirty (30) days to cure a material breach before the other party can terminate [1].",
+        [email, msa],
+        "How long does a party have to cure a material breach?",
+    )
+    assert out is not None
+    assert out.citations[0].hit.document_name == "msa.pdf" and out.citations[0].verified
+    assert "[1]" in out.text  # renumbered: the repaired citation is the answer's first
+
+
+def test_a_sentence_no_passage_supports_keeps_its_marker_and_is_flagged() -> None:
+    email = hit(name="email.eml", body="From (sent by): Dana Whitfield. Subject: settlement terms.")
+    msa = hit(name="msa.pdf", body="Either party may terminate on thirty (30) days' notice.")
+    out = text.check_answer("The cure period is ninety (90) days [1].", [email, msa], "cure period?")
+    assert out is not None
+    assert out.citations[0].hit.document_name == "email.eml" and not out.citations[0].verified
+
+
+def test_an_ellipsis_inside_a_quotation_does_not_hide_it_from_the_check() -> None:
+    table = hit(body="INV-2077 July 31, 2026 $24,000 Unpaid\nINV-2041 June 30, 2026 $20,500 Paid")
+    out = text.check_answer(
+        'INV-2041 has been paid. [1] "Invoice INV-2041... Status: Paid" [1]', [table], "Which invoice has been paid?"
+    )
+    assert out is not None and "Status: Paid" not in out.text
+    assert out.citations[0].verified

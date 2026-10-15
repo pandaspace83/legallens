@@ -26,7 +26,7 @@ from tests.conftest import Api, make_settings, signed_in_client
 pytestmark = pytest.mark.llm
 
 MODELS_DIR = default_data_dir() / "models" / "hf"
-DOCS = ["smith_msa_v3.pdf", "exhibit_b_invoices.pdf", "email_from_acme_counsel.eml"]
+DOCS = ["smith_msa_v3.pdf", "exhibit_b_invoices.pdf", "email_from_acme_counsel.eml", "email_from_smith_client.eml"]
 OUT = Path(__file__).resolve().parents[3] / "GOLDEN_SET.md"
 
 
@@ -37,7 +37,7 @@ class Case:
     doc: str = ""  # a substring of the document that should be cited
 
 
-MSA, INV, EML = "smith_msa_v3", "exhibit_b_invoices", "email_from"
+MSA, INV, EML, CLI = "smith_msa_v3", "exhibit_b_invoices", "email_from_acme", "email_from_smith"
 CASES = [
     Case("How much notice is needed to terminate for convenience?", [["60", "sixty"]], MSA),
     Case("What interest applies to late payments?", [["1%", "one percent"]], MSA),
@@ -62,7 +62,11 @@ CASES = [
     Case("Why is Acme withholding payment of INV-2077?", [["late delivery", "dispute", "withheld"]], INV),
     Case("What settlement amount did Acme's counsel propose, and by when?", [["40,000"], ["october 15"]], EML),
     Case("Who sent the settlement email?", [["whitfield"]], EML),
-    Case("What do the settlement terms say about claims?", [["release", "releases"]], EML),
+    Case("Who sent the email about the delivery logs?", [["raman", "priya"]], CLI),
+    Case("On what dates did Acme sign for the July deliveries?", [["july 9"], ["july 23"]], CLI),
+    Case("When did the July deliveries leave the Oakland warehouse?", [["july 8"], ["july 22"]], CLI),
+    # The answer is in the email's attachment, settlement_terms.pdf.
+    Case("What do the settlement terms say about claims?", [["release", "releases"]], "settlement_terms"),
     Case("What law governs this agreement?", []),
     Case("What is the recipe for blueberry pancakes?", []),
     Case("Who is the chief executive of Acme Corp?", []),

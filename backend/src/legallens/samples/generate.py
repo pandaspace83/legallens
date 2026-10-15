@@ -25,6 +25,7 @@ ORIGINS = {
     "exhibit_b_invoices.pdf": "client",
     "acme_redline_other_side.docx": "other_party",
     "email_from_acme_counsel.eml": "other_party",
+    "email_from_smith_client.eml": "client",
     "rivera_lease.txt": "client",
 }
 
@@ -319,12 +320,29 @@ def email_eml() -> bytes:
     return bytes(msg)
 
 
+def client_email_eml() -> bytes:
+    """A made-up message from the client's operations director to counsel: facts about the July deliveries."""
+    msg = EmailMessage()
+    msg["From"] = "Priya Raman <praman@smithlogistics.example>"
+    msg["To"] = "Counsel for Smith Logistics <counsel@example.org>"
+    msg["Date"] = "Wed, 23 Sep 2026 14:05:00 -0700"
+    msg["Subject"] = "Re: Acme demand - delivery logs"
+    msg.set_content(
+        "Counsel,\n\nOur dispatch logs show the July deliveries left the Oakland warehouse on July 8 and July 22. "
+        "Acme's receiving clerk signed for them on July 9 and July 23, so we do not accept that they were late. "
+        "The signed receipts are in the shared folder under Acme / July.\n\nPlease do not concede the late-delivery "
+        "claim in the reply.\n\nPriya Raman\nOperations Director, Smith Logistics LLC"
+    )
+    return bytes(msg)
+
+
 GENERATORS: dict[str, Callable[[], bytes]] = {
     "smith_msa_v3.pdf": smith_msa,
     "acme_demand_letter_scanned.pdf": demand_letter_scanned,
     "exhibit_b_invoices.pdf": exhibit_b,
     "acme_redline_other_side.docx": redline_docx,
     "email_from_acme_counsel.eml": email_eml,
+    "email_from_smith_client.eml": client_email_eml,
     "rivera_lease.txt": lambda: LEASE.encode(),
 }
 

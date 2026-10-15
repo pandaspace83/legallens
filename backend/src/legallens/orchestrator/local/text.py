@@ -152,6 +152,13 @@ class Citation:
 
 
 _SENTENCE_BREAK = re.compile(r"(?<=[.!?\]])\s+")
+_DOT = "\u2024"  # stands in for a full stop inside a quotation, so an ellipsis does not split the sentence
+
+
+def _mask_quotes(line: str) -> str:
+    return QUOTE.sub(lambda m: m.group(0).replace(".", _DOT), line)
+
+
 _LEADING_BULLET = re.compile(r"^[\s\-*•]*")
 
 
@@ -164,13 +171,17 @@ def drop_unverifiable_quotes(text: str, hits: list[Hit]) -> str:
     lines_out: list[str] = []
     for line in text.split("\n"):
         kept: list[str] = []
-        for sentence in _SENTENCE_BREAK.split(line):
+        for sentence in _SENTENCE_BREAK.split(_mask_quotes(line)):
             markers = [int(m) for m in MARKER.findall(sentence) if 1 <= int(m) <= len(hits)]
             if not markers or not QUOTE.search(sentence):
                 kept.append(sentence)
                 continue
             passages = [hits[m - 1].text for m in markers]
-            bad = [m for m in QUOTE.finditer(sentence) if not any(quote_in(m.group(1), p) for p in passages)]
+            bad = [
+                m
+                for m in QUOTE.finditer(sentence)
+                if not any(quote_in(m.group(1).replace(_DOT, "."), p) for p in passages)
+            ]
             if not bad:
                 kept.append(sentence)
                 continue
@@ -182,8 +193,45 @@ def drop_unverifiable_quotes(text: str, hits: list[Hit]) -> str:
                 cleaned = cleaned[: m.start()] + cleaned[m.end() :]
             cleaned = re.sub(r"(?:,\s*(?:and|or))?\s*:\s*(?=\[\d+\])", " ", cleaned)
             kept.append(re.sub(r"[ \t]{2,}", " ", cleaned).strip())
-        lines_out.append(" ".join(k for k in kept if k.strip()))
+        lines_out.append(" ".join(k for k in kept if k.strip()).replace(_DOT, "."))
     return "\n".join(lines_out).strip()
+
+
+def repair_markers(text: str, hits: list[Hit]) -> str:
+    """Points a marker at the passage that does support its sentence, when the model numbered it wrongly.
+
+    A small model often writes the right fact and the wrong [n]. If the cited passage fails the figure or topic
+    check but exactly the same checks pass on another supplied passage that shares at least two of the
+    sentence's words, the marker moves there. Nothing is added: a sentence no passage supports keeps its marker
+    and is flagged as before."""
+    lines_out: list[str] = []
+    for line in text.split("\n"):
+        kept: list[str] = []
+        for sentence in _SENTENCE_BREAK.split(_mask_quotes(line)):
+            claim = MARKER.sub(" ", QUOTE.sub(" ", sentence))
+            terms = [t.lower() for t in content_terms(claim)]
+
+            def swap(match: re.Match[str], claim: str = claim, terms: list[str] = terms) -> str:
+                n = int(match.group(1))
+                if not 1 <= n <= len(hits):
+                    return match.group(0)
+                if numbers_supported(claim, hits[n - 1].text) and about_the_passage(claim, hits[n - 1].text):
+                    return match.group(0)
+                best, best_overlap = None, 1
+                for index, hit in enumerate(hits, start=1):
+                    if index == n:
+                        continue
+                    if not (numbers_supported(claim, hit.text) and about_the_passage(claim, hit.text)):
+                        continue
+                    have = norm(hit.text)
+                    overlap = sum(1 for t in terms if _stem(t) in have)
+                    if overlap > best_overlap:
+                        best, best_overlap = index, overlap
+                return f"[{best}]" if best is not None else match.group(0)
+
+            kept.append(MARKER.sub(swap, sentence))
+        lines_out.append(" ".join(kept).replace(_DOT, "."))
+    return "\n".join(lines_out)
 
 
 def check_answer(raw: str, hits: list[Hit], question: str, *, also: str = "") -> Checked | None:
@@ -209,6 +257,7 @@ def check_answer(raw: str, hits: list[Hit], question: str, *, also: str = "") ->
     text = re.sub(r"[ \t]+([.,;:])", r"\1", re.sub(r"[ \t]{2,}", " ", text))
 
     text = drop_unverifiable_quotes(text, hits)
+    text = repair_markers(text, hits)
     order: list[int] = []
     for n in map(int, MARKER.findall(text)):
         if n not in order:

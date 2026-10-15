@@ -121,6 +121,7 @@ def test_sniff_by_bytes_not_extension(samples_dir: Path, tmp_path: Path) -> None
         "acme_demand_letter_scanned.pdf": "pdf",
         "acme_redline_other_side.docx": "docx",
         "email_from_acme_counsel.eml": "eml",
+        "email_from_smith_client.eml": "eml",
         "exhibit_b_invoices.pdf": "pdf",
         "rivera_lease.txt": "txt",
         "smith_msa_v3.pdf": "pdf",

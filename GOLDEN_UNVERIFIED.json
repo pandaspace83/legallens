@@ -1,9 +1,16 @@
 [
   {
     "model": "qwen2.5:7b-instruct",
-    "question": "Who sent the settlement email?",
-    "state": "not_found",
-    "answer": "Not found in your documents. I searched all 4 documents in this matter for: sent, settlement, email.",
-    "citations": []
+    "question": "Which invoice has been paid?",
+    "state": "partial",
+    "answer": "INV-2041 has been paid. [1] \"Invoice INV-2041... Status: Paid\" [1]",
+    "citations": [
+      {
+        "n": 1,
+        "verified": false,
+        "quote": "Invoices issued by Smith Logistics LLC to Acme Corp under the Master Services Agreement.",
+        "page": 1
+      }
+    ]
   }
 ]

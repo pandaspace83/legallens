@@ -218,3 +218,12 @@ class TestDelete:
                 assert db.execute(text(f"SELECT count(*) FROM {table}")).scalar() == 0, table
             assert db.execute(text("SELECT count(*) FROM chunks_vec_rowids")).scalar() == 0
             assert db.execute(text("SELECT count(*) FROM chunks_fts WHERE chunks_fts MATCH 'settle'")).scalar() == 0
+
+
+def test_an_email_names_its_sender_and_recipient_in_plain_words(api: Api) -> None:
+    """Golden-set finding: "Who sent the settlement email?" missed the From line."""
+    matter = api.create_matter()
+    [email_id] = api.ingest(matter["id"], "email_from_smith_client.eml")
+    pages = api.client.get(f"/api/v1/documents/{email_id}/pages").json()
+    text = " ".join(b["text"] for p in pages["pages"] for b in p["blocks"])
+    assert "From (sent by): Priya Raman" in text and "To (sent to): Counsel for Smith Logistics" in text

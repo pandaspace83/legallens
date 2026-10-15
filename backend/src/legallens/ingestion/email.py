@@ -24,7 +24,9 @@ class EmailParts:
     skipped: list[str] = field(default_factory=list)
 
     def as_text(self) -> str:
-        lines = [f"{k.capitalize()}: {v}" for k, v in self.headers.items() if v]
+        # "From" and "To" also say who sent and who received, so "who sent this email?" matches them in search.
+        labels = {"from": "From (sent by)", "to": "To (sent to)"}
+        lines = [f"{labels.get(k, k.capitalize())}: {v}" for k, v in self.headers.items() if v]
         return "\n".join(lines) + "\n\n" + self.body.strip()
 
     def metadata(self) -> dict[str, Any]:
