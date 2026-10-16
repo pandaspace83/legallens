@@ -1,3 +1,12 @@
+<!--
+STATUS: unused design note, kept for reference (2026-10-16).
+LegalLens does not call any Claude model, and this prompt is not wired in. Routing today is deterministic: the
+prompt-bar mode, then keywords (orchestrator/stub/router.py). All AI runs locally through Ollama, with nothing
+sent to an outside service (DEC-08, DEC-80, DEC-85). The "Claude Haiku" below was the first plan's choice for an
+LLM router and was dropped with it. If an LLM router is ever added, it would use a local model and be benchmarked
+on the golden set first.
+-->
+
 # Intent Classification Prompt
 
 ## Overview
@@ -74,6 +83,6 @@ The classifier does NOT read document content; it uses only metadata and the mes
 
 ## Model and Temperature
 
-- **Model**: Claude Haiku (fast, accurate for classification)
+- **Model**: *(the original plan named Claude Haiku; not used, see the note at the top)*
 - **Temperature**: 0 (deterministic, focused on intent)
 - **Output**: Structured JSON with `intent` and `confidence` fields
