@@ -86,13 +86,17 @@ def route(ctx: RunContext) -> Route:
     return Route(intent, confidence, document=document)
 
 
-def summary_choice(ctx: RunContext) -> tuple[str, str]:
+def summary_choice(ctx: RunContext, is_law: bool = False) -> tuple[str, str]:
+    """is_law: the document is an uploaded court opinion or statute, so the case-brief template fits when the
+    message names no template."""
     text = ctx.content.lower()
     template = ctx.options.get("summary_template") or (
         "pleading"
         if re.search(r"\b(complaint|pleading|petition)\b", text)
         else "opinion"
         if re.search(r"\b(opinion|case brief|judgment|ruling)\b", text)
+        else "opinion"
+        if is_law
         else "letter_demand"
     )
     audience = ctx.options.get("audience") or (

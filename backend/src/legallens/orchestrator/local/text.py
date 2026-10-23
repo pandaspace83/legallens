@@ -35,10 +35,16 @@ def norm(text: str) -> str:
     return " ".join(text.translate(_CANON).split()).lower()
 
 
+def _bare(text: str) -> str:
+    """Quotation marks and apostrophes removed: a quotation inside a quotation is written with either kind."""
+    return text.replace("'", "").replace('"', "")
+
+
 def quote_in(quote: str, passage: str) -> bool:
     """The quote is literal in the passage; an ellipsis may stand for omitted words between literal parts."""
-    have = norm(passage)
-    parts = [p for p in _ELLIPSIS.split(norm(quote)) if len(p) >= 4]
+    have = _bare(norm(passage))
+    parts = [_bare(p) for p in _ELLIPSIS.split(norm(quote))]
+    parts = [p.strip() for p in parts if len(p.strip()) >= 4]
     return bool(parts) and all(p in have for p in parts)
 
 
@@ -46,14 +52,46 @@ def _stem(word: str) -> str:
     return word[:6]
 
 
+# Words that tie almost any claim in a legal document to almost any passage in it.
+_GENERIC = frozenset(
+    """case cases court courts party parties document documents agreement section sections law laws state states
+    matter order orders issue issues fact facts claim claims right rights rule rules appeal""".split()
+)
+
+
 def about_the_passage(claim: str, passage: str) -> bool:
-    """False only when a claim of three or more content words shares none of them with the passage it cites:
-    the passage is about something else. Paraphrase passes; a wrong-passage citation doesn't."""
+    """False when a claim of three or more content words shares none of its distinctive words with the passage it
+    cites: the passage is about something else. Paraphrase passes; a wrong-passage citation doesn't. A word like
+    "case" or "court" doesn't count as shared: it ties almost any claim to almost any passage."""
     terms = content_terms(QUOTE.sub(" ", claim))
     if len(terms) < 3:
         return True
     have = norm(passage)
-    return any(_stem(t.lower()) in have for t in terms)
+    distinctive = [t for t in terms if t.lower() not in _GENERIC] or terms
+    return any(_stem(t.lower()) in have for t in distinctive)
+
+
+_MONTHS = "january|february|march|april|may|june|july|august|september|october|november|december"
+_DATE_WITH_YEAR = re.compile(rf"\b({_MONTHS})\s+(\d{{1,2}})(?:st|nd|rd|th)?,?\s+(\d{{4}})\b", re.I)
+
+
+def dates_supported(claim: str, passage: str) -> bool:
+    """A date the claim gives with a year ("September 26, 2025") is in the passage with that same year. A year
+    elsewhere in the passage does not make it so: a model fills in a missing year with whichever it saw."""
+    have = norm(passage).replace(",", "")
+    return all(f"{month.lower()} {int(day)} {year}" in have for month, day, year in _DATE_WITH_YEAR.findall(claim))
+
+
+def strip_unsupported_years(text: str, passages: list[str]) -> str:
+    """A model fills in the year of a date the passage gives without one ("September 26" becomes "September 26,
+    2025"). The year is cut, so the date reads as the passage states it."""
+    have = " ".join(norm(p) for p in passages).replace(",", "")
+
+    def fix(m: re.Match[str]) -> str:
+        month, day, year = m.group(1), m.group(2), m.group(3)
+        return m.group(0) if f"{month.lower()} {int(day)} {year}" in have else f"{month} {day}"
+
+    return _DATE_WITH_YEAR.sub(fix, text)
 
 
 def numbers_supported(claim: str, passage: str) -> bool:
@@ -62,6 +100,8 @@ def numbers_supported(claim: str, passage: str) -> bool:
     A small model's commonest slip is a wrong figure (30 days becomes 60). Quotes catch invented wording; this
     catches invented amounts, periods and counts."""
     have = norm(passage)
+    if not dates_supported(claim, passage):
+        return False
     claim = _LIST_NUMBER.sub(" ", claim)
     words = set(re.findall(r"[a-z]+", have))
     digits = {d.replace(",", "").rstrip(".") for d in re.findall(r"\d[\d,.]*", have)}
@@ -160,6 +200,7 @@ def _mask_quotes(line: str) -> str:
 
 
 _LEADING_BULLET = re.compile(r"^[\s\-*•]*")
+_EMPTY_ITEM = re.compile(r"^\s*(?:[-*•]|\d{1,2}[.)])?\s*$")
 
 
 def drop_unverifiable_quotes(text: str, hits: list[Hit]) -> str:
@@ -185,6 +226,14 @@ def drop_unverifiable_quotes(text: str, hits: list[Hit]) -> str:
             if not bad:
                 kept.append(sentence)
                 continue
+            # The quotation is literal in another passage: the model numbered it wrongly, so the marker moves there.
+            elsewhere = [
+                next((i for i, h in enumerate(hits, start=1) if quote_in(m.group(1).replace(_DOT, "."), h.text)), None)
+                for m in bad
+            ]
+            if all(e is not None for e in elsewhere) and len(set(elsewhere)) == 1:
+                kept.append(MARKER.sub(f"[{elsewhere[0]}]", sentence))
+                continue
             lead = _LEADING_BULLET.sub("", sentence)
             if any(sentence[len(sentence) - len(lead) :].startswith(m.group(0)) for m in bad):
                 continue  # the quotation was the sentence's subject: nothing honest is left of it
@@ -193,7 +242,11 @@ def drop_unverifiable_quotes(text: str, hits: list[Hit]) -> str:
                 cleaned = cleaned[: m.start()] + cleaned[m.end() :]
             cleaned = re.sub(r"(?:,\s*(?:and|or))?\s*:\s*(?=\[\d+\])", " ", cleaned)
             kept.append(re.sub(r"[ \t]{2,}", " ", cleaned).strip())
-        lines_out.append(" ".join(k for k in kept if k.strip()).replace(_DOT, "."))
+        joined = " ".join(k for k in kept if k.strip()).replace(_DOT, ".")
+        if (
+            line.strip() and not _EMPTY_ITEM.match(joined)
+        ) or not line.strip():  # a list item whose content was cut leaves no stub
+            lines_out.append(joined)
     return "\n".join(lines_out).strip()
 
 
@@ -256,6 +309,7 @@ def check_answer(raw: str, hits: list[Hit], question: str, *, also: str = "") ->
     text = MARKER.sub(lambda m: m.group(0) if int(m.group(1)) in valid else "", text)
     text = re.sub(r"[ \t]+([.,;:])", r"\1", re.sub(r"[ \t]{2,}", " ", text))
 
+    text = strip_unsupported_years(text, [hit.text for hit in hits] + [also])
     text = drop_unverifiable_quotes(text, hits)
     text = repair_markers(text, hits)
     order: list[int] = []

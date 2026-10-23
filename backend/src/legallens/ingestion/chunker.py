@@ -48,6 +48,37 @@ def _header(doc_name: str, section: list[str], clause_ref: str | None) -> str:
     return " › ".join(parts)
 
 
+# A cover page states its docket number, filing date, judge and counsel without the words a lawyer asks with
+# ("docket", "represented"), so neither keyword search nor the reranker connects the question to it. The label is
+# added to the header (searched, embedded and reranked, never shown) of the first two text chunks on page 1.
+CAPTION_LABEL = (
+    "Caption and counsel: the court, docket number, date filed, the parties, the judge or justice, and who "
+    "represented each side (attorneys for the appellant and the appellee, the State)"
+)
+CAPTION_CHUNKS = 2
+CAPTION_MAX_TOKENS = 150  # a cover page is short; a first page of contract text is not a caption
+
+
+def _label_caption(specs: list[ChunkSpec]) -> None:
+    """Label the first CAPTION_CHUNKS text chunks (and their sections) when they are short and sit on page 1."""
+    labelled = 0
+    for spec in specs:
+        if spec.kind != "text":
+            continue
+        # A numbered clause is contract text, not a cover.
+        if (
+            spec.page_start != 1
+            or spec.clause_ref
+            or spec.token_count > CAPTION_MAX_TOKENS
+            or labelled == CAPTION_CHUNKS
+        ):
+            break
+        labelled += 1
+        for target in (spec, specs[spec.parent] if spec.parent is not None else None):
+            if target is not None and CAPTION_LABEL not in target.header:
+                target.header = f"{target.header} › {CAPTION_LABEL}"
+
+
 def _boxes(parts: list[tuple[Unit, str]]) -> list[dict[str, Any]]:
     """One entry per paragraph in the chunk: its page, box, pinpoint, and where its text sits in the chunk text
     (paragraphs are joined with a blank line). A citation uses this to point at the exact paragraph (DEC-36)."""
@@ -206,4 +237,5 @@ def build(units: list[Unit], doc_name: str) -> list[ChunkSpec]:
             current.append(i)
         if any(units[j].kind != "heading" for j in current):
             flush(carry_overlap=False)
+    _label_caption(specs)
     return specs

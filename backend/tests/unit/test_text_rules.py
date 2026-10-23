@@ -206,3 +206,23 @@ def test_a_court_caption_alone_is_an_opinion_only_with_an_opinion_title() -> Non
         caption + "\nCOMPLAINT\nPlaintiff alleges the following. OPINION of counsel."
     )
     assert not opening_looks_like_authority(caption)
+
+
+def test_pinpoint_places_a_quote_that_runs_across_a_paragraph_break_and_uses_curly_quotes() -> None:
+    from legallens.search.pinpoint import locate
+
+    text = (
+        "First paragraph on page one.\n\n"
+        "But the mother didn't file it until September 27.\n\n"
+        "Our court then ordered more."
+    )
+    first = text.index("But the mother")
+    second = text.index("Our court")
+    boxes = [
+        {"page": 3, "start": 0, "end": first - 2},
+        {"page": 4, "start": first, "end": second - 2},
+        {"page": 4, "start": second, "end": len(text)},
+    ]
+    quote = "But the mother didn’t file it until September 27. Our court then ordered more."
+    found = locate(text, boxes, quote)
+    assert found is not None and found["page"] == 4

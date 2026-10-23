@@ -44,7 +44,12 @@ mkdirSync(join(dir, 'samples'), { recursive: true })
 const env = {
   ...process.env,
   LEGALLENS_DATA_DIR: join(dir, 'data'),
-  LEGALLENS_CONVERTER: 'fast',
+  LEGALLENS_CONVERTER: process.env.E2E_CONVERTER ?? 'fast', // 'docling' is what the real app uses
+  // Docling's model files live in the real app's data folder (macOS path; override with E2E_DOCLING_ARTIFACTS),
+  // not in the throw-away one, so a docling run points at them.
+  LEGALLENS_DOCLING_ARTIFACTS:
+    process.env.E2E_DOCLING_ARTIFACTS ??
+    join(homedir(), 'Library', 'Application Support', 'LegalLens', 'models', 'docling'),
   LEGALLENS_SCANNER: clamdAlive ? 'clamd' : 'none',
   LEGALLENS_CLAMD_SOCKET: clamdSocket,
   LEGALLENS_STUB_TOKEN_DELAY_MS: '0',

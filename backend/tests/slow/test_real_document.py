@@ -43,7 +43,7 @@ CASES = [
     Case("How many days do the respondents have to pay?", [["14", "fourteen"]]),
     Case("Which AI tool produced the fake cases?", [["chatgpt"]], note=True),
     Case("Who is the judge in this case?", [["castel"]]),
-    Case("What court issued this opinion?", [["southern district of new york", "district court"]]),
+    Case("What court issued this opinion?", [["southern district of new york"]]),
     Case("What was Avianca's motion to dismiss based on?", [["montreal convention", "time-barred", "time barred"]]),
     Case("Which federal rule did the lawyers violate?", [["rule 11"]]),
     Case("Did the court find that Mr. LoDuca acted in bad faith?", [["bad faith"]]),

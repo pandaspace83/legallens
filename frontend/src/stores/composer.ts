@@ -36,6 +36,12 @@ export function useMatterSummaryChoice(matterId: ID) {
   return useComposer((s) => s.summary[matterId] ?? DEFAULT_SUMMARY)
 }
 
+// The template and audience the lawyer picked, or undefined when they never did: only a picked choice is sent,
+// so otherwise the backend matches the template to the document (an opinion is not summarized as a letter).
+export function useMatterSummaryPick(matterId: ID) {
+  return useComposer((s) => s.summary[matterId])
+}
+
 export function useMatterDraftType(matterId: ID) {
   return useComposer((s) => s.draftType[matterId] ?? 'response_letter')
 }

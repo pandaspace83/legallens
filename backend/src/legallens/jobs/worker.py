@@ -77,13 +77,41 @@ def run_pending(database: Database, settings: Settings, max_jobs: int = 1000) ->
     return count
 
 
+HEARTBEAT_SECONDS = 3.0
+
+
+def _touch_heartbeat(settings: Settings) -> None:
+    settings.worker_heartbeat_path.parent.mkdir(parents=True, exist_ok=True)
+    settings.worker_heartbeat_path.touch()
+
+
+def execute_with_heartbeat(
+    database: Database, settings: Settings, job: ClaimedJob, interval: float = HEARTBEAT_SECONDS
+) -> None:
+    """Runs a job while a side thread keeps the heartbeat fresh. A summary or an ingestion can run for minutes, and
+    the heartbeat is otherwise touched only between jobs: /health would call a busy worker dead and the app would
+    tell the lawyer that background work is paused while it is running."""
+    done = threading.Event()
+
+    def beat() -> None:
+        while not done.wait(interval):
+            _touch_heartbeat(settings)
+
+    thread = threading.Thread(target=beat, name="legallens-heartbeat", daemon=True)
+    thread.start()
+    try:
+        execute(database, settings, job)
+    finally:
+        done.set()
+        thread.join(timeout=interval + 1)
+
+
 def run_worker(database: Database, settings: Settings, stop: threading.Event) -> None:
     log.info("worker_started")
     _housekeeping(database, settings)
     last_housekeeping = time.monotonic()
     while not stop.is_set():
-        settings.worker_heartbeat_path.parent.mkdir(parents=True, exist_ok=True)
-        settings.worker_heartbeat_path.touch()
+        _touch_heartbeat(settings)
         try:
             job = claim(database)
         except Exception:
@@ -91,7 +119,7 @@ def run_worker(database: Database, settings: Settings, stop: threading.Event) ->
             stop.wait(settings.worker_poll_seconds * 4)
             continue
         if job is not None:
-            execute(database, settings, job)
+            execute_with_heartbeat(database, settings, job)
         else:
             stop.wait(settings.worker_poll_seconds)
         if time.monotonic() - last_housekeeping > HOUSEKEEPING_SECONDS:

@@ -3,11 +3,12 @@ import type { ID } from '@/api/types'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { SummaryOptionsFields } from '@/features/summaries/SummaryOptions'
 import { AUDIENCE_SHORT, TEMPLATE_SHORT } from '@/lib/summaries'
-import { useComposer, useMatterSummaryChoice } from '@/stores/composer'
+import { useComposer, useMatterSummaryChoice, useMatterSummaryPick } from '@/stores/composer'
 
 // In Summarize mode, the composer shows the chosen template and audience; click to change (FE-4.4, FE-6.1).
 export function SummaryChoicePill({ matterId }: { matterId: ID }) {
   const choice = useMatterSummaryChoice(matterId)
+  const picked = useMatterSummaryPick(matterId)
   const setSummary = useComposer((s) => s.setSummary)
 
   return (
@@ -19,7 +20,8 @@ export function SummaryChoicePill({ matterId }: { matterId: ID }) {
         >
           <FileText className="size-3.5 shrink-0" aria-hidden />
           <span className="truncate">
-            {TEMPLATE_SHORT[choice.template]} · {AUDIENCE_SHORT[choice.audience]}
+            {picked ? TEMPLATE_SHORT[choice.template] : 'Matches the document'} ·{' '}
+            {AUDIENCE_SHORT[choice.audience]}
           </span>
           <ChevronDown className="size-3.5 shrink-0" aria-hidden />
         </button>

@@ -146,3 +146,47 @@ def test_an_ellipsis_inside_a_quotation_does_not_hide_it_from_the_check() -> Non
     )
     assert out is not None and "Status: Paid" not in out.text
     assert out.citations[0].verified
+
+
+def test_a_quote_that_is_literal_in_another_passage_moves_the_marker_instead_of_losing_the_sentence() -> None:
+    hits = [
+        hit(body="Unrelated recital about delivery."),
+        hit(body="The parent clearly intended to appeal, and so on."),
+    ]
+    checked = text.check_answer('The first part is "the parent clearly intended to appeal" [1].', hits, "test?")
+    assert checked is not None
+    assert checked.citations[0].hit is hits[1] and checked.citations[0].verified is True
+
+
+def test_a_generic_word_alone_does_not_tie_a_claim_to_a_passage() -> None:
+    passage = "HHS provided services to the mother as the CINA case proceeded."
+    wrong = text.check_answer("These amendments do not impact this case [1].", [hit(body=passage)], "q")
+    assert wrong is not None and wrong.citations[0].verified is False
+
+
+def test_a_quotation_inside_a_quotation_may_use_either_kind_of_mark() -> None:
+    passage = "(3) the delay was “no more than negligible.” W.T., 967 N.W.2d at 322."
+    checked = text.check_answer(
+        """The third part is "the delay was 'no more than negligible'" [1].""", [hit(body=passage)], "q"
+    )
+    assert checked is not None and checked.citations[0].verified is True
+
+
+def test_a_list_item_whose_quotation_is_cut_leaves_no_empty_number_behind() -> None:
+    passage = "The parent clearly intended to appeal, and the delay was short."
+    answer = (
+        'The test is:\n\n1. "the parent clearly intended to appeal" [1].\n2. "something the opinion never says" [1].\n'
+    )
+    checked = text.check_answer(answer, [hit(body=passage)], "q")
+    assert checked is not None
+    assert not any(line.strip() in {"2.", "-", ""} for line in checked.text.split("\n") if line.strip() == "2.")
+    assert "2." not in [line.strip() for line in checked.text.split("\n")]
+
+
+def test_a_year_the_passages_never_give_for_a_date_is_cut() -> None:
+    passage = "The deadline was September 26. In February 2025 the court set a hearing. It ended on May 4, 2023."
+    answer = "The deadline was September 26, 2025 [1]. The order was dated May 4, 2023 [1]."
+    checked = text.check_answer(answer, [hit(body=passage)], "deadline?")
+    assert checked is not None
+    assert "September 26 [1]" in checked.text and "2025" not in checked.text
+    assert "May 4, 2023" in checked.text and checked.citations[0].verified is True

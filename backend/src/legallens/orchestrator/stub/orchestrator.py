@@ -115,7 +115,8 @@ class StubOrchestrator:
             async for event in self._ask(ctx):
                 yield event
         elif decision.intent == "summarize" and decision.document:
-            template, audience = summary_choice(ctx)
+            is_law = bool(await ctx.services.authority_documents([decision.document.id]))
+            template, audience = summary_choice(ctx, is_law=is_law)
             summary_id, job_id = await ctx.services.start_summary(decision.document.id, template, audience)
             text = (
                 f"Summarizing {display_name(decision.document.filename)} with the "
@@ -285,7 +286,8 @@ class StubOrchestrator:
 
         covered = {t for t in terms if any(_covers(h.text, t) for _, h, _ in quoted)}
         missing = [t for t in terms if t not in covered]
-        partial = outside_law or (len(missing) / max(len(terms), 1) > 0.34)
+        # The text above lists every missing word under "Not found in your documents", so the state can't say "found".
+        partial = outside_law or bool(missing)
 
         parts: list[str] = []
         if outside_law:

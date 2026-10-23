@@ -5,7 +5,7 @@ import {
   useMatterDraftType,
   useMatterMode,
   useMatterScope,
-  useMatterSummaryChoice,
+  useMatterSummaryPick,
 } from '@/stores/composer'
 
 // Sends a question with the matter's current scope and mode; a new chat opens its conversation page.
@@ -13,7 +13,7 @@ export function useAsk(matterId: ID, conversationId?: ID) {
   const navigate = useNavigate()
   const scope = useMatterScope(matterId)
   const mode = useMatterMode(matterId)
-  const summary = useMatterSummaryChoice(matterId)
+  const summary = useMatterSummaryPick(matterId)
   const draftType = useMatterDraftType(matterId)
   const send = useSendMessage(matterId)
 
