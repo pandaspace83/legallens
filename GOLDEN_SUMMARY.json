@@ -1,0 +1,416 @@
+[
+  {
+    "passages": 10,
+    "document": "acme_demand_letter_scanned.pdf",
+    "model": "qwen2.5:14b-instruct",
+    "seconds": 127,
+    "fields": {
+      "sender": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- WHITFIELD & GRANT LLP sent it [1] \u201cWHITFIELD & GRANT LLP\u201d [1] \u201cWe represent Acme Corp in connection with the Master Services Agreement.\u201d [1]"
+      },
+      "recipient": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The letter is addressed to Smith Logistics LLC [2] \u201cSmith Logistics LLC, 200 Harbor Way, Oakland, CA 94607\u201d [2]"
+      },
+      "demands": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Payment of $48,500 in overdue invoices within fourteen (14) days [3] \u201cAcme demands the following: 1. Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.\u201d\n- Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [3] \u201c2. Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice.\u201d\n-"
+      },
+      "deadlines": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter [4] \u201cwithin fourteen (14) days of the date of this letter.\u201d\n- Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [4] Not found in this document.\n- Return of all Acme Confidential Information within ten (10) days [4] \u201cwithin ten (10) days.\u201d\n- Compliance with all "
+      },
+      "claims": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter [5] \u201c1. Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.\u201d\n- Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [5] \u201c2. Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice.\u201d\n- "
+      },
+      "threats": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Acme Corp demands payment of $48,500 in overdue invoices within fourteen (14) days [6]\n- Acme demands written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [6]\n- Acme demands the return of all Acme Confidential Information within ten (10) days [6]\n- If Smith does not comply by September 29, 2026, Acme will file suit and seek its attorneys' fees [6]"
+      },
+      "amounts": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- $48,500 is demanded for overdue invoices within fourteen (14) days [7] \u201cAcme demands the following: 1. Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.\u201d [7]"
+      }
+    }
+  },
+  {
+    "passages": 10,
+    "document": "in_re_es_iowa_2026.pdf",
+    "model": "qwen2.5:14b-instruct",
+    "seconds": 662,
+    "fields": {
+      "facts": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- E.S. was born in 2012 and lived with his mother until December 2023 when he was removed due to her arrest for methamphetamine possession and running an unregistered daycare [1], \u201cHis mother had been arrested for possession of methamphetamine. And a witness reported seeing illegal substances in the mother's home. Also, the mother had been running an unregistered daycare business in the home.\u201d [1]"
+      },
+      "posture": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The mother's petition on appeal was filed one day late [4], \u201cthe mother did not file it until September 27.\u201d\n- The court's rules require the petition on appeal to be filed within 15 days after the notice of appeal [5],\n- If the petition on appeal is not filed within the 15-day period, the supreme court will dismiss the appeal [5], \u201cif the petition on appeal is not filed within that fifteen-day p"
+      },
+      "issue": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The issue presented is whether the court of appeals' denial of the mother's request for a delayed appeal should be addressed. [9] \u201cWhen our court grants further review, we may address any issue that was properly raised in the appeal.\u201d [9]\n- The mother's appeal is from the juvenile court's denial of her request for a delayed appeal after she missed the filing deadline for her petition on appeal. "
+      },
+      "holding": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The mother's appeal is from permanency rulings within a CINA proceeding, not from a termination of parental rights. [14] \"These permanency rulings-all made within the CINA proceeding-are the target of the mother's appeal.\"\n- The court concluded that A.B.'s delayed-appeal mechanism should not apply to appeals from permanency rulings in CINA proceedings. [14] \"Because the mother is not appealing f"
+      },
+      "reasoning": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Delays in resolving child welfare cases are against the children's best interest [18], [\u201cDelays in resolving child welfare cases are 'decidedly antagonistic to the children's best interest.'\u201d].\n- Expedited appellate proceedings are required for CINA and termination cases under Iowa Code chapter 232 [18], [\u201cTo help minimize those delays, our law requires expedited appellate proceedings for CINA a"
+      },
+      "disposition": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Court of appeals decision affirmed [23].\n- Appeal dismissed [23].\n- The mother's untimely filing of her petition on appeal was not allowed to proceed as a delayed appeal [1, 8].\n- The juvenile court's permanency rulings remain subject to modification by the juvenile court [24].\n- The mother's appeal was denied and dismissed because she was not appealing from a termination of her parental rights "
+      }
+    }
+  },
+  {
+    "passages": 10,
+    "document": "mata_v_avianca_sanctions.pdf",
+    "model": "qwen2.5:7b-instruct",
+    "seconds": 411,
+    "fields": {
+      "facts": {
+        "correct": false,
+        "written": true,
+        "cited": true,
+        "content": "- \u201cAVIANCA, INC., Plaintiff,\u201d [1]\n- \u201cJuly 10, 2015), which declined to sanction a law firm associate who drafted and signed a complaint that falsely alleged that the plaintiff in a shareholder derivative suit was a shareholder of the nominal defendant.\u201d [2]\n- \u201c(ECF 24.) It included the following statement: \"Although Plaintiff ostensibly cites to a variety of cases in opposition to this motion, the"
+      },
+      "posture": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The plaintiff's opposition to the motion to dismiss was submitted as an \"affirmation\" rather than a memorandum of law, contrary to the Local Civil Rules of the district, which require authorities to be set forth in a memorandum of law. [4]\n\n- The affirmation was researched and written by Mr. Schwartz, a colleague of Mr. LoDuca, and Mr. LoDuca reviewed it for style but did not verify the accuracy"
+      },
+      "issue": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The document discusses the submission of fake judicial opinions by Respondents, which violated Rule 11(b)(2) [11].\n- The fake opinions did not include signatures or seals, and the submission of such opinions was an abuse of the adversary system [12].\n- The Court found that the submission of fake opinions was an unprecedented circumstance and did not provide a non-frivolous ground for extending, "
+      },
+      "holding": {
+        "correct": false,
+        "written": true,
+        "cited": true,
+        "content": "- The automatic stay under the Bankruptcy Code tolls the Montreal Convention's two-year limitations period. [15] \"has held that an automatic stay of a legal proceeding under the Bankruptcy Code tolls the limitations period applicable to the stayed proceeding. See, e.g., Begier v. IRS, 496 U.S. 53, 59-60, 110 S.Ct. 2258, 110 L.Ed.2d 46 (1990). The Montreal Convention's limitations period is a 'peri"
+      },
+      "reasoning": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The court may order an attorney, law firm, or party to show cause why conduct has not violated Rule 11(b). [16]\n- Any Rule 11 sanction should be made with restraint, as the court may act as accuser, fact finder, and sentencing judge. [16]\n- Mr. Schwartz, not admitted to practice in the District, can still be sanctioned under Rule 11(c)(1). [17]\n- The court has authority to impose sanctions on Mr"
+      },
+      "disposition": {
+        "correct": false,
+        "written": true,
+        "cited": true,
+        "content": "- \u201cOn March 1, 2023, Mr. LoDuca filed an \"Affirmation in Opposition\" to the motion to dismiss (the \"Affirmation in Opposition\").\u201d [20]\n- \u201c(ECF 31 at 1.) A fake opinion is not \"existing law\" and citation to a fake opinion does not provide a non-frivolous ground for extending, modifying, or reversing existing law, or for establishing new law.\u201d [21]\n- \u201cOn April 12, 2023, the Court issued an Order tha"
+      }
+    }
+  },
+  {
+    "passages": 6,
+    "document": "acme_demand_letter_scanned.pdf",
+    "model": "qwen2.5:14b-instruct",
+    "seconds": 160,
+    "fields": {
+      "sender": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- WHITFIELD & GRANT LLP sent it [1] \u201cWHITFIELD & GRANT LLP\u201d [1] \u201cWe represent Acme Corp in connection with the Master Services Agreement.\u201d [1]"
+      },
+      "recipient": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The letter is addressed to Smith Logistics LLC [2] \u201cSmith Logistics LLC, 200 Harbor Way, Oakland, CA 94607\u201d [2]"
+      },
+      "demands": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Payment of $48,500 in overdue invoices within fourteen (14) days [3] \u201cAcme demands the following: 1. Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.\u201d\n- Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [3] \u201c2. Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice.\u201d\n-"
+      },
+      "deadlines": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter [4] \u201cwithin fourteen (14) days of the date of this letter.\u201d\n- Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [4] Not found in this document.\n- Return of all Acme Confidential Information within ten (10) days [4] \u201cwithin ten (10) days.\u201d\n- Compliance with all "
+      },
+      "claims": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter [5] \u201c1. Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.\u201d\n- Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [5] \u201c2. Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice.\u201d\n- "
+      },
+      "threats": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Acme Corp demands payment of $48,500 in overdue invoices within fourteen (14) days [6]\n- Acme demands written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [6]\n- Acme demands the return of all Acme Confidential Information within ten (10) days [6]\n- If Smith does not comply by September 29, 2026, Acme will file suit and seek its attorneys' fees [6]"
+      },
+      "amounts": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- $48,500 is demanded for overdue invoices within fourteen (14) days [7] \u201cAcme demands the following: 1. Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.\u201d [7]"
+      }
+    }
+  },
+  {
+    "passages": 6,
+    "document": "in_re_es_iowa_2026.pdf",
+    "model": "qwen2.5:14b-instruct",
+    "seconds": 500,
+    "fields": {
+      "facts": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- E.S. was born in 2012 and lived with his mother until December 2023 when he was removed due to her arrest for methamphetamine possession and running an unregistered daycare with illegal substances [1].\n- The mother requested and was granted permission to represent herself pro se, with her former attorney serving as stand-by counsel [1].\n- In February 2025, a permanency hearing was scheduled for "
+      },
+      "posture": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The mother's petition on appeal was filed late, beyond the 15-day period required by Iowa R. App. P. 6.201(1)(b) [4].\n- The court of appeals denied a delayed appeal and dismissed the mother's appeal [5].\n- The mother's parental rights were not terminated; instead, the permanency goal was changed to sole custody with the father [6].\n- The case involves a child welfare proceeding under Iowa Code c"
+      },
+      "issue": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The issue presented is whether the court of appeals' denial of the mother's request for a delayed appeal should be addressed. [8] \u201cWhen our court grants further review, we may address any issue that was properly raised in the appeal.\u201d [8]\n- The mother's appeal is from the court's denial of her request for a delayed appeal after her untimely filing of the petition on appeal. [8] \u201cHere we address "
+      },
+      "holding": {
+        "correct": false,
+        "written": true,
+        "cited": true,
+        "content": "- Holding: The court affirms the denial of a delayed appeal and dismisses the mother's appeal because she is not challenging the termination of her parental rights, but rather permanency rulings within a CINA proceeding, which remain subject to modification. [12] \u201cAlthough we adopt a different rationale, we agree with the court of appeals' disposition of this case. The court of appeals was correct"
+      },
+      "reasoning": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Delays in resolving child welfare cases are against the children's best interest [13], \u201cDelays in resolving child welfare cases are 'decidedly antagonistic to the children's best interest.'\u201d [13]\n- Expedited appellate proceedings are required for CINA and termination cases under Iowa Code chapter 232 [13], \u201cTo help minimize those delays, our law requires expedited appellate proceedings for CINA "
+      },
+      "disposition": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Court of appeals decision affirmed [16]\n- Appeal dismissed [16]\n- May, J., delivered the opinion of the court, joined by all justices [17]\n- No post-termination relief action is available for parents under Iowa law [18]\n- The mother's appeal was untimely due to circumstances beyond her control [19]\n- The court must dismiss the appeal if the petition on appeal is not filed within 15 days [20]\n- A"
+      }
+    }
+  },
+  {
+    "passages": 6,
+    "document": "mata_v_avianca_sanctions.pdf",
+    "model": "qwen2.5:7b-instruct",
+    "seconds": 361,
+    "fields": {
+      "facts": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Roberto Mata is a defendant in a case against Avianca, Inc. [1] [\u201cROBERTO MATA, -against- AVIANCA, INC., Plaintiff, 22-cv-1461 (PKC)\u201d]\n\n- Mr. LoDuca, the only attorney of record, consciously avoided learning the facts by neither reading the Avianca submission when received nor after receiving the Court's notice that the fake cases could not be found. [2] [\u201cMr. LoDuca, the only attorney of record"
+      },
+      "posture": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- \u201cThe Local Civil Rules of this District require that \"the cases and other authorities relied upon\" in opposition to a motion be set forth in a memorandum of law.\u201d [5]\n- \u201cThe bankruptcy court later granted China Southern's motion to lift the stay, and Varghese filed a notice of appeal to this Court.\u201d [6]\n- \u201cThe failure to correct a prior statement in a pending motion is the later advocacy of that"
+      },
+      "issue": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- \u201cWhile no date is given for the queries, the declaration strongly suggested that he questioned whether \"Varghese\" was \"real\" prior to either the March 1 Affirmation in Opposition or the April 25 Affidavit.\u201d [8]\n- \u201cRule 11(b)(2) states: \"By presenting to the court a pleading, written motion, or other paper-whether by signing, filing, submitting, or later advocating it-an attorney or unrepresented"
+      },
+      "holding": {
+        "correct": false,
+        "written": true,
+        "cited": true,
+        "content": "- \u201cTherefore, we hold that the filing of Varghese's Chapter 13 petition tolled the Montreal Convention's two-year limitations period, which did not begin tc V run until the automatic stay was lifted.\"\u201d [11]\n- \u201cMr. Schwartz then entered various prompts that caused ChatGPT to generate descriptions of fake cases, including \"provide case law in support that statute of limitations is tolled by bankrupt"
+      },
+      "reasoning": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The court may order an attorney, law firm, or party to show cause why conduct has not violated Rule 11(b) [14].\n- Sanctions should be imposed with restraint and should not be for minor, inconsequential violations [14].\n- Mr. Schwartz is not admitted to practice in the District but can be sanctioned under Rule 11(c)(1) [14].\n- The court has authority to impose sanctions sua sponte, akin to its in"
+      },
+      "disposition": {
+        "correct": false,
+        "written": true,
+        "cited": true,
+        "content": "- \u201cOn March 1, 2023, Mr. LoDuca filed an \"Affirmation in Opposition\" to the motion to dismiss (the \"Affirmation in Opposition\").\u201d [16]\n- \u201c(ECF 31 at 1.) A fake opinion is not \"existing law\" and citation to a fake opinion does not provide a non-frivolous ground for extending, modifying, or reversing existing law, or for establishing new law.\u201d [17]\n- \u201cOn April 12, 2023, the Court issued an Order tha"
+      }
+    }
+  },
+  {
+    "passages": 4,
+    "document": "acme_demand_letter_scanned.pdf",
+    "model": "qwen2.5:14b-instruct",
+    "seconds": 151,
+    "fields": {
+      "sender": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- WHITFIELD & GRANT LLP sent it [1] \u201cWHITFIELD & GRANT LLP\u201d [1] \u201cWe represent Acme Corp in connection with the Master Services Agreement.\u201d [1]"
+      },
+      "recipient": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The letter is addressed to Smith Logistics LLC [2] \u201cSmith Logistics LLC, 200 Harbor Way, Oakland, CA 94607\u201d [2]"
+      },
+      "demands": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Payment of $48,500 in overdue invoices within fourteen (14) days [3] \u201cAcme demands the following: 1. Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.\u201d\n- Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [3] \u201c2. Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice.\u201d\n-"
+      },
+      "deadlines": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter [4] \u201cwithin fourteen (14) days of the date of this letter.\u201d\n- Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [4] Not found in this document.\n- Return of all Acme Confidential Information within ten (10) days [4] \u201cwithin ten (10) days.\u201d\n- Compliance with all "
+      },
+      "claims": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter [5] \u201c1. Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.\u201d\n- Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [5] \u201c2. Written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice.\u201d\n- "
+      },
+      "threats": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Acme Corp demands payment of $48,500 in overdue invoices within fourteen (14) days [6]\n- Acme demands written confirmation that Smith will cure its breach of Section 4.2 by providing proper notice [6]\n- Acme demands the return of all Acme Confidential Information within ten (10) days [6]\n- If Smith does not comply by September 29, 2026, Acme will file suit and seek its attorneys' fees [6]"
+      },
+      "amounts": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- $48,500 is demanded for overdue invoices within fourteen (14) days [7] \u201cAcme demands the following: 1. Payment of $48,500 in overdue invoices within fourteen (14) days of the date of this letter.\u201d [7]"
+      }
+    }
+  },
+  {
+    "passages": 4,
+    "document": "in_re_es_iowa_2026.pdf",
+    "model": "qwen2.5:14b-instruct",
+    "seconds": 378,
+    "fields": {
+      "facts": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- E.S. was born in 2012 and lived with his mother until December 2023. [1] \u201cHis mother had been arrested for possession of methamphetamine. And a witness reported seeing illegal substances in the mother's home. Also, the mother had been running an unregistered daycare business in the home.\u201d [1]\n- E.S. was removed from his mother's care and placed with his father. [1] \u201cE.S. was removed and placed w"
+      },
+      "posture": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The mother's petition on appeal was filed late, beyond the 15-day period required by Iowa R. App. P. 6.201(1)(b). [3] \u201cThat petition on appeal must be filed \"within 15 days after the filing of the notice of appeal.\"\u201d [3]\n- The court of appeals denied a delayed appeal and dismissed the mother's appeal. [4] \u201cCourt of appeals decision affirmed, and appeal dismissed.\u201d\n- The mother's appeal was not f"
+      },
+      "issue": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The issue presented is whether the court of appeals' denial of the mother's request for a delayed appeal should be addressed. [6] \u201cWhen our court grants further review, we may address any issue that was properly raised in the appeal.\u201d [6]\n- The mother's appeal targets the juvenile court's permanency rulings within the CINA proceeding, not a termination of her parental rights. [7] \u201cThese permanen"
+      },
+      "holding": {
+        "correct": false,
+        "written": true,
+        "cited": true,
+        "content": "- Holding: The court affirms the denial of a delayed appeal and dismisses the mother's appeal. [9] \"Although we adopt a different rationale, we agree with the court of appeals' disposition of this case. The court of appeals was correct to deny a delayed appeal and dismiss the mother's appeal.\""
+      },
+      "reasoning": {
+        "correct": false,
+        "written": true,
+        "cited": true,
+        "content": "- Delays in resolving child welfare cases are against the children's best interest [10]: \u201cDelays in resolving child welfare cases are 'decidedly antagonistic to the children's best interest.'\u201d [10]\n- Expedited appellate proceedings are required for CINA and termination cases under Iowa Code chapter 232 [10]: \"our law requires expedited appellate proceedings for CINA and termination cases under Iow"
+      },
+      "disposition": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The court of appeals' decision is affirmed [13].\n- The appeal is dismissed [13].\n- The court of appeals was correct to deny a delayed appeal and dismiss the mother's appeal [13].\n- May, J., delivered the opinion of the court, in which all justices joined [14].\n- Brenna Bird, Attorney General, and Mackenzie L. Moran, Assistant Attorney General, for appellee [14]."
+      }
+    }
+  },
+  {
+    "passages": 4,
+    "document": "mata_v_avianca_sanctions.pdf",
+    "model": "qwen2.5:7b-instruct",
+    "seconds": 293,
+    "fields": {
+      "facts": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Roberto Mata is the defendant in a case against Avianca, Inc. [1]\n\n- The court discusses the culpability of an attorney who avoids knowing the wrongful nature of their conduct. [2]\n\n- Respondents, including Mr. Schwartz and Mr. LoDuca, advocated for fake cases and legal arguments in an Affirmation in Opposition after being informed that their citations were non-existent. [2]\n\n- Rule 11(b)(2) req"
+      },
+      "posture": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- The plaintiff's opposition to the motion to dismiss was submitted as an \"affirmation\" rather than a memorandum of law, which is required by the Local Civil Rules of the district. [5] \"The Local Civil Rules of this District require that 'the cases and other authorities relied upon' in opposition to a motion be set forth in a memorandum of law. Local Civil Rule 7.1(a)(2), 7.1(b).\" [5]\n\n- The affir"
+      },
+      "issue": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- \u201cWhile no date is given for the queries, the declaration strongly suggested that he questioned whether \"Varghese\" was \"real\" prior to either the March 1 Affirmation in Opposition or the April 25 Affidavit.\u201d [9]\n- \u201cRule 11(b)(2) states: \"By presenting to the court a pleading, written motion, or other paper-whether by signing, filing, submitting, or later advocating it-an attorney or unrepresented"
+      },
+      "holding": {
+        "correct": false,
+        "written": true,
+        "cited": true,
+        "content": "- The Bankruptcy Code's automatic stay tolls the Montreal Convention's two-year limitations period. [12] \"has held that an automatic stay of a legal proceeding under the Bankruptcy Code tolls the limitations period applicable to the stayed proceeding.\" [12]"
+      },
+      "reasoning": {
+        "correct": true,
+        "written": true,
+        "cited": true,
+        "content": "- Rule 11(c)(3) allows the court to order an attorney, law firm, or party to show cause why their conduct has violated Rule 11(b). [13] \"On its own, the court may order an attorney, law firm, or party to show cause why conduct specifically described in the order has not violated Rule 11(b).\" \"If, after notice and a reasonable opportunity to respond, the court determines that Rule 11(b) has been vi"
+      },
+      "disposition": {
+        "correct": false,
+        "written": true,
+        "cited": true,
+        "content": "- \u201cOn March 1, 2023, Mr. LoDuca filed an \"Affirmation in Opposition\" to the motion to dismiss (the \"Affirmation in Opposition\").\u201d [14]\n- \u201c(ECF 31 at 1.) A fake opinion is not \"existing law\" and citation to a fake opinion does not provide a non-frivolous ground for extending, modifying, or reversing existing law, or for establishing new law.\u201d [15]\n- \u201cOn April 12, 2023, the Court issued an Order tha"
+      }
+    }
+  }
+]

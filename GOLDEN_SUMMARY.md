@@ -1,0 +1,26 @@
+# Summary golden test
+
+| Passages per field | Document | Model | Seconds | Correct | Written by the model | Cited |
+|---|---|---|---|---|---|---|
+| 10 | acme_demand_letter_scanned.pdf | qwen2.5:14b-instruct | 127 | 7/7 | 7/7 | 7/7 |
+| 10 | in_re_es_iowa_2026.pdf | qwen2.5:14b-instruct | 662 | 6/6 | 6/6 | 6/6 |
+| 10 | mata_v_avianca_sanctions.pdf | qwen2.5:7b-instruct | 411 | 3/6 | 6/6 | 6/6 |
+| 6 | acme_demand_letter_scanned.pdf | qwen2.5:14b-instruct | 160 | 7/7 | 7/7 | 7/7 |
+| 6 | in_re_es_iowa_2026.pdf | qwen2.5:14b-instruct | 500 | 5/6 | 6/6 | 6/6 |
+| 6 | mata_v_avianca_sanctions.pdf | qwen2.5:7b-instruct | 361 | 4/6 | 6/6 | 6/6 |
+| 4 | acme_demand_letter_scanned.pdf | qwen2.5:14b-instruct | 151 | 7/7 | 7/7 | 7/7 |
+| 4 | in_re_es_iowa_2026.pdf | qwen2.5:14b-instruct | 378 | 4/6 | 6/6 | 6/6 |
+| 4 | mata_v_avianca_sanctions.pdf | qwen2.5:7b-instruct | 293 | 4/6 | 6/6 | 6/6 |
+
+## Fields that were not correct
+
+- 10 passages, mata_v_avianca_sanctions.pdf, **facts**: '- “AVIANCA, INC., Plaintiff,” [1]\n- “July 10, 2015), which declined to sanction a law firm associate who drafted and signed a complaint that falsely alleged that the plaintiff in a shareholder derivative suit was a shareholder of the nominal defendant.” [2]\n- “(ECF 24.) It included the following statement: "Although Plaintiff ostensibly cites to a variety of cases in opposition to this motion, the'
+- 10 passages, mata_v_avianca_sanctions.pdf, **holding**: '- The automatic stay under the Bankruptcy Code tolls the Montreal Convention\'s two-year limitations period. [15] "has held that an automatic stay of a legal proceeding under the Bankruptcy Code tolls the limitations period applicable to the stayed proceeding. See, e.g., Begier v. IRS, 496 U.S. 53, 59-60, 110 S.Ct. 2258, 110 L.Ed.2d 46 (1990). The Montreal Convention\'s limitations period is a \'peri'
+- 10 passages, mata_v_avianca_sanctions.pdf, **disposition**: '- “On March 1, 2023, Mr. LoDuca filed an "Affirmation in Opposition" to the motion to dismiss (the "Affirmation in Opposition").” [20]\n- “(ECF 31 at 1.) A fake opinion is not "existing law" and citation to a fake opinion does not provide a non-frivolous ground for extending, modifying, or reversing existing law, or for establishing new law.” [21]\n- “On April 12, 2023, the Court issued an Order tha'
+- 6 passages, in_re_es_iowa_2026.pdf, **holding**: "- Holding: The court affirms the denial of a delayed appeal and dismisses the mother's appeal because she is not challenging the termination of her parental rights, but rather permanency rulings within a CINA proceeding, which remain subject to modification. [12] “Although we adopt a different rationale, we agree with the court of appeals' disposition of this case. The court of appeals was correct"
+- 6 passages, mata_v_avianca_sanctions.pdf, **holding**: '- “Therefore, we hold that the filing of Varghese\'s Chapter 13 petition tolled the Montreal Convention\'s two-year limitations period, which did not begin tc V run until the automatic stay was lifted."” [11]\n- “Mr. Schwartz then entered various prompts that caused ChatGPT to generate descriptions of fake cases, including "provide case law in support that statute of limitations is tolled by bankrupt'
+- 6 passages, mata_v_avianca_sanctions.pdf, **disposition**: '- “On March 1, 2023, Mr. LoDuca filed an "Affirmation in Opposition" to the motion to dismiss (the "Affirmation in Opposition").” [16]\n- “(ECF 31 at 1.) A fake opinion is not "existing law" and citation to a fake opinion does not provide a non-frivolous ground for extending, modifying, or reversing existing law, or for establishing new law.” [17]\n- “On April 12, 2023, the Court issued an Order tha'
+- 4 passages, in_re_es_iowa_2026.pdf, **holding**: '- Holding: The court affirms the denial of a delayed appeal and dismisses the mother\'s appeal. [9] "Although we adopt a different rationale, we agree with the court of appeals\' disposition of this case. The court of appeals was correct to deny a delayed appeal and dismiss the mother\'s appeal."'
+- 4 passages, in_re_es_iowa_2026.pdf, **reasoning**: '- Delays in resolving child welfare cases are against the children\'s best interest [10]: “Delays in resolving child welfare cases are \'decidedly antagonistic to the children\'s best interest.\'” [10]\n- Expedited appellate proceedings are required for CINA and termination cases under Iowa Code chapter 232 [10]: "our law requires expedited appellate proceedings for CINA and termination cases under Iow'
+- 4 passages, mata_v_avianca_sanctions.pdf, **holding**: '- The Bankruptcy Code\'s automatic stay tolls the Montreal Convention\'s two-year limitations period. [12] "has held that an automatic stay of a legal proceeding under the Bankruptcy Code tolls the limitations period applicable to the stayed proceeding." [12]'
+- 4 passages, mata_v_avianca_sanctions.pdf, **disposition**: '- “On March 1, 2023, Mr. LoDuca filed an "Affirmation in Opposition" to the motion to dismiss (the "Affirmation in Opposition").” [14]\n- “(ECF 31 at 1.) A fake opinion is not "existing law" and citation to a fake opinion does not provide a non-frivolous ground for extending, modifying, or reversing existing law, or for establishing new law.” [15]\n- “On April 12, 2023, the Court issued an Order tha'

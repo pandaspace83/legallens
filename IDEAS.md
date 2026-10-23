@@ -73,6 +73,8 @@ Decided on 2026-10-02 unless a later date is shown.
   (embeddings) and OCR. The same goes for anything else that touches documents, including malware scanning,
   error reporting and analytics. The model must be one that can run self-hosted. The AI layer stays swappable in
   case this decision changes.
+  *Relaxed in part by DEC-94 (2026-10-23): Claude may answer behind a setting. Embeddings, OCR, scanning, logs and
+  analytics stay local.*
 - **DEC-09 Matters** *(accepted 2026-10-05)*: There is one workspace, and inside it each client case or deal is a
   separate *matter*. Every document, question, summary and draft belongs to exactly one matter. Even a solo
   lawyer has many clients. Keeping each client's documents in its own matter stops one client's confidential
@@ -426,6 +428,28 @@ Recorded at closeout (`CLOSEOUT_TODO.md`); the evidence is in `GATE_BENCHMARK.md
 - **DEC-88 Drafts take facts from the client's own documents.** When none are named and the whole matter is in
   scope, supporting documents default to the client's documents; the draft type is fixed only by Draft mode, so
   "a memo" in plain words gives a memo. Found by the UAT run, 2026-10-14.
+- **DEC-94 Claude may answer, behind a setting (relaxes DEC-08).** *(accepted 2026-10-23)* LegalLens may call
+  Claude through the Anthropic SDK for the model steps (answer, summary, draft, and later the router) as one more
+  provider behind the existing model gateway (`models/llm.py`). The local models stay the default and the fallback;
+  Claude is chosen by a setting, and when it is on, "Where your data goes" and the matter's AI-consent record
+  (DEC-60) say so. The no-outside-connection test becomes provider-aware: it fails if anything other than the chosen
+  provider's address is contacted. Embeddings, reranking, OCR, malware scanning, logs and analytics stay local (DEC-08
+  still holds for them). The purpose is learning and a professionally graded end-to-end project, not use with
+  clients. Decided 2026-10-23.
+- **DEC-95 Only public or synthetic documents ever reach Claude.** *(accepted 2026-10-23)* No real client data is
+  uploaded to a Claude-enabled LegalLens: the owner guarantees it, and DEC-73 stays. As a second check, the
+  assistant asks the owner to confirm each document before it is uploaded, naming the file and saying where it came
+  from. DEF-23's conditions (contractual no-training and zero-retention terms for the chosen model, the client's
+  informed consent, a per-matter setting) must be met and recorded before any real document is ever used. Some models
+  are not offered under zero data retention, so that is checked per model first. Decided 2026-10-23.
+- **DEC-96 A $5 spend cap to start.** *(accepted 2026-10-23)* All new spend is capped at $5 until the owner raises
+  it, enforced two ways: a spend limit the owner sets with the provider, and a guard in the gateway that adds up each
+  call's cost from the token counts the response reports, warns at 80% and refuses further Claude calls at the cap.
+  The $5 covers Claude calls and any cloud resources together; the first cloud step is a budget alert, and nothing
+  is deployed until the owner confirms the plan. Estimates at list prices (to be replaced by measured usage): one
+  Ask costs about $0.0005 on Haiku 5.5, $0.01 on Sonnet 5.5 and $0.02 on Opus 5.5; a 10-page summary about $0.004,
+  $0.09 and $0.17; a full golden-set pass about $0.05, $1 and $2. Thinking tokens bill as output, so Sonnet and Opus
+  may cost more than these figures. Decided 2026-10-23.
 ---
 
 ## 3. Suggested (SUG)
@@ -542,6 +566,7 @@ Recorded at closeout (`CLOSEOUT_TODO.md`); the evidence is in `GATE_BENCHMARK.md
   LegalLens is sold to firms.
 - **DEF-23 Optional outside AI provider:** Only if DEC-08 changes, and only with contractual no-training and
   zero-retention terms, the client's informed consent, and a per-matter setting.
+  *DEF-23 → DEC-94 (accepted 2026-10-23). Its conditions still apply before any real document is used (DEC-95).*
 - **DEF-24 Privilege detection in documents received from the other side.**
 - **DEF-25 Multi-agent upgrade path:** Possible agents once the RAG version is stable:
   - **Drafting agent:** drafts section by section from the lawyer's templates.
