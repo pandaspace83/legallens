@@ -23,7 +23,6 @@ from legallens.search.sentences import best_sentence
 from legallens.services.summaries import AUDIENCE_PASSAGES, NOT_FOUND, TEMPLATES
 
 SUMMARY_DOC_CHARS = 16000  # a document up to this size goes to the model whole; longer ones by relevance
-SUMMARY_FIELD_PASSAGES = 10
 SUMMARY_TOKENS = 500
 
 
@@ -101,7 +100,7 @@ def _passages_for(ctx: JobContext, field: Any, document_id: str, embedder: Any) 
             matter_id=ctx.matter_id,
             query=f"{field.title}. {' '.join(field.keywords)}",
             document_ids=[document_id],
-            k_fused=SUMMARY_FIELD_PASSAGES,
+            k_fused=ctx.settings.summary_field_passages,
         )
         return result.hits
 

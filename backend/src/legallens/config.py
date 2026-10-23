@@ -89,6 +89,9 @@ class Settings(BaseSettings):
     # DEC-14: a 50-page summary in 5 minutes. The 14B needed 10 minutes on this Mac, so long documents use the 7B.
     llm_summary_long_model: str = "qwen2.5:7b-instruct"
     summary_long_pages: int = 20
+    summary_field_passages: int = (
+        10  # passages the model reads per summary field, for a document too long to send whole
+    )
     llm_draft_model: str = "qwen2.5:14b-instruct"
     llm_context_tokens: int = 8192
     llm_timeout_seconds: int = 300
