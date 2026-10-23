@@ -26,7 +26,12 @@ interface Question {
 }
 
 const questions: Question[] = [
-  { id: 'Q01', kind: 'fact', q: 'Which justice wrote the opinion of the court?', expect: [/\bMay\b/] },
+  {
+    id: 'Q01',
+    kind: 'fact',
+    q: 'Which justice wrote the opinion of the court?',
+    expect: [/\bMay\b/],
+  },
   {
     id: 'Q02',
     kind: 'holding',
@@ -93,7 +98,9 @@ const questions: Question[] = [
     id: 'Q12',
     kind: 'unanswerable',
     q: 'What did the dissenting justice argue?',
-    expect: [/no dissent|all justices joined|not found|does not (mention|contain|say)|not in your documents/i],
+    expect: [
+      /no dissent|all justices joined|not found|does not (mention|contain|say)|not in your documents/i,
+    ],
   },
   {
     id: 'Q13',
@@ -173,7 +180,9 @@ async function ask(question: string) {
 
 async function newChat() {
   await page.goto(matterPath)
-  await expect(page.getByRole('heading', { name: /What would you like to know about/ })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: /What would you like to know about/ }),
+  ).toBeVisible()
 }
 
 test('sign in, open the matter, upload the opinion', async () => {
@@ -200,7 +209,9 @@ test('sign in, open the matter, upload the opinion', async () => {
     .getByRole('radio', { name: 'Our client' })
     .click()
   await dialog.getByRole('button', { name: /Upload 1 file/ }).click()
-  await expect(page.getByRole('dialog', { name: 'Documents processed' })).toBeVisible({ timeout: 300_000 })
+  await expect(page.getByRole('dialog', { name: 'Documents processed' })).toBeVisible({
+    timeout: 300_000,
+  })
   await page.screenshot({ path: join(OUT, 'shots', 'upload-done.png') })
   await page.getByRole('button', { name: 'Done' }).click()
   const docs = await api<{ items: Record<string, unknown>[] }>(`/matters/${matterId}/documents`)
@@ -231,7 +242,9 @@ for (const item of questions) {
     let msg: Record<string, unknown> | undefined
     const deadline = Date.now() + ANSWER_WAIT
     while (Date.now() < deadline) {
-      const data = await api<{ items: Record<string, unknown>[] }>(`/conversations/${convId}/messages`)
+      const data = await api<{ items: Record<string, unknown>[] }>(
+        `/conversations/${convId}/messages`,
+      )
       msg = data.items.find((m) => m.role === 'assistant')
       if (msg && msg.status !== 'streaming' && String(msg.content ?? '').length > 0) break
       await page.waitForTimeout(1500)
@@ -248,12 +261,15 @@ for (const item of questions) {
     const problems: string[] = []
     if (!answer) problems.push('no answer text')
     for (const re of item.expect) if (!re.test(answer)) problems.push(`answer does not match ${re}`)
-    for (const re of item.forbid ?? []) if (re.test(answer.trim())) problems.push(`answer matches forbidden ${re}`)
-    if (item.state && !item.state.includes(String(state))) problems.push(`state ${state} not in ${item.state}`)
+    for (const re of item.forbid ?? [])
+      if (re.test(answer.trim())) problems.push(`answer matches forbidden ${re}`)
+    if (item.state && !item.state.includes(String(state)))
+      problems.push(`state ${state} not in ${item.state}`)
     if (state === 'found' && citations.length === 0) problems.push('state found but no citations')
     if (citations.some((c) => !c.verified)) problems.push('unverified citation shown')
     for (const m of answer.matchAll(/\[(\d+)\]/g))
-      if (!citations.some((c) => c.n === Number(m[1]))) problems.push(`marker [${m[1]}] has no citation`)
+      if (!citations.some((c) => c.n === Number(m[1])))
+        problems.push(`marker [${m[1]}] has no citation`)
     rows.push({
       id: item.id,
       kind: item.kind,
@@ -277,8 +293,12 @@ test('follow-up in one chat: pronouns resolve', async () => {
   const wait = async (count: number) => {
     const deadline = Date.now() + ANSWER_WAIT
     while (Date.now() < deadline) {
-      const data = await api<{ items: Record<string, unknown>[] }>(`/conversations/${convId}/messages`)
-      const done = data.items.filter((m) => m.role === 'assistant' && m.status !== 'streaming' && m.content)
+      const data = await api<{ items: Record<string, unknown>[] }>(
+        `/conversations/${convId}/messages`,
+      )
+      const done = data.items.filter(
+        (m) => m.role === 'assistant' && m.status !== 'streaming' && m.content,
+      )
       if (done.length >= count) return done
       await page.waitForTimeout(1500)
     }
@@ -290,7 +310,8 @@ test('follow-up in one chat: pronouns resolve', async () => {
   const last = done[done.length - 1]
   const answer = String(last?.content ?? '')
   const problems: string[] = []
-  if (!/all (of the )?justices|joined|unanim/i.test(answer)) problems.push('follow-up did not say all justices joined')
+  if (!/all (of the )?justices|joined|unanim/i.test(answer))
+    problems.push('follow-up did not say all justices joined')
   rows.push({
     id: 'Q17',
     kind: 'follow-up',
@@ -311,20 +332,29 @@ test('follow-up in one chat: pronouns resolve', async () => {
 })
 
 test('summarize the opinion', async () => {
-  const docs = await api<{ items: { id: string; filename: string }[] }>(`/matters/${matterId}/documents`)
+  const docs = await api<{ items: { id: string; filename: string }[] }>(
+    `/matters/${matterId}/documents`,
+  )
   const filename = docs.items[0]?.filename ?? ''
   const base = filename.replace(/\.pdf$/i, '')
   await newChat()
-  await page.getByRole('button', { name: /All documents/ }).first().click()
+  await page
+    .getByRole('button', { name: /All documents/ })
+    .first()
+    .click()
   const popover = page.locator('[data-radix-popper-content-wrapper]')
   await expect(popover).toBeVisible()
-  await popover.getByRole('button', { name: new RegExp(base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) }).click()
+  await popover
+    .getByRole('button', { name: new RegExp(base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) })
+    .click()
   await ask('Summarize this document')
   await page.getByRole('button', { name: 'Open summary' }).click({ timeout: JOB_WAIT })
   const panel = page.getByRole('complementary', { name: 'Summary' })
   await expect(panel.getByRole('region').first()).toBeVisible({ timeout: JOB_WAIT })
   await page.screenshot({ path: join(OUT, 'shots', 'summary.png') })
-  const sums = await api<{ items: { id: string; status: string }[] }>(`/matters/${matterId}/summaries`)
+  const sums = await api<{ items: { id: string; status: string }[] }>(
+    `/matters/${matterId}/summaries`,
+  )
   const full = await api<Record<string, unknown>>(`/summaries/${sums.items[0].id}`)
   extra.summary = full
 })
@@ -333,10 +363,15 @@ test('draft a memo on the opinion', async () => {
   await newChat()
   await page.getByRole('button', { name: /^Auto/ }).first().click()
   await page.getByRole('menuitem', { name: /Draft/ }).click()
-  await page.getByRole('button', { name: /Response letter/ }).first().click()
+  await page
+    .getByRole('button', { name: /Response letter/ })
+    .first()
+    .click()
   await page.getByRole('radio', { name: /Internal memo/ }).click()
   await page.keyboard.press('Escape')
-  await ask('Draft a memo on whether a parent can get a delayed appeal when parental rights were not terminated')
+  await ask(
+    'Draft a memo on whether a parent can get a delayed appeal when parental rights were not terminated',
+  )
   await page.getByRole('button', { name: 'Open draft' }).click({ timeout: JOB_WAIT })
   const panel = page.getByRole('complementary', { name: 'Draft' })
   await expect(panel.getByText('AI draft · not reviewed')).toBeVisible({ timeout: JOB_WAIT })
