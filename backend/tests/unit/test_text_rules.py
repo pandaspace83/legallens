@@ -226,3 +226,13 @@ def test_pinpoint_places_a_quote_that_runs_across_a_paragraph_break_and_uses_cur
     quote = "But the mother didn’t file it until September 27. Our court then ordered more."
     found = locate(text, boxes, quote)
     assert found is not None and found["page"] == 4
+
+
+def test_a_state_the_passages_never_mention_marks_the_question_as_needing_outside_law() -> None:
+    from legallens.orchestrator.stub.orchestrator import names_a_jurisdiction_the_passages_never_mention as unseen
+
+    iowa = ["The Iowa Supreme Court held that a delayed appeal is not available."]
+    assert unseen("Is this also the law in Texas?", iowa) is True
+    assert unseen("What is the law in Iowa on delayed appeals?", iowa) is False
+    assert unseen("What notice is required to terminate?", iowa) is False
+    assert unseen("Does New York or Iowa law apply?", iowa) is True

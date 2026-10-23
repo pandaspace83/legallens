@@ -234,12 +234,19 @@ def memo(
     instructions: str,
     author: str = "[ATTORNEY NAME]",
     narrate: Respond | None = None,
+    find_in_incoming: FindFacts | None = None,
 ) -> dict[str, Any]:
     """DEC-45 structure. Law comes only from uploaded authority, so every Rule step starts as [RULE NEEDED: …].
 
     The Statement of Facts is written by the model when `narrate` is given and its paragraph checks out (every
-    citation literal, every figure in a passage, no authority); otherwise the first passages are quoted."""
+    citation literal, every figure in a passage, no authority); otherwise the first passages are quoted. The facts
+    come from the passages that match the lawyer's instruction when they gave one (a court opinion opens with its
+    cover, not its facts), in reading order; with no instruction, from the document's opening."""
     pool = incoming_chunks[:6]
+    if instructions.strip() and find_in_incoming:
+        relevant = find_in_incoming(instructions)[:6]
+        if relevant:
+            pool = sorted(relevant, key=lambda c: c.get("seq", 0))
     written = narrate("Write the Statement of Facts.", pool) if narrate and pool else None
     if written:
         mapping: dict[int, int] = {}
@@ -249,7 +256,7 @@ def memo(
             citations.append(_citation(local, pool[fact_index], quote))
         statement = _renumber(written.text, mapping)
     else:
-        facts = incoming_chunks[:3]
+        facts = pool[:3]
         citations = [_citation(i, c, " ".join(c["text"].split())[:280]) for i, c in enumerate(facts, start=1)]
         statement = "\n\n".join(f"“{c['quote']}” [{c['n']}]" for c in citations) or "[PLACEHOLDER: statement of facts]"
     sections = [

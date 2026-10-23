@@ -45,6 +45,36 @@ _OUTSIDE_LAW = re.compile(
     r"statute of limitations|case law|precedent|is (it|this|that) (legal|lawful)|unlawful|still good law)",
     re.I,
 )
+_STATES = [
+    *(
+        "Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware Florida Georgia Hawaii Idaho "
+        "Illinois Indiana Iowa Kansas Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota "
+        "Mississippi Missouri Montana Nebraska Nevada Ohio Oklahoma Oregon Pennsylvania Tennessee Texas Utah "
+        "Vermont Virginia Wisconsin Wyoming"
+    ).split(),
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Carolina",
+    "North Dakota",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "West Virginia",
+    "District of Columbia",
+]
+_STATE_NAME = re.compile(r"\b(" + "|".join(sorted(_STATES, key=len, reverse=True)) + r")\b")
+
+
+def names_a_jurisdiction_the_passages_never_mention(question: str, passages: list[str]) -> bool:
+    """The question names a state that none of the passages mentions ("is this also the law in Texas?"): it asks
+    for law the documents do not hold, so the answer says so."""
+    named = set(_STATE_NAME.findall(question))
+    have = " ".join(passages).lower()
+    return any(name.lower() not in have for name in named)
+
+
 _FOLLOW_UP = re.compile(r"^\s*(and|also|what about|how about|plus|then|but)\b", re.I)
 _PRONOUN = re.compile(r"\b(it|its|that|this|those|these|they|them|there)\b", re.I)
 _WORDS = re.compile(r"\S+\s*")
@@ -229,6 +259,9 @@ class StubOrchestrator:
             fused=[h.trace() for h in result.hits],
             reranked=[h.chunk_id for h in reranked],
             gate_score=round(gate_score, 4),
+        )
+        outside_law = outside_law or names_a_jurisdiction_the_passages_never_mention(
+            ctx.content, [h.text for h in reranked]
         )
         yield Retrieval(
             question=question,

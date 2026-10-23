@@ -4,7 +4,7 @@
 
 | Model | Correct | Right document cited | All citations verified | Correct 'not found' | Invented answers | Avg per question |
 |---|---|---|---|---|---|---|
-| qwen2.5:7b-instruct | 27/27 | 27/27 | 27/27 | 10/10 | 0 | 7.9 s |
+| qwen2.5:7b-instruct | 27/27 | 27/27 | 27/27 | 10/10 | 0 | 13.0 s |
 
 ## Per question
 
@@ -27,7 +27,7 @@
 | qwen2.5:7b-instruct | Is either side liable for consequential damages? | ok | found | 1 | 'Neither party is liable for indirect or consequential damages. [1] "Neither party is liabl' |
 | qwen2.5:7b-instruct | How many days does Acme have to pay an invoice? | ok | found | 1 | 'Acme has thirty (30) days from receipt of an invoice to pay it [1]. "Acme shall pay each i' |
 | qwen2.5:7b-instruct | What is the total unpaid amount on the invoices? | ok | found | 1 | 'The total unpaid amount on the invoices is $48,500 [1]. This is stated in Exhibit B: INVOI' |
-| qwen2.5:7b-instruct | Which invoices are unpaid? | ok | found | 1 | 'Unpaid invoices are INV-2077 and INV-2103 [1]. "Total unpaid as of September 1, 2026: $48,' |
+| qwen2.5:7b-instruct | Which invoices are unpaid? | ok | found | 1 | 'Unpaid invoices are INV-2077 and INV-2103 [1]. "Unpaid" is listed under the status column ' |
 | qwen2.5:7b-instruct | How much was invoice INV-2103 for? | ok | found | 1 | 'Invoice INV-2103 was for $24,500 [1].' |
 | qwen2.5:7b-instruct | Which invoice has been paid? | ok | found | 1 | 'INV-2041 has been paid. [1]' |
 | qwen2.5:7b-instruct | Why is Acme withholding payment of INV-2077? | ok | found | 1 | 'Payment of invoice INV-2077 is withheld pending resolution of the late delivery dispute [1' |

@@ -160,6 +160,25 @@ def compose(
             if h.bm25_rank is not None
         ]
 
+    def find_in_incoming(text: str) -> list[dict[str, Any]]:
+        result = hybrid_search(
+            db, embedder, matter_id=draft.matter_id, query=text, document_ids=[incoming.id], k_fused=6
+        )
+        return [
+            {
+                "chunk_id": h.chunk_id,
+                "document_id": h.document_id,
+                "document_name": h.document_name,
+                "text": h.text,
+                "page": h.page_start,
+                "para_ref": h.para_ref,
+                "bbox": h.bbox,
+                "seq": h.seq,
+            }
+            for h in result.hits
+            if h.kind != "section"
+        ]
+
     matter_info = {"name": matter.name, "client_name": matter.client_name}
     # The signer is the lawyer who owns the matter; their name is known, so it is not left as a placeholder.
     owner = db.get(User, matter.owner_user_id)
@@ -174,6 +193,7 @@ def compose(
             instructions=draft.instructions or "",
             author=author,
             narrate=narrate,
+            find_in_incoming=find_in_incoming,
         )
     else:
         content = templates.response_letter(

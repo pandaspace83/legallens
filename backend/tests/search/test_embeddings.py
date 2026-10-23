@@ -198,3 +198,33 @@ def test_ingestion_refuses_to_mix_models(api: Api) -> None:
 def test_reindex_rejects_an_unknown_matter(api: Api) -> None:
     with pytest.raises(ValueError, match="No matter"):
         reindex(api.database, get_embedder(api.settings), matter_id="mat_missing")
+
+
+def test_reindex_gives_an_older_documents_cover_chunks_the_caption_label(api: Api) -> None:
+    from sqlalchemy import select, text
+
+    from legallens.db.models import Chunk
+    from legallens.ingestion.chunker import CAPTION_LABEL
+
+    matter = api.create_matter()
+    mid = matter["id"]
+    api.ingest(mid, "smith_msa_v3.pdf")
+    with api.database.write() as db:
+        set_scope(db, mid)
+        first = db.execute(select(Chunk).where(Chunk.kind == "text").order_by(Chunk.seq)).scalars().first()
+        assert first is not None
+        # As a cover chunk uploaded before the label existed: short, on page 1, no clause number, no label.
+        first.page_start, first.clause_ref, first.token_count = 1, None, 10
+        first.header = first.header.replace(f" › {CAPTION_LABEL}", "")
+        first_id = first.id
+    reindex(api.database, get_embedder(api.settings), matter_id=mid)
+    with api.database.read() as db:
+        set_scope(db, mid)
+        assert CAPTION_LABEL in db.get(Chunk, first_id).header  # type: ignore[union-attr]
+        hits = db.execute(text("SELECT rowid FROM chunks_fts WHERE chunks_fts MATCH 'docket'")).all()
+        assert first_id in [r[0] for r in hits], "the keyword index sees the new header words"
+    again = reindex(api.database, get_embedder(api.settings), matter_id=mid)
+    assert again[mid] > 0
+    with api.database.read() as db:
+        set_scope(db, mid)
+        assert db.get(Chunk, first_id).header.count(CAPTION_LABEL) == 1  # type: ignore[union-attr]
