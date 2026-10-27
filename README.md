@@ -2,7 +2,9 @@
 
 A local-first assistant for lawyers: ask questions of a matter's documents with cited answers, summarize them, and draft replies the lawyer reviews and adopts. Everything runs on one computer; nothing leaves it (DEC-08).
 
-> **Synthetic documents only (DEC-73).** Sign-in runs in dev mode and the AI engine is a stand-in (the app shows a "Stand-in answers" badge). Don't put real client documents in yet.
+> **Synthetic documents only (DEC-73).** Sign-in runs in dev mode by default, and answers come from local models through Ollama. Don't put real client documents in yet.
+
+**How it was built:** [BUILD_HISTORY.md](BUILD_HISTORY.md) has the dated timeline, from the first idea on 1 October 2026 to today.
 
 | Folder | What it is |
 | --- | --- |
