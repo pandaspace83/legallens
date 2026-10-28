@@ -4,6 +4,11 @@
 > IDs: `CN-<phase>.<n>`. Decisions: DEC-94 (Claude behind a setting), DEC-95 (public or synthetic documents only, ask
 > before any upload), DEC-96 ($5 cap) in [IDEAS.md](IDEAS.md). Learning goals and scores: [LEARNING_JOURNAL.md](LEARNING_JOURNAL.md).
 
+## Why Claude-native
+
+Faster responses (the 14B local model takes about 11 minutes to summarize 10 pages) and less maintenance (no local
+models, GPU or Ollama setup to keep working, tune and re-test). Quality is compared against the local baseline in CN-2.6.
+
 ## How we work
 
 - **One step at a time.** Claude says what to build, why it matters for the exam objective, and the check that proves

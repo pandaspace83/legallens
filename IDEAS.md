@@ -434,8 +434,8 @@ Recorded at closeout (`CLOSEOUT_TODO.md`); the evidence is in `GATE_BENCHMARK.md
   Claude is chosen by a setting, and when it is on, "Where your data goes" and the matter's AI-consent record
   (DEC-60) say so. The no-outside-connection test becomes provider-aware: it fails if anything other than the chosen
   provider's address is contacted. Embeddings, reranking, OCR, malware scanning, logs and analytics stay local (DEC-08
-  still holds for them). The purpose is learning and a professionally graded end-to-end project, not use with
-  clients. Decided 2026-10-23.
+  still holds for them). The purpose is faster responses and less maintenance than running local models, and a
+  professionally graded end-to-end project; it is not for use with clients. Decided 2026-10-23.
 - **DEC-95 Only public or synthetic documents ever reach Claude.** *(accepted 2026-10-23)* No real client data is
   uploaded to a Claude-enabled LegalLens: the owner guarantees it, and DEC-73 stays. As a second check, the
   assistant asks the owner to confirm each document before it is uploaded, naming the file and saying where it came

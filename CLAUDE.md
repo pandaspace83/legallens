@@ -2,7 +2,7 @@
 
 An AI assistant for one solo lawyer: **Ask** questions of uploaded documents, **Summarize** a document, **Draft** a
 response letter or memo. FastAPI + SQLite backend, React frontend, local models through Ollama. Being converted to a
-Claude-native system as a learning project; see the journal rule at the bottom.
+Claude-native system for faster responses and less maintenance than running local models; see the journal rule at the bottom.
 
 Decisions live in [IDEAS.md](IDEAS.md) (`DEC-nn`, never renumbered). Architecture: [architecture/](architecture/)
 (start with `LegalLens_EndToEnd_Map.md`). Tests by hand: [test-evidence/HUMAN_TEST_CHECKLIST.md](test-evidence/HUMAN_TEST_CHECKLIST.md).
