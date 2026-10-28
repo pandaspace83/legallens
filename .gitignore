@@ -59,3 +59,6 @@ actions-runner/
 
 # Public documents fetched by tests
 backend/tests/slow/_cache/
+
+# Personal learning tracking, kept on my laptop only
+LEARNING_JOURNAL.md

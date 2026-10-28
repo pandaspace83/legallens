@@ -21,7 +21,7 @@ this page does. Every date comes from one of three records:
   before any code was written, then tests at every layer and an audit of what was built against the BRD.
 - **AI pair.** The code was written with Claude Code, and every commit credits it as co-author. From 23 October the
   working rule changed: in the Claude-native phase I write the code and Claude guides and reviews
-  ([PHASE2_TODO.md](PHASE2_TODO.md)). What I learn along the way is logged in [LEARNING_JOURNAL.md](LEARNING_JOURNAL.md).
+  ([PHASE2_TODO.md](PHASE2_TODO.md)).
 
 ## Timeline
 
@@ -67,7 +67,7 @@ gantt
 | 21 Oct | An end-to-end map: mind map, layers, data model and sequence diagrams. | [LegalLens_EndToEnd_Map.md](architecture/LegalLens_EndToEnd_Map.md) |
 | 22 Oct | A human test checklist and end-to-end UI testing. I asked why no defect had been found, then ran a real published court opinion through the app, which exposed real defects. | [HUMAN_TEST_CHECKLIST.md](test-evidence/HUMAN_TEST_CHECKLIST.md) |
 | 23 Oct | Fixed the defects from a second real opinion (In re E.S., Iowa 2026). Built a summary golden test and tuned it. Started the Claude-native phase: decisions DEC-94 to DEC-96 (Claude behind a setting, public or synthetic documents only, a $5 spending cap), a step-by-step plan, `CLAUDE.md` and a learning journal. From here, each change is its own pull request. | [`6c8ddaf`](https://github.com/pandaspace83/legallens/commit/6c8ddaf), PRs [#1](https://github.com/pandaspace83/legallens/pull/1), [#2](https://github.com/pandaspace83/legallens/pull/2), [#3](https://github.com/pandaspace83/legallens/pull/3) |
-| From 26 Oct | The Claude-native phase continues, one step and one pull request at a time. | [LEARNING_JOURNAL.md](LEARNING_JOURNAL.md) |
+| From 26 Oct | The Claude-native phase continues, one step and one pull request at a time. | [PHASE2_TODO.md](PHASE2_TODO.md) |
 
 ## Milestones
 

@@ -2,7 +2,7 @@
 
 > **Status:** Draft 2026-10-23, waiting for your go-ahead on Step 1 · **You build, Claude guides.**
 > IDs: `CN-<phase>.<n>`. Decisions: DEC-94 (Claude behind a setting), DEC-95 (public or synthetic documents only, ask
-> before any upload), DEC-96 ($5 cap) in [IDEAS.md](IDEAS.md). Learning goals and scores: [LEARNING_JOURNAL.md](LEARNING_JOURNAL.md).
+> before any upload), DEC-96 ($5 cap) in [IDEAS.md](IDEAS.md).
 
 ## How we work
 
