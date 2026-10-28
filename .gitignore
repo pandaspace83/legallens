@@ -60,5 +60,8 @@ actions-runner/
 # Public documents fetched by tests
 backend/tests/slow/_cache/
 
+# Docker env file for the backend container (the .example is committed)
+backend/env.docker
+
 # Personal learning tracking, kept on my laptop only
 LEARNING_JOURNAL.md

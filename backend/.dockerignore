@@ -1,0 +1,17 @@
+.venv
+.venv.nosync
+.mypy_cache
+.pytest_cache
+.ruff_cache
+.coverage
+__pycache__
+*.pyc
+tests
+.env*
+env.docker*
+.git
+*.log
+.DS_Store
+Dockerfile
+.dockerignore
+DOCKER.md
