@@ -1,6 +1,6 @@
 # Running the backend in Docker
 
-Built and run on Docker 29.9.2 (Apple Silicon, `--platform linux/amd64`) on 2026-10-28. Image size: 714 MB (CPU-only PyTorch). The container
+Built and run on Docker 29.9.2 (Apple Silicon, `--platform linux/amd64`) on 2026-10-28. Image size: about 714 MB compressed (what a registry pull moves), 3.06 GB on disk (CPU-only PyTorch). The container
 starts, migrates, answers `/api/v1/health` and shuts down on SIGTERM in under a second.
 
 ## Build and run (Apple Silicon Mac, image for linux/amd64)
@@ -53,8 +53,9 @@ which exist in the container, so use `env.docker.example`. Every setting is list
 
 ## Open points
 
-- **Size.** 714 MB. On Linux, `pyproject.toml` takes `torch` and `torchvision` from the CPU-only PyTorch index, which dropped
-  the CUDA libraries (the image was 3.52 GB). macOS and Windows still use the PyPI builds, so a Linux container
+- **Size.** About 714 MB compressed and 3.06 GB on disk (`docker image ls` shows one or the other, depending on when
+  you look). On Linux, `pyproject.toml` takes `torch` and `torchvision` from the CPU-only PyTorch index, which dropped
+  the CUDA libraries (the earlier build measured 3.52 GB, a compressed figure, so it was larger on disk). macOS and Windows still use the PyPI builds, so a Linux container
   runs `torch 2.15.0+cpu` where the Mac runs `2.14.1`. For a GPU node, remove the `[tool.uv.sources]` entries and re-lock.
 - **Health says `degraded`** with the scanner off. That is expected here; the container itself reports healthy.
 - **Frontend.** `frontend/Dockerfile` serves the built app and proxies `/api` to `API_UPSTREAM` (default
@@ -64,3 +65,8 @@ which exist in the container, so use `env.docker.example`. Every setting is list
   documents need a scanner first.
 - **Network.** DEC-08 keeps the API on the local machine. `LEGALLENS_HOST=0.0.0.0` is needed inside a container; publish
   the port as `-p 127.0.0.1:8000:8000` to keep it on this Mac.
+
+## Both containers together
+
+`docker compose up --build` from the repo root starts the backend and the frontend (http://localhost:8080); see
+[docker-compose.yml](../docker-compose.yml). Tested natively on Apple Silicon: both images build and sign-in works through nginx.

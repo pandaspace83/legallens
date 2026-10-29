@@ -1,0 +1,33 @@
+# Runs the whole app in containers: docker compose up --build
+#   1. cp backend/env.docker.example backend/env.docker    (once)
+#   2. docker compose up --build
+#   3. docker compose exec backend legallens seed          (once per new volume: dev user + demo matters)
+# Then open http://localhost:8080. See backend/DOCKER.md for the settings.
+services:
+  backend:
+    build: ./backend
+    env_file: backend/env.docker
+    volumes:
+      - legallens-data:/data # the database, uploads and downloaded models; SQLite means one replica only
+    ports:
+      - "127.0.0.1:8000:8000" # API and /docs, on this Mac only (DEC-08)
+    healthcheck: # the image already defines one; this just makes the dependency below wait for it
+      test:
+        ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=4)"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 6
+
+  frontend:
+    build: ./frontend
+    environment:
+      API_UPSTREAM: http://backend:8000 # the service name above
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  legallens-data:
