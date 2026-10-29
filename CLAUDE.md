@@ -2,7 +2,7 @@
 
 An AI assistant for one solo lawyer: **Ask** questions of uploaded documents, **Summarize** a document, **Draft** a
 response letter or memo. FastAPI + SQLite backend, React frontend, local models through Ollama. Being converted to a
-Claude-native system as a learning project; see the journal rule at the bottom.
+Claude-native system for faster responses and less maintenance than running local models; see the journal rule at the bottom.
 
 Decisions live in [IDEAS.md](IDEAS.md) (`DEC-nn`, never renumbered). Architecture: [architecture/](architecture/)
 (start with `LegalLens_EndToEnd_Map.md`). Tests by hand: [test-evidence/HUMAN_TEST_CHECKLIST.md](test-evidence/HUMAN_TEST_CHECKLIST.md).
@@ -21,18 +21,11 @@ Decisions live in [IDEAS.md](IDEAS.md) (`DEC-nn`, never renumbered). Architectur
 
 ## Commands
 
-Backend (from `backend/`, Python 3.13 with uv):
+Per-folder commands are in `backend/CLAUDE.md` and `frontend/CLAUDE.md`, which import their READMEs. Whole-repo:
 
-- `uv run pytest -q` runs the fast suite (about 250 tests); `uv run ruff check src tests`; `uv run mypy src`.
-- `uv run pytest -m llm ...` calls real local models (Ollama must be running); `-m slow` runs Docling, OCR and ClamAV.
-- `uv run legallens dev` runs the API with an in-process worker; `scripts/dev.sh` starts it and the frontend together
-  (http://localhost:5173; dev sign-in is `lawyer@legallens.local`, any password, any six digits).
-- `uv run legallens db upgrade`, `reindex`, `backup`, `feedback export` (see `legallens --help`).
-
-Frontend (from `frontend/`): `npm test` (unit), `npx tsc --noEmit -p .`, `npm run test:e2e` (browser, mock data),
-`npm run test:e2e:real` (browser against a throw-away real backend; `E2E_CONVERTER=docling` to match the real app).
-
-Release check: `scripts/release_gate.sh` (suites, golden set, compare with `golden_baseline.json`).
+- `scripts/dev.sh` starts the API (with an in-process worker) and the frontend together (http://localhost:5173; dev
+  sign-in is `lawyer@legallens.local`, any password, any six digits).
+- `scripts/release_gate.sh` is the release check: suites, golden set, compare with `golden_baseline.json`.
 
 ## Where things are
 
@@ -44,13 +37,8 @@ Release check: `scripts/release_gate.sh` (suites, golden set, compare with `gold
 
 ## Things learned the hard way
 
-- Tests and the browser harness use the **fast** PDF converter; the real app uses **Docling**. They split text
-  differently, so verify retrieval and citation changes with Docling before believing a result.
-- A passing "structure" check (citation exists, quote is literal) is not a correct answer. Read answers against the
-  source document.
-- The UI sends a summary template only when the lawyer picked one; otherwise the backend matches it to the document.
-- The worker must keep its heartbeat fresh during long jobs, or the app wrongly says background work is paused.
 - macOS: `sed -i ''` needs the empty string. The repo sits on the Desktop, so the CI runner lives outside it.
+- More lessons are in `backend/CLAUDE.md` and `frontend/CLAUDE.md`.
 
 ## Learning journal
 
