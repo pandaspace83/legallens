@@ -4,6 +4,8 @@ A local-first assistant for lawyers: ask questions of a matter's documents with 
 
 > **Synthetic documents only (DEC-73).** Sign-in runs in dev mode by default, and answers come from local models through Ollama. Don't put real client documents in yet.
 
+**Licence:** all rights reserved. You may read the code; you may not copy, reuse or train on it without written permission (see [LICENSE](LICENSE)).
+
 **How it was built:** [BUILD_HISTORY.md](BUILD_HISTORY.md) has the dated timeline, from the first idea on 1 October 2026 to today.
 
 | Folder | What it is |
@@ -99,19 +101,10 @@ that way if a cloud model is ever added:
 ## The golden-set gate in CI
 
 `.github/workflows/golden-gate.yml` runs the golden set against the real local models and fails on any drop from
-`golden_baseline.json` or on any invented answer. It runs on a **self-hosted runner** (a Mac with Ollama and the
-models), nightly, on pushes to `main` that touch the answering code, and on demand (Actions tab → "Golden-set
-gate" → Run workflow). GitHub's hosted runners have neither Ollama nor a GPU.
+`golden_baseline.json` or on any invented answer. It needs Ollama and the models, which GitHub's hosted runners do not
+have, so it is manual-only. Run it on the Mac that has the models with `scripts/release_gate.sh`.
 
-One-time setup on the Mac that has the models:
-
-1. Repository → Settings → Actions → Runners → **New self-hosted runner** → macOS, ARM64. Run the download
-   commands it shows, then configure with the extra label `ollama`:
-   `./config.sh --url https://github.com/<you>/legallens --token <one-time token from that page> --labels ollama`
-   (the token is single-use and expires within the hour; never paste it anywhere else).
-2. Keep it running: `./svc.sh install && ./svc.sh start` from the runner folder.
-3. Keep Ollama running: `brew services start ollama`, with `qwen2.5:7b-instruct` and `llama3.2:3b` pulled and
-   `legallens models download --what embeddings` done.
-
-Safety: a self-hosted runner runs whatever a workflow says, so keep the repository private and do not add
-`pull_request` triggers for outside contributors. The job fails early, with the fix, if Ollama or a model is missing.
+No self-hosted runner is registered. This repository is public, and a self-hosted runner would run whatever a
+stranger's pull request put in a workflow. If the repository ever goes private again, register one (Settings →
+Actions → Runners, macOS ARM64, label `ollama`), switch the workflow back to its `schedule` and `push` triggers, and
+keep Ollama running with `qwen2.5:7b-instruct` and `llama3.2:3b` pulled.
