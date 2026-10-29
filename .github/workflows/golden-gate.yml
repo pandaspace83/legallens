@@ -2,27 +2,14 @@
 # drop from golden_baseline.json or on any invented answer.
 #
 # Needs a machine with Ollama and the models, so it runs on a SELF-HOSTED runner (your Mac), never on GitHub's
-# hosted runners. Until a runner with the labels below is registered, this job simply waits in the queue.
-# Safety: a self-hosted runner executes whatever a workflow tells it to. Keep this repository private, and never
-# trigger it from pull requests by strangers (this file does not use the pull_request event for that reason).
+# hosted runners. No runner is registered now, because this repository is public and a self-hosted runner there would
+# run whatever a stranger's pull request put in a workflow. Run the gate by hand with scripts/release_gate.sh; only
+# register a runner again if the repository goes private. Until then this workflow is manual-only (workflow_dispatch)
+# and would wait in the queue.
 name: Golden-set gate
 
 on:
   workflow_dispatch: {}
-  schedule:
-    - cron: "0 7 * * *" # every day, 07:00 UTC
-  push:
-    branches: [main]
-    paths:
-      - "backend/src/legallens/orchestrator/**"
-      - "backend/src/legallens/search/**"
-      - "backend/src/legallens/models/**"
-      - "backend/src/legallens/drafting/**"
-      - "backend/src/legallens/ingestion/**"
-      - "backend/src/legallens/config.py"
-      - "backend/tests/slow/test_golden_set.py"
-      - "golden_baseline.json"
-      - ".github/workflows/golden-gate.yml"
 
 concurrency:
   group: golden-gate
