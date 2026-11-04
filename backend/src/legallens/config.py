@@ -101,6 +101,9 @@ class Settings(BaseSettings):
     # Used when a job's model setting above is still an Ollama name; set a job's setting to a "claude-..." name to
     # pick a different Claude model for that job.
     claude_model: str = "claude-haiku-5-5"
+    # The most LegalLens may spend on Claude calls in total (DEC-96, DEC-103), and the share at which it warns.
+    claude_spend_cap_usd: float = 5.0
+    claude_spend_warn_ratio: float = 0.8
     llm_context_tokens: int = 8192
     llm_timeout_seconds: int = 300
     llm_retries: int = 1
@@ -125,6 +128,11 @@ class Settings(BaseSettings):
     @property
     def db_path(self) -> Path:
         return self.data_dir / "legallens.db"
+
+    @property
+    def spend_ledger_path(self) -> Path:
+        """Apart from the main database on purpose: `db reset` must not reset the spend total."""
+        return self.data_dir / "claude_spend.db"
 
     @property
     def files_dir(self) -> Path:

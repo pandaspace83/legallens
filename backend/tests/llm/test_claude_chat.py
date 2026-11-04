@@ -10,6 +10,7 @@ import httpx
 import pytest
 
 from legallens.models.llm import ClaudeChat, LLMError, LLMResult, OllamaChat, get_llm, local_status
+from legallens.models.spend import GuardedChat
 from tests.conftest import make_settings
 
 CANARY = "ZEBRA-CANARY-7f3a9c"
@@ -147,11 +148,12 @@ def test_the_provider_defaults_to_local(tmp_path) -> None:  # type: ignore[no-un
     assert isinstance(get_llm(settings), OllamaChat)
 
 
-def test_the_claude_provider_returns_claude_chat_with_the_key(tmp_path) -> None:  # type: ignore[no-untyped-def]
+def test_the_claude_provider_returns_claude_chat_behind_the_guard_with_the_key(tmp_path) -> None:  # type: ignore[no-untyped-def]
     settings = make_settings(tmp_path, llm_provider="claude", anthropic_api_key="sk-ant-test")
     chat = get_llm(settings)
-    assert isinstance(chat, ClaudeChat)
-    assert chat.api_key == "sk-ant-test"
+    assert isinstance(chat, GuardedChat)
+    assert isinstance(chat.inner, ClaudeChat)
+    assert chat.inner.api_key == "sk-ant-test"
     assert "sk-ant-test" not in repr(settings)  # a SecretStr never prints
 
 
@@ -163,4 +165,4 @@ def test_health_with_claude_checks_the_key_and_never_calls_out(tmp_path, monkeyp
     no_key = make_settings(tmp_path, llm_provider="claude")
     with_key = make_settings(tmp_path, llm_provider="claude", anthropic_api_key="sk-ant-test")
     assert local_status(no_key)[0] is False
-    assert local_status(with_key) == (True, "Claude · claude-haiku-5-5")
+    assert local_status(with_key) == (True, "Claude · claude-haiku-5-5 · $0.0000 of $5.00 spent")

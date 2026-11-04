@@ -179,7 +179,7 @@ class ClaudeChat:
         self.retries = retries
         self._client = client  # tests only
 
-    def _model(self, model: str) -> str:
+    def resolve_model(self, model: str) -> str:
         return model if model.startswith("claude-") else self.default_model
 
     def _get_client(self) -> Any:
@@ -193,7 +193,7 @@ class ClaudeChat:
 
     def _args(self, model: str, system: str, user: str, max_tokens: int, temperature: float) -> dict[str, Any]:
         return {
-            "model": self._model(model),
+            "model": self.resolve_model(model),
             "max_tokens": max_tokens,
             "temperature": temperature,
             "system": system,
@@ -259,13 +259,21 @@ class ClaudeChat:
 
 def get_llm(settings: Settings) -> ChatModel:
     if settings.llm_provider == "claude":
+        from legallens.models.spend import GuardedChat, SpendGuard, SpendLedger  # spend imports this module
+
         key = settings.anthropic_api_key.get_secret_value() if settings.anthropic_api_key else None
-        return ClaudeChat(
+        claude = ClaudeChat(
             key,
             default_model=settings.claude_model,
             timeout=settings.llm_timeout_seconds,
             retries=settings.llm_retries,
         )
+        guard = SpendGuard(
+            SpendLedger(settings.spend_ledger_path),
+            cap_usd=settings.claude_spend_cap_usd,
+            warn_ratio=settings.claude_spend_warn_ratio,
+        )
+        return GuardedChat(claude, guard)
     return OllamaChat(
         settings.llm_url,
         context_tokens=settings.llm_context_tokens,
@@ -281,7 +289,11 @@ def local_status(settings: Settings) -> tuple[bool, str]:
     if settings.llm_provider == "claude":
         if settings.anthropic_api_key is None:
             return False, "Claude is selected but no API key is set (LEGALLENS_ANTHROPIC_API_KEY)"
-        return True, f"Claude · {settings.claude_model}"
+        from legallens.models.spend import dollars, spend_summary
+
+        spent, cap = spend_summary(settings)
+        detail = f"Claude · {settings.claude_model} · {dollars(spent)} of {dollars(cap)} spent"
+        return spent < cap, detail if spent < cap else f"{detail}: cap reached, no further calls"
     try:
         response = httpx.get(f"{settings.llm_url.rstrip('/')}/api/tags", timeout=2)
         response.raise_for_status()
