@@ -54,6 +54,20 @@ curl -b jar -X POST $B/conversations/<conversation_id>/messages \
 curl -N -b jar http://127.0.0.1:8000/api/v1/runs/<run_id>/stream     # SSE: tokens, citations, done
 ```
 
+## Claude as the model (off by default)
+
+`LEGALLENS_LLM_PROVIDER=claude` sends prompts to Anthropic instead of Ollama (DEC-94). Only public or synthetic
+documents may reach it (DEC-95). Keep the key in the macOS Keychain, not in a file, and export it for one shell:
+
+```bash
+security add-generic-password -a "$USER" -s legallens-anthropic -w      # once; it prompts for the key
+export LEGALLENS_ANTHROPIC_API_KEY=$(security find-generic-password -a "$USER" -s legallens-anthropic -w)
+LEGALLENS_LLM_PROVIDER=claude uv run legallens dev
+```
+
+A job whose model setting is still an Ollama name is answered by `LEGALLENS_CLAUDE_MODEL` (default
+`claude-haiku-5-5`); set a job's setting to a `claude-...` name to pick another model for that job.
+
 ## Other commands
 
 | Command | Does |

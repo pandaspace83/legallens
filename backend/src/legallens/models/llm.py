@@ -1,8 +1,9 @@
-"""The local language model behind one interface (WORKFLOWS_TODO W6).
+"""The language model behind one interface (WORKFLOWS_TODO W6).
 
-OllamaChat talks to an Ollama server on this machine only (DEC-08). Nothing here knows about prompts or
-documents: it takes messages and returns text, so a bigger local model (or another provider) is a settings
-change, not a code change. Calls are async so a long answer never blocks the server.
+OllamaChat talks to an Ollama server on this machine only (DEC-08). ClaudeChat talks to Anthropic and is used
+only when `llm_provider` is "claude" (DEC-94). Nothing here knows about prompts or documents: it takes messages
+and returns text, so a bigger model (or another provider) is a settings change, not a code change. Calls are
+async so a long answer never blocks the server.
 """
 
 import asyncio
@@ -12,6 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import Any, Protocol
 
+import anthropic
 import httpx
 
 from legallens.config import Settings
@@ -153,7 +155,117 @@ class OllamaChat:
             return False
 
 
+class ClaudeChat:
+    """Claude through the Anthropic API, behind the same interface as OllamaChat.
+
+    A job's model setting that is still an Ollama name (for example `qwen2.5:7b-instruct`) is answered by
+    `default_model`; a name starting with `claude-` is used as given. Token counts are the ones the API reports.
+    The key is read when the first call is made, so a missing key fails that call (which callers already handle)
+    and not the whole app.
+    """
+
+    def __init__(
+        self,
+        api_key: str | None,
+        *,
+        default_model: str,
+        timeout: float,
+        retries: int,
+        client: Any = None,
+    ) -> None:
+        self.api_key = api_key
+        self.default_model = default_model
+        self.timeout = timeout
+        self.retries = retries
+        self._client = client  # tests only
+
+    def _model(self, model: str) -> str:
+        return model if model.startswith("claude-") else self.default_model
+
+    def _get_client(self) -> Any:
+        if self._client is None:
+            if not self.api_key:
+                raise LLMError("no Anthropic API key is set (LEGALLENS_ANTHROPIC_API_KEY)")
+            self._client = anthropic.AsyncAnthropic(
+                api_key=self.api_key, timeout=self.timeout, max_retries=self.retries
+            )
+        return self._client
+
+    def _args(self, model: str, system: str, user: str, max_tokens: int, temperature: float) -> dict[str, Any]:
+        return {
+            "model": self._model(model),
+            "max_tokens": max_tokens,
+            "temperature": temperature,
+            "system": system,
+            "messages": [{"role": "user", "content": user}],
+        }
+
+    @staticmethod
+    def _failure(exc: anthropic.APIError, model: str) -> LLMError:
+        """Only the error type and HTTP status: the API's message can echo part of the prompt."""
+        status = getattr(exc, "status_code", None)
+        where = f" HTTP {status}" if status else ""
+        return LLMError(f"{type(exc).__name__}{where} calling model {model}")
+
+    async def complete(
+        self, model: str, system: str, user: str, *, max_tokens: int = 1024, temperature: float = 0.0
+    ) -> LLMResult:
+        args = self._args(model, system, user, max_tokens, temperature)
+        client = self._get_client()
+        try:
+            message = await client.messages.create(**args)
+        except anthropic.APIError as exc:
+            raise self._failure(exc, args["model"]) from exc
+        text = "".join(block.text for block in message.content if block.type == "text")
+        return LLMResult(
+            text=text,
+            tokens_in=int(message.usage.input_tokens),
+            tokens_out=int(message.usage.output_tokens),
+            model=args["model"],
+        )
+
+    async def stream(
+        self, model: str, system: str, user: str, *, max_tokens: int = 1024, temperature: float = 0.0
+    ) -> AsyncIterator[str]:
+        async for item in self.stream_full(model, system, user, max_tokens=max_tokens, temperature=temperature):
+            if isinstance(item, str):
+                yield item
+
+    async def stream_full(
+        self, model: str, system: str, user: str, *, max_tokens: int = 1024, temperature: float = 0.0
+    ) -> AsyncIterator[str | LLMResult]:
+        args = self._args(model, system, user, max_tokens, temperature)
+        client = self._get_client()
+        parts: list[str] = []
+        try:
+            async with client.messages.stream(**args) as stream:
+                async for piece in stream.text_stream:
+                    parts.append(piece)
+                    yield piece
+                final = await stream.get_final_message()
+        except anthropic.APIError as exc:
+            raise self._failure(exc, args["model"]) from exc
+        yield LLMResult(
+            text="".join(parts),
+            tokens_in=int(final.usage.input_tokens),
+            tokens_out=int(final.usage.output_tokens),
+            model=args["model"],
+        )
+
+    async def ping(self) -> bool:
+        """True when a key is set. It makes no call, because every call to Claude costs money (DEC-96)."""
+        return bool(self.api_key)
+
+
 def get_llm(settings: Settings) -> ChatModel:
+    if settings.llm_provider == "claude":
+        key = settings.anthropic_api_key.get_secret_value() if settings.anthropic_api_key else None
+        return ClaudeChat(
+            key,
+            default_model=settings.claude_model,
+            timeout=settings.llm_timeout_seconds,
+            retries=settings.llm_retries,
+        )
     return OllamaChat(
         settings.llm_url,
         context_tokens=settings.llm_context_tokens,
@@ -163,7 +275,13 @@ def get_llm(settings: Settings) -> ChatModel:
 
 
 def local_status(settings: Settings) -> tuple[bool, str]:
-    """(ok, detail) for /health: is Ollama up, and are the configured models pulled?"""
+    """(ok, detail) for /health: is Ollama up, and are the configured models pulled?
+
+    With the Claude provider it only checks that a key is set: a health check must not cost money."""
+    if settings.llm_provider == "claude":
+        if settings.anthropic_api_key is None:
+            return False, "Claude is selected but no API key is set (LEGALLENS_ANTHROPIC_API_KEY)"
+        return True, f"Claude · {settings.claude_model}"
     try:
         response = httpx.get(f"{settings.llm_url.rstrip('/')}/api/tags", timeout=2)
         response.raise_for_status()
