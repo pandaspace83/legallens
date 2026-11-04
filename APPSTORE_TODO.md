@@ -57,6 +57,7 @@ runs somewhere else**. Three things change before any Xcode work:
       or **(b)** the Apple fee sits outside the cap and the $5 still covers Claude and cloud. *Output:* a `DEC-nn`
       that amends DEC-96.
       *Decided 2026-11-01: (b), the Apple fee sits outside the cap (DEC-98).*
+      *Amended 2026-11-04: the $5 covers Claude calls only; cloud hosting gets its own budget at AZ-0.1 (DEC-103).*
 - [x] **AS-0.3 Native shell.** **(a) Capacitor:** the React app runs inside a native iOS app; nearly all code and tests
       are reused, and native plugins add what a website can't. **(b) SwiftUI:** a native app on `openapi.json`; the
       best feel, but a second UI to build and test. Apple rejects apps that are only a website in a frame (guideline
