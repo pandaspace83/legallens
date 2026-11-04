@@ -6,7 +6,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -93,6 +93,14 @@ class Settings(BaseSettings):
         10  # passages the model reads per summary field, for a document too long to send whole
     )
     llm_draft_model: str = "qwen2.5:14b-instruct"
+    # Which provider answers (DEC-94). "local" is Ollama on this machine and nothing leaves it. "claude" sends the
+    # prompts to Anthropic, so it is off unless chosen; the key comes from LEGALLENS_ANTHROPIC_API_KEY and is never
+    # stored in a file Git sees.
+    llm_provider: Literal["local", "claude"] = "local"
+    anthropic_api_key: SecretStr | None = None
+    # Used when a job's model setting above is still an Ollama name; set a job's setting to a "claude-..." name to
+    # pick a different Claude model for that job.
+    claude_model: str = "claude-haiku-5-5"
     llm_context_tokens: int = 8192
     llm_timeout_seconds: int = 300
     llm_retries: int = 1

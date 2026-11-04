@@ -1,9 +1,9 @@
 # LegalLens on Azure: step by step
 
 > **Status:** Draft 2026-10-28, waiting for your go-ahead on AZ-0 · **You click, Claude guides.**
-> IDs: `AZ-<phase>.<n>`. Related decisions: DEC-96 ($5 cap on new spend, Claude calls plus any cloud), DEC-95 (public or
-> synthetic documents only), DEC-73 (no real client data yet). Images and the compose file are already on `main`
-> ([backend/DOCKER.md](backend/DOCKER.md), [docker-compose.yml](docker-compose.yml)).
+> IDs: `AZ-<phase>.<n>`. Related decisions: DEC-96 and DEC-103 ($5 cap on Claude calls; Azure gets its own budget,
+> set at AZ-0.1), DEC-95 (public or synthetic documents only), DEC-73 (no real client data yet). Images and the
+> compose file are already on `main` ([backend/DOCKER.md](backend/DOCKER.md), [docker-compose.yml](docker-compose.yml)).
 
 ## How we work
 

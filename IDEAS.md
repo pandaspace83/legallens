@@ -450,6 +450,45 @@ Recorded at closeout (`CLOSEOUT_TODO.md`); the evidence is in `GATE_BENCHMARK.md
   Ask costs about $0.0005 on Haiku 5.5, $0.01 on Sonnet 5.5 and $0.02 on Opus 5.5; a 10-page summary about $0.004,
   $0.09 and $0.17; a full golden-set pass about $0.05, $1 and $2. Thinking tokens bill as output, so Sonnet and Opus
   may cost more than these figures. Decided 2026-10-23.
+  *Amended by DEC-98 (2026-11-01): the Apple Developer Program fee sits outside the cap.*
+  *Amended by DEC-103 (2026-11-04): the cap covers Claude calls only; cloud hosting gets its own budget.*
+
+### 2.14 App Store, 2026-11-01
+
+The answers to AS-0 in `APPSTORE_TODO.md`.
+
+- **DEC-97 A TestFlight demo first.** *(accepted 2026-11-01)* LegalLens reaches iPhones through TestFlight, for
+  testers the owner invites, so DEC-94 (Claude is not for use with clients) and DEC-95 (public or synthetic documents
+  only) still hold. A public App Store listing comes later, as a demo on the synthetic sample matter, and only once the
+  TestFlight build works. A product for real lawyers is a separate project: it needs DEF-23's conditions and lifting
+  DEC-73. Decided 2026-11-01.
+- **DEC-98 The Apple fee sits outside the $5 cap (amends DEC-96).** *(accepted 2026-11-01)* The Apple Developer
+  Program costs $99 a year, a fixed and known amount, so it does not count against DEC-96. The $5 still caps Claude
+  calls and cloud resources together, enforced as DEC-96 says. The fee is paid only once the app runs on the owner's
+  iPhone with the free Personal Team (AS-1.3, AS-4.6). Decided 2026-11-01.
+  *Amended by DEC-103 (2026-11-04): the $5 now caps Claude calls only, not cloud resources.*
+- **DEC-99 The iOS app is the React app inside Capacitor.** *(accepted 2026-11-01)* The existing frontend, its phone
+  layouts and its tests run inside a native iOS shell built with Capacitor; there is no second UI in SwiftUI. Native
+  touches (the iOS document picker, Face ID for the lock screen, safe areas) make it more than a website in a frame,
+  which App Review rejects (guideline 4.2). Decided 2026-11-01.
+- **DEC-100 An Individual developer account.** *(accepted 2026-11-01)* The owner enrolls in the Apple Developer
+  Program as an individual, and the owner's legal name shows as the seller. An Organization account (a legal entity
+  and a D-U-N-S number) is needed only if LegalLens becomes a product for real lawyers (DEC-97). Decided 2026-11-01.
+- **DEC-101 iPhone only for 1.0.** *(accepted 2026-11-01)* Version 1.0 runs on iPhone; iPad waits, although the
+  tablet layout exists. One device family to test, one screenshot set. Decided 2026-11-01.
+- **DEC-102 Accounts are invite-only.** *(accepted 2026-11-01)* The owner creates each user with
+  `legallens user create`, and nothing in the app creates an account, so Apple's rule that an app offering sign-up
+  must offer account deletion does not apply (AS-3.6 is not needed). If sign-up is ever added, delete-my-account
+  comes with it. Decided 2026-11-01.
+- **DEC-103 The $5 cap covers Claude calls only; cloud hosting gets its own budget (amends DEC-96 and DEC-98).**
+  *(accepted 2026-11-04)* The $5 caps what LegalLens spends on Claude calls while it is built and tested, so testing
+  never costs much. It is enforced two ways, as DEC-96 says: the spend limit the owner set with the provider
+  (confirmed 2026-11-04) and the cost guard in the gateway (CN-2.3). Azure hosting no longer counts against the $5.
+  It needs its own budget, which AZ-0.1 sets before any resource is created, with a budget alert first; nothing is
+  deployed until the owner confirms it. The Apple fee stays outside every cap (DEC-98, $99 a year). The cap for
+  showing LegalLens to clients or friends is not set yet: after the model comparison (CN-2.6) measures what each
+  kind of question costs, the owner decides a limit for demos in a later decision. Decided 2026-11-04.
+
 ---
 
 ## 3. Suggested (SUG)

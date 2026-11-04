@@ -12,8 +12,9 @@ Decisions live in [IDEAS.md](IDEAS.md) (`DEC-nn`, never renumbered). Architectur
 - **Documents (DEC-95).** Only public or synthetic documents ever reach Claude. Before any document is uploaded to
   LegalLens while Claude is enabled, ask the owner to confirm it: name the file and where it came from. This covers
   my own test uploads.
-- **Money (DEC-96).** New spend is capped at $5 in total (Claude calls plus any cloud). Say the estimated cost before
-  running anything that calls Claude, and never run it in a loop or on every change.
+- **Money (DEC-96, DEC-103).** Claude calls are capped at $5 in total. Cloud hosting has its own budget, set at AZ-0.1
+  before anything is created; create nothing billable until then. Say the estimated cost before running anything that
+  calls Claude, and never run it in a loop or on every change.
 - **Confidentiality.** No client or document text in logs, errors or test output (DEC-68). Every query on client data
   carries `matter_id` (DEC-53); never bypass the scope guard. Model calls go through `models/llm.py` only.
 - **Git.** Commit or push only when asked. Never `git add -A` blindly: look at `git status` first.
