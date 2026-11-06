@@ -108,9 +108,11 @@ runs somewhere else**. Three things change before any Xcode work:
 
 ## AS-3: App changes for a phone client · Opus to design, Sonnet to build
 
-- [ ] **AS-3.1 A configurable API address.** The client's `BASE` comes from the build (for example
+- [x] **AS-3.1 A configurable API address.** The client's `BASE` comes from the build (for example
       `VITE_API_BASE`), not from the page's origin. *Check:* the web build still works same-origin; an iOS build calls
       the hosted address.
+      *Done 2026-11-06: `VITE_API_BASE` sets the address at build time; unset, nothing changes. A hosted address also
+      needs AS-3.2 (token sign-in) and AS-3.4 (CORS) before a phone can use it.*
 - [ ] **AS-3.2 Sign-in without same-origin cookies.** *Claude can build.* The proposed design (decided in this
       step): sign-in returns a token; the app keeps it in the iOS Keychain through a plugin and sends it as
       `Authorization`; the backend accepts the cookie (web) or the header (app); the CSRF header rule (DEC-54) stays on

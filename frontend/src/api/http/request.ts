@@ -1,6 +1,11 @@
-// The request layer (INT-2.1): base /api/v1, same-origin cookies, JSON in and out, and every failure as an ApiError.
+// The request layer (INT-2.1): base /api/v1 (on VITE_API_BASE when set, AS-3.1), same-origin cookies, JSON in and out, and every failure as an ApiError.
 
-export const BASE = '/api/v1'
+/** The origin to call, without a trailing slash. Empty (the default) means the page's own origin (AS-3.1). */
+export function apiOrigin(configured: string | undefined): string {
+  return (configured ?? '').trim().replace(/\/+$/, '')
+}
+
+export const BASE = `${apiOrigin(import.meta.env.VITE_API_BASE)}/api/v1`
 
 /** A problem+json answer from the server (RFC 9457), or a connection failure (status 0). */
 export class ApiError extends Error {
