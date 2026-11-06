@@ -29,7 +29,9 @@ from legallens.orchestrator.errors import log_failure
 from legallens.orchestrator.local import prompts, text
 from legallens.orchestrator.stub.orchestrator import Retrieval, StubOrchestrator, outside_law_notice
 
-ANSWER_TOKENS = 700
+# Claude writes longer answers than the local 7B model (CN-2.5: a 3-part test hit 700 and stopped mid-sentence).
+# Output tokens are cheap (Haiku: $0.50 per million), and the spend guard still caps the total.
+ANSWER_TOKENS = 1500
 REWRITE_TOKENS = 150
 
 
