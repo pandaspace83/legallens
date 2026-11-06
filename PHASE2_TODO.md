@@ -33,22 +33,25 @@ models, GPU or Ollama setup to keep working, tune and re-test). Quality is compa
 
 ## Phase B: Claude behind LegalLens (journal Topic 2)
 
-- [ ] **CN-2.1** *(You, in the console.)* Create an API key for this project only, set a **$5 spend limit** with the
+- [x] **CN-2.1** *(You, in the console.)* Create an API key for this project only, set a **$5 spend limit** with the
       provider, and store the key outside the repo (never in a file Git sees; gitleaks is watching). *Check:* a one-line
       call from a scratch script returns text and shows `usage` tokens.
-- [ ] **CN-2.2** Add the `anthropic` package and a setting `llm_provider = local | claude`. Write `ClaudeChat` in
+- [x] **CN-2.2** Add the `anthropic` package and a setting `llm_provider = local | claude`. Write `ClaudeChat` in
       `models/llm.py` implementing the same `ChatModel` protocol (`complete` and `stream`), returning the real token
       counts. Models: `claude-haiku-5-5` first, `claude-sonnet-5-5` second. *Check:* a unit test with a fake client
       passes; with the setting at `local`, nothing changes and the fast suite is green.
-- [ ] **CN-2.3** The cost guard (DEC-96): a price table, the cost of each call from its tokens, a running total that
+- [x] **CN-2.3** The cost guard (DEC-96): a price table, the cost of each call from its tokens, a running total that
       survives restarts, a warning at 80% and a refusal at $5. *Check:* tests with fake usage prove it refuses at the
       cap and never calls out once the cap is hit.
-- [ ] **CN-2.4** DEC-94 plumbing: make the no-outside-connection test provider-aware, update "Where your data goes",
+- [x] **CN-2.4** DEC-94 plumbing: make the no-outside-connection test provider-aware, update "Where your data goes",
       and record the provider in the matter's AI-consent record. *Check:* the test fails if any other address is
       contacted.
-- [ ] **CN-2.5** First real call: one Ask on the Iowa opinion with Haiku. Claude asks you to confirm the document
+- [x] **CN-2.5** First real call: one Ask on the Iowa opinion with Haiku. Claude asks you to confirm the document
       first (DEC-95) and states the cost. *Check:* a correct cited answer, the cost recorded, and the running total
       matches what the console shows.
+      *Done 2026-11-06: Haiku answered the Iowa delayed-appeal question with 2 citations; 4,702 tokens in, 700 out,
+      $0.000821, and the console's token counts matched. The answer stopped mid-sentence at the 700-token limit, so
+      `ANSWER_TOKENS` is now 1500. Found on the way: the SDK has no `temperature` argument (fixed in CN-2.4).*
 - [ ] **CN-2.6** `MODEL_COMPARISON` v2: the 37-question Ask set on qwen 7B, Haiku and Sonnet for accuracy, latency and
       cost, with a recommendation you'd defend to a managing partner. Claude states the estimated cost; thinking
       tokens bill as output, so the guard decides when to stop. *Check:* the table, plus the total spent.
