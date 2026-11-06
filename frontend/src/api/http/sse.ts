@@ -1,4 +1,5 @@
 import { ApiError, problemFrom, url, type RequestOptions } from '@/api/http/request'
+import { authHeaders, credentialsMode } from '@/api/http/token'
 
 // A small Server-Sent Events reader over fetch (decision 7). EventSource can't be stopped from a signal and
 // reconnects by itself after `done`; this one closes when the run ends, and resumes with Last-Event-ID when the
@@ -69,9 +70,13 @@ export async function readSse(options: ReadSseOptions): Promise<void> {
     if (signal?.aborted) return
     try {
       const response = await fetch(url(path, query), {
-        credentials: 'same-origin',
+        credentials: credentialsMode(),
         signal,
-        headers: { accept: 'text/event-stream', ...(lastId ? { 'last-event-id': lastId } : {}) },
+        headers: {
+          accept: 'text/event-stream',
+          ...authHeaders(),
+          ...(lastId ? { 'last-event-id': lastId } : {}),
+        },
       })
       if (!response.ok) throw await problemFrom(response)
       if (!response.body) throw new Error('No response body')

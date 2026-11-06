@@ -15,6 +15,7 @@ from functools import lru_cache
 
 from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
+from starlette.requests import Request
 
 from legallens.config import Settings
 from legallens.db.engine import Database
@@ -25,6 +26,21 @@ from legallens.timeutil import utcnow
 
 COOKIE_NAME = "ll_session"
 TOUCH_INTERVAL = timedelta(seconds=60)
+
+
+def request_token(request: Request) -> str | None:
+    """The session token a request carries (DEC-104).
+
+    An `Authorization` header, when present, is the only credential read: a malformed or unknown value is a 401 and
+    never falls back to the cookie. Without the header, the cookie is used as before. No URL parameter is read.
+    """
+    header = request.headers.get("authorization")
+    if header is None:
+        return request.cookies.get(COOKIE_NAME)
+    scheme, _, value = header.partition(" ")
+    if scheme.lower() != "bearer" or not value.strip():
+        raise ApiError(401, "not_authenticated", "Sign in to continue.")
+    return value.strip()
 
 
 @dataclass(frozen=True)

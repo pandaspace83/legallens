@@ -10,6 +10,7 @@ import {
   walk,
 } from '@/api/http/request'
 import { readSse } from '@/api/http/sse'
+import { authHeaders, clearToken, saveToken, usesBearer } from '@/api/http/token'
 import {
   toAuditEntry,
   toCitation,
@@ -146,6 +147,15 @@ export function createHttpApiClient(): ApiClient {
 
     // ---- A · Auth
     async signIn(email, password) {
+      if (usesBearer()) {
+        // The iOS app: the token comes back in the body, not as a cookie (DEC-104).
+        const login = await request<Wire['LoginResponse']>('/auth/login', {
+          method: 'POST',
+          body: { email, password, session_transport: 'bearer' },
+        })
+        if (login.token) saveToken(login.token)
+        return { mfaRequired: true }
+      }
       await request('/auth/login', { method: 'POST', body: { email, password } })
       return { mfaRequired: true }
     },
@@ -165,7 +175,11 @@ export function createHttpApiClient(): ApiClient {
       return toUser(me.user, { session: me.session, app: me.app })
     },
     async signOut() {
-      await request('/auth/logout', { method: 'POST' })
+      try {
+        await request('/auth/logout', { method: 'POST' })
+      } finally {
+        clearToken() // the token goes even if the server could not be reached
+      }
     },
 
     // ---- B · Matters
@@ -345,8 +359,9 @@ export function createHttpApiClient(): ApiClient {
       const accepted = await new Promise<Wire['UploadAccepted']>((resolve, reject) => {
         const xhr = new XMLHttpRequest()
         xhr.open('POST', `${BASE}/matters/${matterId}/documents`)
-        xhr.withCredentials = true
+        xhr.withCredentials = !usesBearer()
         xhr.setRequestHeader('accept', 'application/json')
+        for (const [name, value] of Object.entries(authHeaders())) xhr.setRequestHeader(name, value)
         xhr.setRequestHeader('x-legallens-request', '1')
         xhr.upload.onprogress = (e) => {
           if (e.lengthComputable) onProgress?.(e.loaded / e.total)

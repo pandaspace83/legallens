@@ -10,10 +10,15 @@ from legallens.schemas.common import RequestModel, ResponseModel, Timestamp
 class LoginRequest(RequestModel):
     email: str = Field(min_length=3, max_length=254)
     password: str = Field(min_length=1, max_length=1024)
+    # "cookie" (the web app) sets the session cookie; "bearer" (the iOS app) returns the token in the body instead and
+    # sets no cookie (DEC-104).
+    session_transport: Literal["cookie", "bearer"] = "cookie"
 
 
 class LoginResponse(ResponseModel):
     mfa_required: bool = True
+    # Only for a bearer login. Not usable until the 6-digit code is verified.
+    token: str | None = None
 
 
 class MfaVerifyRequest(RequestModel):

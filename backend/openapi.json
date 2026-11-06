@@ -2547,6 +2547,15 @@
             "minLength": 1,
             "title": "Password",
             "type": "string"
+          },
+          "session_transport": {
+            "default": "cookie",
+            "enum": [
+              "cookie",
+              "bearer"
+            ],
+            "title": "Session Transport",
+            "type": "string"
           }
         },
         "required": [
@@ -2562,6 +2571,17 @@
             "default": true,
             "title": "Mfa Required",
             "type": "boolean"
+          },
+          "token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token"
           }
         },
         "title": "LoginResponse",

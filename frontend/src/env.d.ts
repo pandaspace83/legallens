@@ -4,6 +4,8 @@ interface ImportMetaEnv {
   /** Where the backend lives when it is not on the page's own origin, e.g. `https://api.example.com` (AS-3.1).
    *  Unset means same-origin, which is how the web build and the Docker image work. */
   readonly VITE_API_BASE?: string
+  /** How the session travels: `cookie` (default, the web app) or `bearer` (the iOS app, AS-3.2). */
+  readonly VITE_AUTH?: 'cookie' | 'bearer'
 }
 
 /** The frontend's version from package.json, set at build time (vite.config.ts). */
