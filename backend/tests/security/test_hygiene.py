@@ -2,13 +2,15 @@
 
 import json
 import logging
+import shutil
 import socket
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
 from sqlalchemy import text
 
-from tests.conftest import Api
+from tests.conftest import Api, make_settings, signed_in_client
 
 CANARY = "ZEBRA-CANARY-7f3a9c"
 
@@ -178,3 +180,56 @@ def test_every_write_is_audited(api: Api, samples_dir) -> None:  # type: ignore[
 
         assert verify_chain(db) == (True, None)
     assert all(isinstance(d, dict) for d in details)
+
+
+def test_claude_provider_contacts_only_api_anthropic_com(
+    tmp_path: Path, template_db: Path, samples_dir: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """DEC-94 with the provider set to Claude: the one outside address is api.anthropic.com, nothing else.
+
+    Every name lookup and every non-local connection is recorded and refused, so no request really leaves. The
+    test also fails if Claude is never tried, since then it would prove nothing.
+    """
+    settings = make_settings(
+        tmp_path / "data",
+        orchestrator="local",
+        llm_provider="claude",
+        anthropic_api_key="sk-ant-test-not-real",
+        llm_retries=0,
+    )
+    settings.ensure_dirs()
+    shutil.copy(template_db, settings.db_path)
+    hosts: set[str] = set()
+    other_connects: list[object] = []
+    local = ("127.0.0.1", "::1", "localhost", "testserver")
+
+    def lookup(host: object, *args: object, **kwargs: object) -> object:
+        name = host.decode() if isinstance(host, bytes) else str(host)
+        if name not in local:
+            hosts.add(name)
+            raise socket.gaierror("name lookup blocked by test")
+        return real_lookup(host, *args, **kwargs)  # type: ignore[arg-type]
+
+    original = socket.socket.connect
+
+    def guarded(self: socket.socket, address: object) -> object:
+        if not (isinstance(address, str) or (isinstance(address, tuple) and str(address[0]) in local)):
+            other_connects.append(address)
+            raise OSError("outbound connection blocked by test")
+        return original(self, address)  # type: ignore[arg-type]
+
+    real_lookup = socket.getaddrinfo
+    monkeypatch.setattr(socket, "getaddrinfo", lookup)
+    monkeypatch.setattr(socket.socket, "connect", guarded)
+    client = signed_in_client(settings)
+    try:
+        api = Api(client, settings, samples_dir)
+        matter = api.create_matter()
+        api.ingest(matter["id"], "smith_msa_v3.pdf")
+        api.run_jobs()
+        chat = api.new_chat(matter["id"])
+        api.ask(chat, "What notice is needed to terminate?")
+    finally:
+        client.__exit__(None, None, None)
+    assert other_connects == []
+    assert hosts == {"api.anthropic.com"}

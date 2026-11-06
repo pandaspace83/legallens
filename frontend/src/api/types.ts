@@ -14,6 +14,8 @@ export interface User {
   idleTimeoutMs?: number
   /** The AI engine is a stand-in (stub orchestrator): answers are not a model's (decision 10, INT-3.9). */
   standInEngine?: boolean
+  /** Which AI answers: 'local' stays on this computer, 'claude' sends text to Anthropic (DEC-94). */
+  llmProvider?: 'local' | 'claude'
 }
 
 export type MatterStatus = 'open' | 'closed'
@@ -27,6 +29,8 @@ export interface AiConsent {
   /** ISO date the consent was given or declined. */
   recordedOn?: string
   notes?: string
+  /** Which AI was active when this record was saved. Set by the server. */
+  provider?: 'local' | 'claude'
 }
 
 export interface Matter {

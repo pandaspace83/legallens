@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   type LucideIcon,
 } from 'lucide-react'
+import { useMe } from '@/api/queries/auth'
 import { SystemBanner } from '@/features/shell/SystemBanner'
 import { TopBar } from '@/features/shell/TopBar'
 
@@ -37,13 +38,15 @@ const LOCAL: { Icon: LucideIcon; title: string; body: string }[] = [
 ]
 
 const NEVER = [
-  'Sent to outside AI services such as OpenAI, Anthropic or Google',
+  'Sent to outside AI services, other than Anthropic when Claude is on',
   'Used to train any AI model',
   'Included in analytics, crash reports or tracing tools',
   'Mixed between matters: each matter’s documents are searched on their own',
 ]
 
 export function DataFlowPage() {
+  const claude = useMe().data?.llmProvider === 'claude'
+  const local = claude ? LOCAL.filter((item) => item.title !== 'The AI model') : LOCAL
   return (
     <div className="min-h-dvh bg-app">
       <TopBar />
@@ -56,8 +59,9 @@ export function DataFlowPage() {
           Where your data goes
         </h1>
         <p className="mt-2 max-w-[620px] text-[15px] leading-relaxed text-fg-muted">
-          Everything LegalLens does happens on this computer. This page explains it in plain
-          language, for you and for your clients.
+          {claude
+            ? 'Claude is on, so the questions you ask and the passages it needs are sent to Anthropic. The rest stays on this computer. This page explains it in plain language.'
+            : 'Everything LegalLens does happens on this computer. This page explains it in plain language, for you and for your clients.'}
         </p>
 
         <section className="mt-10">
@@ -65,7 +69,7 @@ export function DataFlowPage() {
             Stays on this computer
           </h2>
           <ul className="mt-3 grid gap-3 sm:grid-cols-2">
-            {LOCAL.map(({ Icon, title, body }) => (
+            {local.map(({ Icon, title, body }) => (
               <li
                 key={title}
                 className="flex gap-3.5 rounded-card border border-line bg-surface p-4 shadow-raised"
@@ -81,6 +85,23 @@ export function DataFlowPage() {
             ))}
           </ul>
         </section>
+
+        {claude ? (
+          <section
+            aria-labelledby="claude-heading"
+            className="mt-10 rounded-card border border-warning/40 bg-warning-tint p-5"
+          >
+            <h2 id="claude-heading" className="font-semibold text-fg">
+              Sent to Anthropic while Claude is on
+            </h2>
+            <p className="mt-2 text-[13.5px] leading-relaxed text-fg-muted">
+              Each question, the passages from your documents it needs to answer, and any text you
+              ask it to summarize or draft from go to Anthropic’s servers. LegalLens counts what
+              each call costs and stops at the spending limit. Use public or synthetic documents
+              only; real client files must not be used with Claude.
+            </p>
+          </section>
+        ) : null}
 
         <section className="mt-10 grid gap-4 sm:grid-cols-2">
           <div className="rounded-card border border-line bg-surface p-5">

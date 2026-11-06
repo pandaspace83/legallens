@@ -88,6 +88,21 @@
             ],
             "title": "Notes"
           },
+          "provider": {
+            "anyOf": [
+              {
+                "enum": [
+                  "local",
+                  "claude"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          },
           "recorded_on": {
             "anyOf": [
               {
@@ -139,6 +154,14 @@
             "title": "Embedder",
             "type": "string"
           },
+          "llm_provider": {
+            "enum": [
+              "local",
+              "claude"
+            ],
+            "title": "Llm Provider",
+            "type": "string"
+          },
           "model_id": {
             "anyOf": [
               {
@@ -179,7 +202,8 @@
           "orchestrator",
           "embedder",
           "converter",
-          "scanner"
+          "scanner",
+          "llm_provider"
         ],
         "title": "AppInfo",
         "type": "object"

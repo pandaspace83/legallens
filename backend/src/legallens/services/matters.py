@@ -1,7 +1,7 @@
 """Matters: create, edit, close, list (DEC-09, DEC-30, DEC-32, DEC-60)."""
 
 from datetime import datetime
-from typing import Any
+from typing import Any, Literal
 
 from sqlalchemy import and_, func, or_, select
 from sqlalchemy.orm import Session
@@ -26,7 +26,12 @@ from legallens.services.pagination import decode_cursor, encode_cursor
 from legallens.timeutil import iso, utcnow
 
 
-def create(db: Session, me: Principal, body: MatterCreate) -> Matter:
+def _stamped(consent: AiConsent, provider: Literal["local", "claude"]) -> dict:  # type: ignore[type-arg]
+    """The consent record, with the AI that was active when it was saved (DEC-60, DEC-94)."""
+    return consent.model_copy(update={"provider": provider}).model_dump(mode="json")
+
+
+def create(db: Session, me: Principal, body: MatterCreate, provider: Literal["local", "claude"] = "local") -> Matter:
     matter = Matter(
         id=new_id("matter"),
         owner_user_id=me.user.id,
@@ -37,7 +42,7 @@ def create(db: Session, me: Principal, body: MatterCreate) -> Matter:
         jurisdiction=body.jurisdiction,
         practice_area=body.practice_area,
         profile_json=(body.profile or MatterProfile()).model_dump(mode="json"),
-        ai_consent_json=(body.ai_consent or AiConsent()).model_dump(mode="json"),
+        ai_consent_json=_stamped(body.ai_consent or AiConsent(), provider),
         status="open",
     )
     db.add(matter)
@@ -49,7 +54,9 @@ def create(db: Session, me: Principal, body: MatterCreate) -> Matter:
     return matter
 
 
-def update(db: Session, me: Principal, matter: Matter, body: MatterUpdate) -> Matter:
+def update(
+    db: Session, me: Principal, matter: Matter, body: MatterUpdate, provider: Literal["local", "claude"] = "local"
+) -> Matter:
     changed: list[str] = []
     for field in ("name", "client_name", "our_side", "court", "jurisdiction", "practice_area"):
         if field in body.model_fields_set:
@@ -59,7 +66,7 @@ def update(db: Session, me: Principal, matter: Matter, body: MatterUpdate) -> Ma
         matter.profile_json = body.profile.model_dump(mode="json")
         changed.append("profile")
     if body.ai_consent is not None:
-        matter.ai_consent_json = body.ai_consent.model_dump(mode="json")
+        matter.ai_consent_json = _stamped(body.ai_consent, provider)
         changed.append("ai_consent")
     if changed:
         matter.last_activity_at = utcnow()
