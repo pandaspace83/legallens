@@ -28,6 +28,7 @@ def test_a_bearer_login_returns_a_token_and_sets_no_cookie(real) -> None:  # typ
     body = response.json()
     assert body["mfa_required"] is True and len(body["token"]) >= 40
     assert "set-cookie" not in response.headers and client.cookies.get("ll_session") is None
+    assert response.headers["cache-control"] == "no-store"
 
 
 def test_a_cookie_login_never_puts_the_token_in_the_body(real) -> None:  # type: ignore[no-untyped-def]  # noqa: F811

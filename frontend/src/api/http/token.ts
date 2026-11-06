@@ -37,6 +37,15 @@ export const usesBearer = () => bearer
 export const saveToken = (token: string) => store.set(token)
 export const clearToken = () => store.clear()
 
+/** The token a request carried, read before it was sent. */
+export const currentToken = () => (bearer ? store.get() : null)
+
+/** Forget the token only if it is still the one a failed request carried. A 401 for a request sent before sign-in
+ * must not wipe the token that sign-in has just saved. */
+export function clearTokenIf(sent: string | null) {
+  if (sent !== null && store.get() === sent) store.clear()
+}
+
 /** `Authorization` when this build signs in with a token and one is held; nothing otherwise. */
 export function authHeaders(): Record<string, string> {
   const token = bearer ? store.get() : null

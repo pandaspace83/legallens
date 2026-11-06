@@ -81,6 +81,8 @@ def login(body: LoginRequest, response: Response, db: WriteDB, settings: AppSett
     token, _ = auth_service.create_session(db, settings, user, mfa_verified=False)
     db.commit()
     if body.session_transport == "bearer":
+        # A token in a body must never be stored by a cache along the way (as RFC 6749 asks of token responses).
+        response.headers["Cache-Control"] = "no-store"
         return LoginResponse(mfa_required=True, token=token)
     _set_cookie(response, settings, token)
     return LoginResponse(mfa_required=True)

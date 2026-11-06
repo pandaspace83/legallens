@@ -19,6 +19,12 @@ function stubFetch(response: Response) {
   return fetchMock
 }
 
+const problem = (code: string) =>
+  new Response(JSON.stringify({ code, detail: 'x' }), {
+    status: 401,
+    headers: { 'content-type': 'application/problem+json' },
+  })
+
 const lastInit = (mock: ReturnType<typeof stubFetch>) =>
   (mock.mock.calls[0] as unknown as [string, RequestInit])[1]
 
@@ -65,6 +71,35 @@ describe('bearer build', () => {
     )
     await expect(send('/matters')).rejects.toBeInstanceOf(ApiError)
     expect(authHeaders()).toEqual({})
+  })
+
+  it('forgets a token whose session is already gone', async () => {
+    saveToken('tok-123')
+    stubFetch(problem('not_authenticated'))
+    await expect(send('/matters')).rejects.toBeInstanceOf(ApiError)
+    expect(authHeaders()).toEqual({})
+  })
+
+  it('keeps a token saved after a request that was sent without one', async () => {
+    let finish: (r: Response) => void = () => {}
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => new Promise<Response>((resolve) => (finish = resolve))),
+    )
+    const early = send('/auth/me') // sent before sign-in: no token
+    saveToken('tok-new') // sign-in completes while it is in flight
+    finish(problem('not_authenticated'))
+    await expect(early).rejects.toBeInstanceOf(ApiError)
+    expect(authHeaders()).toEqual({ authorization: 'Bearer tok-new' })
+  })
+
+  it('keeps the token on a wrong 6-digit code', async () => {
+    saveToken('tok-123')
+    stubFetch(problem('invalid_code'))
+    await expect(
+      send('/auth/mfa/verify', { method: 'POST', body: { code: '000000' } }),
+    ).rejects.toBeInstanceOf(ApiError)
+    expect(authHeaders()).toEqual({ authorization: 'Bearer tok-123' })
   })
 
   it('clearToken forgets it', () => {

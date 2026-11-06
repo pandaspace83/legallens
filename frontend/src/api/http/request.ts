@@ -1,6 +1,6 @@
 // The request layer (INT-2.1): base /api/v1 (on VITE_API_BASE when set, AS-3.1), same-origin cookies, JSON in and out, and every failure as an ApiError.
 
-import { authHeaders, clearToken, credentialsMode } from './token'
+import { authHeaders, clearTokenIf, credentialsMode, currentToken } from './token'
 
 /** The origin to call, without a trailing slash. Empty (the default) means the page's own origin (AS-3.1). */
 export function apiOrigin(configured: string | undefined): string {
@@ -90,6 +90,7 @@ export async function problemFrom(response: Response): Promise<ApiError> {
 export async function send(path: string, options: RequestOptions = {}): Promise<Response> {
   const { method = 'GET', query, body, headers, signal } = options
   let response: Response
+  const sentToken = currentToken()
   try {
     response = await fetch(url(path, query), {
       method,
@@ -113,10 +114,15 @@ export async function send(path: string, options: RequestOptions = {}): Promise<
   const error = await problemFrom(response)
   // A session that ended while the page was open: the lock screen asks for a fresh sign-in (DEC-54). Wrong
   // passwords and codes are also 401s but carry their own codes, and are answered on the sign-in form.
-  if (response.status === 401 && error.code === 'session_expired') {
-    clearToken()
-    onUnauthorized(error)
+  // A dead token is forgotten whether it timed out (`session_expired`) or its session row is already gone
+  // (`not_authenticated`, after the worker purges expired sessions), so the app does not keep sending it.
+  if (
+    response.status === 401 &&
+    (error.code === 'session_expired' || error.code === 'not_authenticated')
+  ) {
+    clearTokenIf(sentToken)
   }
+  if (response.status === 401 && error.code === 'session_expired') onUnauthorized(error)
   throw error
 }
 
