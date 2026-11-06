@@ -488,6 +488,18 @@ The answers to AS-0 in `APPSTORE_TODO.md`.
   deployed until the owner confirms it. The Apple fee stays outside every cap (DEC-98, $99 a year). The cap for
   showing LegalLens to clients or friends is not set yet: after the model comparison (CN-2.6) measures what each
   kind of question costs, the owner decides a limit for demos in a later decision. Decided 2026-11-04.
+- **DEC-104 The iOS app signs in with a bearer token; the web keeps its cookie (extends DEC-54).** *(accepted
+  2026-11-06)* Login takes `session_transport`: `cookie` (the default, unchanged) or `bearer`, which returns the token
+  in the response body and sets no cookie; a cookie login never puts the token in the body, so the web keeps
+  HttpOnly's protection. An `Authorization: Bearer` header, when present, is the only credential read: a bad token is a
+  401, never a fallback to the cookie. Bearer sessions follow every DEC-54 rule: only the SHA-256 is stored, the token
+  does nothing until the 6-digit code is verified, 30 minutes idle and 12 hours at most (the same on the phone, so a
+  TestFlight tester signs in again after half an hour away), the same lockout, and sign-out deletes the session. No
+  endpoint takes a token in the URL, which is why matter events move off `EventSource` (AS-3.3). The
+  `X-LegalLens-Request` header stays required on every write in both modes. The app keeps the token in the iOS
+  Keychain, wired in at AS-4.1 once Capacitor exists; until then the client's token store is an interface with an
+  in-memory version for tests. CORS (AS-3.4) allows the headers this needs and never allows credentials. Decided
+  2026-11-06.
 
 ---
 

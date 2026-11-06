@@ -113,11 +113,13 @@ runs somewhere else**. Three things change before any Xcode work:
       the hosted address.
       *Done 2026-11-06: `VITE_API_BASE` sets the address at build time; unset, nothing changes. A hosted address also
       needs AS-3.2 (token sign-in) and AS-3.4 (CORS) before a phone can use it.*
-- [ ] **AS-3.2 Sign-in without same-origin cookies.** *Claude can build.* The proposed design (decided in this
-      step): sign-in returns a token; the app keeps it in the iOS Keychain through a plugin and sends it as
-      `Authorization`; the backend accepts the cookie (web) or the header (app); the CSRF header rule (DEC-54) stays on
-      the cookie path. *Check:* backend tests for both paths; the app stays signed in after quitting, and sign-out
-      clears the Keychain.
+- [ ] **AS-3.2 Sign-in without same-origin cookies.** *Claude can build.* Designed 2026-11-06 as DEC-104: login
+      with `session_transport: "bearer"` returns the token in the body and sets no cookie; the app sends it as
+      `Authorization`, which, when present, is the only credential read; the cookie path is unchanged; the CSRF header
+      stays on every write; no token in any URL. The Keychain plugin is wired at AS-4.1. *Check:* backend tests for
+      both paths (header wins with no cookie fallback, no token before MFA, sign-out ends a bearer session, `?token=`
+      ignored, CSRF still required) and frontend tests that the header is sent. At AS-4: the app stays signed in after
+      quitting within the 30-minute idle limit, and sign-out clears the Keychain.
 - [ ] **AS-3.3 Streams with the token.** Answers already stream over `fetch` in `sse.ts`; move matter events off
       `EventSource` onto the same reader, keeping resume with `Last-Event-ID` (decision 7). *Check:* an Ask streams on
       an iPhone on cellular, and a dropped connection resumes.
