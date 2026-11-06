@@ -49,6 +49,7 @@ export function toUser(
     licensingStates: wire.licensing_states,
     idleTimeoutMs: extra.session ? extra.session.idle_timeout_s * 1000 : undefined,
     standInEngine: extra.app ? extra.app.orchestrator === 'stub' : undefined,
+    llmProvider: extra.app?.llm_provider,
   }
 }
 
@@ -95,6 +96,7 @@ export function toMatter(wire: Wire['MatterOut']): Matter {
       toldRisks: wire.ai_consent.told_risks ?? false,
       recordedOn: wire.ai_consent.recorded_on ?? undefined,
       notes: wire.ai_consent.notes ?? undefined,
+      provider: wire.ai_consent.provider ?? undefined,
     },
   }
 }

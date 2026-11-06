@@ -36,6 +36,8 @@ class AiConsent(RequestModel):
     told_risks: bool = False
     notes: str | None = Field(default=None, max_length=4000)
     consent_document_id: str | None = None
+    # Which AI answered when this record was saved. Set by the server (CN-2.4), never trusted from the client.
+    provider: Literal["local", "claude"] | None = None
 
 
 class MatterCreate(RequestModel):

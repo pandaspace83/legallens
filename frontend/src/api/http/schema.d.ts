@@ -802,6 +802,8 @@ export interface components {
             consent_document_id?: string | null;
             /** Notes */
             notes?: string | null;
+            /** Provider */
+            provider?: ("local" | "claude") | null;
             /** Recorded On */
             recorded_on?: string | null;
             /**
@@ -832,6 +834,11 @@ export interface components {
             converter: string;
             /** Embedder */
             embedder: string;
+            /**
+             * Llm Provider
+             * @enum {string}
+             */
+            llm_provider: "local" | "claude";
             /** Model Id */
             model_id?: string | null;
             /** Orchestrator */

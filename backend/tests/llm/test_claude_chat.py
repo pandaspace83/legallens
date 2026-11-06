@@ -2,6 +2,7 @@
 needs a key or a network connection."""
 
 import asyncio
+import inspect
 from types import SimpleNamespace
 from typing import Any
 
@@ -49,13 +50,22 @@ class FakeAnthropic:
         self.calls: list[dict[str, Any]] = []
         self.messages = SimpleNamespace(create=self._create, stream=self._stream)
 
+    @staticmethod
+    def _check(method: Any, kwargs: dict[str, Any]) -> None:
+        """Reject any argument the real SDK would reject, which a loose fake hid before (CN-2.4)."""
+        accepted = set(inspect.signature(method).parameters)
+        unknown = set(kwargs) - accepted
+        assert not unknown, f"the Anthropic SDK does not accept {sorted(unknown)}"
+
     async def _create(self, **kwargs: Any) -> SimpleNamespace:
+        self._check(anthropic.resources.messages.AsyncMessages.create, kwargs)
         self.calls.append(kwargs)
         if self.fail:
             raise self.fail
         return SimpleNamespace(content=[SimpleNamespace(type="text", text=self.text)], usage=self.usage)
 
     def _stream(self, **kwargs: Any) -> _Stream:
+        self._check(anthropic.resources.messages.AsyncMessages.stream, kwargs)
         self.calls.append(kwargs)
         return _Stream(self.text.split("|"), self.usage, self.fail)
 
@@ -78,7 +88,8 @@ def test_complete_returns_text_and_the_token_counts_the_api_reports() -> None:
     assert sent["model"] == "claude-sonnet-5-5"
     assert sent["system"] == "sys"
     assert sent["messages"] == [{"role": "user", "content": "usr"}]
-    assert (sent["max_tokens"], sent["temperature"]) == (64, 0.2)
+    assert sent["max_tokens"] == 64
+    assert "temperature" not in sent  # the SDK has no such argument
 
 
 def test_an_ollama_model_name_is_answered_by_the_default_claude_model() -> None:

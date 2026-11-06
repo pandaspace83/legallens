@@ -192,10 +192,11 @@ class ClaudeChat:
         return self._client
 
     def _args(self, model: str, system: str, user: str, max_tokens: int, temperature: float) -> dict[str, Any]:
+        # `temperature` is accepted for the shared interface but not sent: the current Anthropic SDK has no such
+        # argument, and a real call with it raises TypeError (found by the CN-2.4 outbound test).
         return {
             "model": self.resolve_model(model),
             "max_tokens": max_tokens,
-            "temperature": temperature,
             "system": system,
             "messages": [{"role": "user", "content": user}],
         }

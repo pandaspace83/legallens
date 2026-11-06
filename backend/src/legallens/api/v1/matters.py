@@ -28,8 +28,8 @@ def list_matters(
 
 
 @router.post("", status_code=201, operation_id="createMatter", responses=problem_responses(401, 422))
-def create_matter(body: MatterCreate, me: CurrentUser, db: WriteDB) -> MatterOut:
-    matter = svc.create(db, me, body)
+def create_matter(body: MatterCreate, me: CurrentUser, db: WriteDB, settings: AppSettings) -> MatterOut:
+    matter = svc.create(db, me, body, settings.llm_provider)
     db.commit()
     return svc.to_out(db, matter)
 
@@ -40,9 +40,9 @@ def get_matter(matter_id: str, me: CurrentUser, db: ReadDB) -> MatterOut:
 
 
 @router.patch("/{matter_id}", operation_id="updateMatter", responses=problem_responses(401, 403, 404, 409, 422))
-def update_matter(matter_id: str, body: MatterUpdate, me: CurrentUser, db: WriteDB) -> MatterOut:
+def update_matter(matter_id: str, body: MatterUpdate, me: CurrentUser, db: WriteDB, settings: AppSettings) -> MatterOut:
     matter = load_matter(db, me, matter_id, writable=True)
-    svc.update(db, me, matter, body)
+    svc.update(db, me, matter, body, settings.llm_provider)
     db.commit()
     return svc.to_out(db, matter)
 

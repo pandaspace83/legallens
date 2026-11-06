@@ -32,6 +32,7 @@ def app_info(settings: Settings) -> AppInfo:
         embedder=settings.embedder,
         converter=settings.converter,
         scanner=settings.scanner,
+        llm_provider=settings.llm_provider,
         model_id="stub-orchestrator" if settings.orchestrator == "stub" else None,
         prompt_version="stub-0" if settings.orchestrator == "stub" else None,
     )

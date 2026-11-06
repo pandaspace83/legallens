@@ -58,6 +58,7 @@ class AppInfo(ResponseModel):
     embedder: str
     converter: str
     scanner: str
+    llm_provider: Literal["local", "claude"]
     model_id: str | None = None
     prompt_version: str | None = None
 
