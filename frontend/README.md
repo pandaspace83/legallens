@@ -96,6 +96,10 @@ plan and its reason is in §10 of that file.
 | `npm run api:types`               | Regenerate `src/api/http/schema.d.ts` from the backend's `openapi.json` |
 | `npm run screenshots`             | Retake `../architecture/screens/` (needs `npm run dev` running)         |
 
+The backend address defaults to the page's own origin. Set `VITE_API_BASE=https://host` at build time (for the iOS app,
+AS-3.1) to call a hosted backend instead; with it set, the backend must also allow that origin (AS-3.4) and accept a
+token in place of the cookie (AS-3.2).
+
 The first run of `test:e2e` needs the test browser: `npx playwright install chromium`. The browser tests start
 their own mock-data server on port 5174, so a dev server on 5173 doesn't affect them. If the backend's API changes,
 a unit test fails until you run `npm run api:types`.
