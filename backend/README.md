@@ -65,6 +65,12 @@ export LEGALLENS_ANTHROPIC_API_KEY=$(security find-generic-password -a "$USER" -
 LEGALLENS_LLM_PROVIDER=claude uv run legallens dev
 ```
 
+**Spend guard (DEC-96, DEC-103).** Every Claude call is priced from the token counts the API reports and added to a
+running total in `claude_spend.db`, next to the main database in the data folder. `legallens db reset` does not touch
+it. At 80% of `LEGALLENS_CLAUDE_SPEND_CAP_USD` (default 5) a warning is logged; at the cap no call is sent. One call
+can cross the cap, because its cost is known afterwards, so the spend limit in the Anthropic console stays the hard
+stop. `/health` shows the total. A model with no price in `models/spend.py` is refused.
+
 A job whose model setting is still an Ollama name is answered by `LEGALLENS_CLAUDE_MODEL` (default
 `claude-haiku-5-5`); set a job's setting to a `claude-...` name to pick another model for that job.
 
