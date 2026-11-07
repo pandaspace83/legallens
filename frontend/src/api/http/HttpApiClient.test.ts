@@ -3,6 +3,7 @@ import { createHttpApiClient } from '@/api/http/HttpApiClient'
 import { ApiError } from '@/api/http/request'
 import type { components } from '@/api/http/schema'
 import { useSession } from '@/stores/session'
+import { memoryTokenStore, saveToken, setBearerMode, setTokenStore } from '@/api/http/token'
 import me from './fixtures/me.json'
 import matters from './fixtures/matters.json'
 import matter from './fixtures/matter.json'
@@ -433,45 +434,51 @@ describe('drafts', () => {
 })
 
 describe('matter events', () => {
-  it('maps named events from an EventSource and closes on unsubscribe', () => {
-    const instances: FakeSource[] = []
-    class FakeSource {
-      listeners = new Map<string, (e: { data: string }) => void>()
-      closed = false
-      url: string
-      constructor(url: string) {
-        this.url = url
-        instances.push(this)
-      }
-      addEventListener(name: string, fn: (e: { data: string }) => void) {
-        this.listeners.set(name, fn)
-      }
-      close() {
-        this.closed = true
-      }
-    }
-    vi.stubGlobal('EventSource', FakeSource)
+  it('maps named events read over fetch and stops on unsubscribe', async () => {
+    const sse = (text: string) =>
+      new Response(text, { status: 200, headers: { 'content-type': 'text/event-stream' } })
+    const stream =
+      'id: 1\nevent: job.done\ndata: {"kind":"draft","job_id":"j","draft_id":"drf_1","title":"Response"}\n\n' +
+      'id: 2\nevent: ping\ndata: {}\n\n' +
+      'id: 3\nevent: job.failed\ndata: {"kind":"summarize","job_id":"j","summary_id":"sum_1","error":{"message":"Failed"}}\n\n'
+    const fetchMock = vi.fn(async () => sse(stream))
+    vi.stubGlobal('fetch', fetchMock)
     const seen: unknown[] = []
     const stop = createHttpApiClient().subscribeMatterEvents(smith, (e) => seen.push(e))
-    const source = instances[0]!
-    expect(source.url).toBe(`/api/v1/matters/${smith}/events`)
-    source.listeners.get('job.done')!({
-      data: JSON.stringify({ kind: 'draft', job_id: 'j', draft_id: 'drf_1', title: 'Response' }),
-    })
-    source.listeners.get('job.failed')!({
-      data: JSON.stringify({
-        kind: 'summarize',
-        job_id: 'j',
-        summary_id: 'sum_1',
-        error: { message: 'Failed' },
-      }),
-    })
+    await vi.waitFor(() => expect(seen).toHaveLength(2))
+    expect(String(fetchMock.mock.calls[0]![0])).toBe(`/api/v1/matters/${smith}/events`)
     expect(seen).toEqual([
       { type: 'job.done', kind: 'draft', jobId: 'j', draftId: 'drf_1', title: 'Response' },
       { type: 'job.failed', kind: 'summarize', jobId: 'j', entityId: 'sum_1', message: 'Failed' },
     ])
+    // The stream ended without the run finishing: it reconnects and resumes after the last event.
+    await vi.waitFor(() => expect(fetchMock.mock.calls.length).toBeGreaterThan(1), {
+      timeout: 3000,
+    })
+    const resumed = fetchMock.mock.calls[1]![1] as { headers: Record<string, string> }
+    expect(resumed.headers['last-event-id']).toBe('3')
     stop()
-    expect(source.closed).toBe(true)
+    const calls = fetchMock.mock.calls.length
+    await new Promise((r) => setTimeout(r, 50))
+    expect(fetchMock.mock.calls.length).toBe(calls)
+  })
+
+  it('sends the bearer token on the events stream', async () => {
+    const fetchMock = vi.fn(async () => new Response('', { status: 401 }))
+    vi.stubGlobal('fetch', fetchMock)
+    setTokenStore(memoryTokenStore())
+    setBearerMode(true)
+    await saveToken('tok_abc')
+    const stop = createHttpApiClient().subscribeMatterEvents(smith, () => {})
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    const init = fetchMock.mock.calls[0]![1] as {
+      headers: Record<string, string>
+      credentials: string
+    }
+    expect(init.headers.authorization).toBe('Bearer tok_abc')
+    expect(init.credentials).toBe('omit')
+    stop()
+    setBearerMode(false)
   })
 })
 

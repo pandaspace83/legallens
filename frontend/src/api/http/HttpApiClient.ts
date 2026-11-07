@@ -571,30 +571,34 @@ export function createHttpApiClient(): ApiClient {
 
     // ---- Matter events
     subscribeMatterEvents(matterId, onEvent) {
-      // EventSource reconnects by itself and resumes with Last-Event-ID (decision 7).
-      const source = new EventSource(`${BASE}/matters/${matterId}/events`)
-      const names = [
+      // Read over fetch, not EventSource: EventSource can't send an Authorization header (DEC-104). readSse
+      // reconnects with Last-Event-ID, as EventSource did, and never gives up while the page is listening.
+      const names = new Set<string>([
         'job.progress',
         'job.done',
         'job.failed',
         'document.ready',
         'document.failed',
-      ] as const
-      for (const name of names) {
-        source.addEventListener(name, (message) => {
+      ])
+      const controller = new AbortController()
+      void readSse({
+        path: `/matters/${matterId}/events`,
+        signal: controller.signal,
+        retries: Number.POSITIVE_INFINITY,
+        onMessage(message) {
+          if (!names.has(message.event)) return
           try {
-            const data = JSON.parse((message as MessageEvent<string>).data) as Record<
-              string,
-              unknown
-            >
-            const event: MatterEvent | null = toMatterEvent(name, data)
+            const data = JSON.parse(message.data) as Record<string, unknown>
+            const event: MatterEvent | null = toMatterEvent(message.event, data)
             if (event) onEvent(event)
           } catch {
             // A malformed event is dropped; the next one carries on.
           }
-        })
-      }
-      return () => source.close()
+        },
+      }).catch(() => {
+        // The server answered with a problem (signed out, no access): nothing here to retry.
+      })
+      return () => controller.abort()
     },
   }
   return client
