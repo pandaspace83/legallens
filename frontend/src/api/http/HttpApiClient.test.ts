@@ -441,7 +441,7 @@ describe('matter events', () => {
       'id: 1\nevent: job.done\ndata: {"kind":"draft","job_id":"j","draft_id":"drf_1","title":"Response"}\n\n' +
       'id: 2\nevent: ping\ndata: {}\n\n' +
       'id: 3\nevent: job.failed\ndata: {"kind":"summarize","job_id":"j","summary_id":"sum_1","error":{"message":"Failed"}}\n\n'
-    const fetchMock = vi.fn(async () => sse(stream))
+    const fetchMock = vi.fn(async (..._args: unknown[]) => sse(stream))
     vi.stubGlobal('fetch', fetchMock)
     const seen: unknown[] = []
     const stop = createHttpApiClient().subscribeMatterEvents(smith, (e) => seen.push(e))
@@ -464,7 +464,7 @@ describe('matter events', () => {
   })
 
   it('sends the bearer token on the events stream', async () => {
-    const fetchMock = vi.fn(async () => new Response('', { status: 401 }))
+    const fetchMock = vi.fn(async (..._args: unknown[]) => new Response('', { status: 401 }))
     vi.stubGlobal('fetch', fetchMock)
     setTokenStore(memoryTokenStore())
     setBearerMode(true)
