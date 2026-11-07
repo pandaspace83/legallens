@@ -121,11 +121,13 @@ runs somewhere else**. Three things change before any Xcode work:
       ignored, CSRF still required) and frontend tests that the header is sent. At AS-4: the app stays signed in after
       quitting within the 30-minute idle limit, and sign-out clears the Keychain.
       *Built 2026-11-06: backend and frontend, with 9 backend and 6 frontend tests. The Keychain store and the
-      "stays signed in" check wait for AS-4.1. Matter events still use `EventSource`, so they fail on a bearer build
-      until AS-3.3.*
-- [ ] **AS-3.3 Streams with the token.** Answers already stream over `fetch` in `sse.ts`; move matter events off
+      "stays signed in" check wait for AS-4.1. Matter events used `EventSource` until AS-3.3.*
+- [x] **AS-3.3 Streams with the token.** Answers already stream over `fetch` in `sse.ts`; move matter events off
       `EventSource` onto the same reader, keeping resume with `Last-Event-ID` (decision 7). *Check:* an Ask streams on
       an iPhone on cellular, and a dropped connection resumes.
+      *Built 2026-11-07: `subscribeMatterEvents` reads over `readSse` (Authorization header, `Last-Event-ID` resume,
+      retries without limit while the page listens, stops on unsubscribe). Tests cover the bearer header, the resume
+      and the stop. The cellular check waits for AS-4.*
 - [ ] **AS-3.4 CORS for the app's origin only** (`capacitor://localhost`). *Check:* a request from any other origin
       is refused.
 - [ ] **AS-3.5 Consent before anything reaches Claude.** Apple asks apps to say which third-party AI receives
