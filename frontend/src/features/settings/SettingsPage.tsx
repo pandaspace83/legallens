@@ -1,7 +1,7 @@
 import { KeyRound, Lock, LogOut, ShieldCheck, Timer } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
-import { useMe } from '@/api/queries/auth'
+import { useMe, useSignOut } from '@/api/queries/auth'
 import { Avatar } from '@/components/common/Avatar'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -77,6 +77,7 @@ function Row({
 
 export function SettingsPage() {
   const { data: me } = useMe()
+  const signOut = useSignOut()
   const navigate = useNavigate()
   const { hash } = useLocation()
   const lock = useSession((s) => s.lock)
@@ -132,7 +133,10 @@ export function SettingsPage() {
               </div>
               <Button
                 variant="secondary"
-                onClick={() => navigate('/login', { state: { signedOut: 'manual' } })}
+                onClick={() => {
+                  navigate('/login', { state: { signedOut: 'manual' } })
+                  void signOut()
+                }}
               >
                 <LogOut /> Sign out
               </Button>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Outlet } from 'react-router'
 import { useMe } from '@/api/queries/auth'
+import { AiConsentGate } from '@/features/auth/AiConsentGate'
 import { LockScreen } from '@/features/auth/LockScreen'
 import { SessionTimeoutDialog } from '@/features/auth/SessionTimeoutDialog'
 import { ShortcutsSheet } from '@/features/shell/ShortcutsSheet'
@@ -18,7 +19,8 @@ export function SessionGuard() {
   const epoch = useSession((s) => s.activityEpoch)
   const setIdleTimeout = useSession((s) => s.setIdleTimeout)
   // The server decides how long a session may sit idle (INT-3.7); the lock follows it, not a fixed 30 minutes.
-  const serverTimeout = useMe().data?.idleTimeoutMs
+  const me = useMe().data
+  const serverTimeout = me?.idleTimeoutMs
   useEffect(() => {
     if (serverTimeout && serverTimeout !== useSession.getState().idleTimeoutMs)
       setIdleTimeout(serverTimeout)
@@ -68,6 +70,7 @@ export function SessionGuard() {
       </div>
       <SessionTimeoutDialog remainingMs={remaining} />
       <ShortcutsSheet />
+      {me?.aiConsentRequired && !locked ? <AiConsentGate /> : null}
       {locked ? <LockScreen /> : null}
     </>
   )

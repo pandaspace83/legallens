@@ -16,6 +16,10 @@ export interface User {
   standInEngine?: boolean
   /** Which AI answers: 'local' stays on this computer, 'claude' sends text to Anthropic (DEC-94). */
   llmProvider?: 'local' | 'claude'
+  /** True until this lawyer has agreed to text going to the AI company (AS-3.5). Only with Claude on. */
+  aiConsentRequired?: boolean
+  /** The wording version the agreement is for; sent back when agreeing (AS-3.5). */
+  aiConsentVersion?: string
 }
 
 export type MatterStatus = 'open' | 'closed'

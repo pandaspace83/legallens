@@ -222,6 +222,7 @@ def test_claude_provider_contacts_only_api_anthropic_com(
     monkeypatch.setattr(socket, "getaddrinfo", lookup)
     monkeypatch.setattr(socket.socket, "connect", guarded)
     client = signed_in_client(settings)
+    client.post("/api/v1/auth/ai-consent", json={"version": "1"})  # AS-3.5: asked before Claude is used
     try:
         api = Api(client, settings, samples_dir)
         matter = api.create_matter()

@@ -23,7 +23,9 @@ def test_committed_spec_matches_the_app(tmp_path: Path) -> None:
 def test_every_operation_is_named_and_documents_its_errors(tmp_path: Path) -> None:
     spec = _spec(tmp_path)
     operations = [(m, p, o) for p, v in spec["paths"].items() for m, o in v.items()]
-    assert len(operations) == 50  # 43 built + 6 added in integration Phase 1 (INT-1.3, INT-1.6, INT-1.7)
+    assert (
+        len(operations) == 51
+    )  # 43 built + 6 added in integration Phase 1 (INT-1.3, INT-1.6, INT-1.7) + AS-3.5 consent
     ids = [o["operationId"] for _, _, o in operations]
     assert len(set(ids)) == len(ids)
     for method, path, operation in operations:

@@ -113,7 +113,7 @@ Order matters: A, B and then C need the documents from B. D and E need them too.
 
 ## I · Claude provider and the iPhone groundwork (added 2026-11-07)
 
-> Covers CN-2.1 to CN-2.5 and AS-3.1 to AS-3.4. Only public or synthetic documents go to Claude (DEC-95).
+> Covers CN-2.1 to CN-2.5 and AS-3.1 to AS-3.5. Only public or synthetic documents go to Claude (DEC-95).
 > Do these with the default local setup first (TC-26), then with `LEGALLENS_LLM_PROVIDER=claude` (TC-27 to TC-29).
 
 - [ ] **TC-26 Local stays the default.** Start the app with no provider setting. Open *Where your data goes* and *Settings → About*.
@@ -127,6 +127,13 @@ Order matters: A, B and then C need the documents from B. D and E need them too.
 - [ ] **TC-30 Matter events without a reload.** Upload a document and stay on the page.
   Check: progress and "Ready" appear without reloading (events now stream over fetch, AS-3.3). Turn Wi-Fi off for a few seconds and on again: updates resume.
 
+- [ ] **TC-31 Agreement before Claude.** With Claude on and a new account (or `ai_consent_version` cleared in the database), sign in.
+  Check: a full-screen "Where your data goes" appears before anything else; it names Anthropic and says what is sent and what stays. Agree is disabled until the box is ticked. Press Escape and click outside: it does not close. Tick, Agree: you reach the matters list and it does not return on reload.
+- [ ] **TC-32 Declining sends nothing.** On the same screen press Sign out, sign in again.
+  Check: the screen comes back. Ask nothing; in a terminal, `curl` a message send with your session and see 403 `ai_consent_required` (the automated test does this for all five routes).
+- [ ] **TC-33 Sign out ends the session.** Sign out from the account menu, then press the browser Back button.
+  Check: you are at the sign-in page and the matters do not load without signing in again. (Before 2026-11-07 the menu did not end the session on the server.)
+
 **Waiting for the iPhone build (AS-4):** an Ask streams on cellular; the app stays signed in after quitting; sign-in with the token on a real device.
 
 **Automated evidence (no human step needed)**
@@ -138,8 +145,9 @@ Order matters: A, B and then C need the documents from B. D and E need them too.
 | AS-3.2 | Token only after password; useless before the code; header is the only credential; no `?token=`; logout, idle limit, CSRF and lockout hold; `no-store` on the token reply; a dead token is forgotten safely | `tests/security/test_bearer_auth.py`, `frontend/src/api/http/token.test.ts` |
 | AS-3.3 | Matter events carry the bearer header, resume with Last-Event-ID, and stop on unsubscribe | `frontend/src/api/http/HttpApiClient.test.ts` |
 | AS-3.4 | Only `capacitor://localhost` is allowed; other origins, headers and methods are refused; no credentials | `tests/security/test_cors.py` |
+| AS-3.5 | The five routes that reach Claude refuse until the lawyer agrees; agreeing is audited; old wording is refused; local mode asks nothing; the screen needs the box ticked and sends the version it showed | `tests/security/test_ai_consent.py`, `frontend/src/features/auth/AiConsentGate.test.tsx` |
 
-Last full run 2026-11-07: backend 298 passed, frontend 121 passed.
+Last full run 2026-11-07: backend 306 passed, frontend 124 passed.
 
 ---
 
@@ -147,7 +155,7 @@ Last full run 2026-11-07: backend 298 passed, frontend 121 passed.
 
 | | Count |
 |---|---|
-| Passed | __ / 38 |
+| Passed | __ / 41 |
 | Failed | __ |
 | Blocked | __ |
 

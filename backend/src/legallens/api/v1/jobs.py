@@ -17,7 +17,7 @@ from legallens.errors import ApiError
 from legallens.jobs.queue import request_cancel
 from legallens.schemas.common import ErrorInfo, Page, problem_responses
 from legallens.schemas.jobs import JobOut, JobResult, SummaryAccepted, SummaryListItem, SummaryOut, SummaryRequest
-from legallens.services import events, summaries
+from legallens.services import ai_consent, events, summaries
 from legallens.services.chat import dumps
 
 router = APIRouter(tags=["F · Summaries and jobs"])
@@ -47,7 +47,10 @@ def job_out(job: Job) -> JobOut:
     operation_id="createSummary",
     responses=problem_responses(401, 403, 404, 409, 422),
 )
-def create_summary(document_id: str, body: SummaryRequest, me: CurrentUser, db: WriteDB) -> SummaryAccepted:
+def create_summary(
+    document_id: str, body: SummaryRequest, me: CurrentUser, db: WriteDB, settings: AppSettings
+) -> SummaryAccepted:
+    ai_consent.ensure(settings, me.user)
     document, _ = load_in_matter(db, me, Document, document_id, writable=True, label="Document")
     summary, job_id = summaries.start(
         db, user_id=me.user.id, document=document, template=body.template, audience=body.audience
