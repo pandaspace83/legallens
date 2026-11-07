@@ -511,6 +511,17 @@ The answers to AS-0 in `APPSTORE_TODO.md`.
   provider only). The wording has a version; when it changes materially the version is bumped and everyone is asked
   again. Declining signs the lawyer out. The screen does not restrict which documents may be used: the app is for
   attorneys, who decide that themselves (removed at the lawyer's request, 2026-11-07). Decided 2026-11-07.
+- **DEC-106 Phase A is the invite-only TestFlight demo; real attorneys wait for Phase B.** *(accepted 2026-11-07)*
+  LegalLens's sole purpose is to help licensed attorneys analyze and summarize legal documents in plain language; it
+  does not gather, sell or circulate data (no analytics, advertising, tracking or third-party SDKs, building on DEC-55
+  and DEC-56). **Phase A (now):** finish the TestFlight demo (AS-4 to AS-6) with invite-only accounts (DEC-102) on the
+  synthetic sample matter; DEC-94, DEC-95 and DEC-97 stay in force, so no real client document is used. **Phase B
+  (before the App Store or any real client document):** the RL-1 to RL-9 checklist in APPSTORE_TODO.md: a legal
+  entity and insurance (Apple 5.1.1(ix); replaces DEC-100), a zero-data-retention agreement with Anthropic (DEF-23),
+  attorney-reviewed terms and privacy policy, a bar-license check before each invite (DEF-26), honest copy for a
+  hosted app, "verify the output" notices (Anthropic Commercial Terms D.3), keys outside the data folder, delete-all-
+  my-data, breach notice to attorneys, and Unlisted App Distribution. Found by the Opus review of 2026-11-07.
+  Decided 2026-11-07.
 
 ---
 

@@ -14,11 +14,14 @@ import { errorText } from '@/lib/errors'
 const SENT = [
   'The questions you ask, and the passages of your documents that LegalLens picks to answer them.',
   'For a summary or a draft, the text of the document being worked on.',
+  'Under its commercial terms, Anthropic does not train its models on this text and deletes it within 30 days. Text its safety systems flag may be kept for up to 2 years.',
 ]
 
+// Checked against Anthropic's privacy articles and Commercial Terms on 2026-11-07. Change this wording (and bump
+// CURRENT_VERSION in services/ai_consent.py) if a zero-data-retention agreement is approved.
 const KEPT = [
   'Your uploaded files, the database and the search index stay in LegalLens’s own storage. Files are not uploaded to Anthropic.',
-  'Anthropic’s own terms apply to what it receives. LegalLens does not use your text to train any model.',
+  'LegalLens does not use your text to train any model, and has no analytics, advertising or tracking.',
 ]
 
 export function AiConsentGate() {
