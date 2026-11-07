@@ -39,6 +39,8 @@ class User(Base):
     last_login_at: Mapped[datetime | None]
     failed_logins: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     locked_until: Mapped[datetime | None]
+    ai_consent_at: Mapped[datetime | None]  # AS-3.5: agreed to send text to a third-party AI
+    ai_consent_version: Mapped[str | None] = mapped_column(String)
 
 
 class AuthSession(Base):

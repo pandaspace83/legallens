@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+    "/api/v1/auth/ai-consent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Accept Ai Consent
+         * @description Records that this lawyer read "Where your data goes" and agreed to text going to Anthropic (AS-3.5).
+         */
+        post: operations["acceptAiConsent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/dev-session": {
         parameters: {
             query?: never;
@@ -827,6 +847,23 @@ export interface components {
              * @default false
              */
             told_tool: boolean;
+        };
+        /** AiConsentAccept */
+        AiConsentAccept: {
+            /** Version */
+            version: string;
+        };
+        /**
+         * AiConsentState
+         * @description Whether this account may send text to the AI (AS-3.5). `required` is true until it has agreed.
+         */
+        AiConsentState: {
+            /** Given At */
+            given_at?: string | null;
+            /** Required */
+            required: boolean;
+            /** Version */
+            version: string;
         };
         /** AppInfo */
         AppInfo: {
@@ -1804,6 +1841,7 @@ export interface components {
         };
         /** Me */
         Me: {
+            ai_consent: components["schemas"]["AiConsentState"];
             app: components["schemas"]["AppInfo"];
             /**
              * Auth Mode
@@ -2392,6 +2430,60 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    acceptAiConsent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiConsentAccept"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Me"];
+                };
+            };
+            /** @description Problem */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Problem"];
+                    "application/problem+json": unknown;
+                };
+            };
+            /** @description Problem */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Problem"];
+                    "application/problem+json": unknown;
+                };
+            };
+            /** @description Problem */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Problem"];
+                    "application/problem+json": unknown;
+                };
+            };
+        };
+    };
     devSession: {
         parameters: {
             query?: never;

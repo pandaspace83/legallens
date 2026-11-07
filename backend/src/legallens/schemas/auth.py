@@ -68,8 +68,21 @@ class AppInfo(ResponseModel):
     prompt_version: str | None = None
 
 
+class AiConsentState(ResponseModel):
+    """Whether this account may send text to the AI (AS-3.5). `required` is true until it has agreed."""
+
+    required: bool
+    version: str
+    given_at: Timestamp | None = None
+
+
+class AiConsentAccept(RequestModel):
+    version: str
+
+
 class Me(ResponseModel):
     user: UserOut
     session: SessionInfo
     auth_mode: Literal["dev", "real"]
     app: AppInfo
+    ai_consent: AiConsentState

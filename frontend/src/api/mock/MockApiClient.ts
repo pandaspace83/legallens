@@ -273,6 +273,11 @@ export function createMockApiClient(): ApiClient {
       return { ...db.user }
     },
 
+    async acceptAiConsent() {
+      await latency(100, 200)
+      return db.user
+    },
+
     async signOut() {
       await latency(100, 200)
     },

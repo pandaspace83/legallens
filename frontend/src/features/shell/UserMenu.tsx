@@ -1,6 +1,6 @@
 import { Keyboard, Lock, LogOut, Settings, ShieldCheck } from 'lucide-react'
 import { useNavigate } from 'react-router'
-import { useMe } from '@/api/queries/auth'
+import { useMe, useSignOut } from '@/api/queries/auth'
 import { Avatar } from '@/components/common/Avatar'
 import {
   Menu,
@@ -16,6 +16,7 @@ import { useShortcutsSheet } from '@/stores/ui'
 export function UserMenu() {
   const navigate = useNavigate()
   const { data: me } = useMe()
+  const signOut = useSignOut()
   const lock = useSession((s) => s.lock)
   const showShortcuts = useShortcutsSheet((s) => s.setOpen)
 
@@ -53,7 +54,10 @@ export function UserMenu() {
         </MenuItem>
         <MenuItem
           icon={<LogOut />}
-          onSelect={() => navigate('/login', { state: { signedOut: 'manual' } })}
+          onSelect={() => {
+            navigate('/login', { state: { signedOut: 'manual' } })
+            void signOut()
+          }}
         >
           Sign out
         </MenuItem>

@@ -5,7 +5,7 @@ from typing import Literal
 from fastapi import APIRouter, Query, Response
 from sqlalchemy import select
 
-from legallens.api.deps import CurrentUser, ReadDB, WriteDB, load_in_matter, load_matter
+from legallens.api.deps import AppSettings, CurrentUser, ReadDB, WriteDB, load_in_matter, load_matter
 from legallens.db.models import Conversation, Document, Draft, Matter
 from legallens.errors import ApiError
 from legallens.jobs.queue import enqueue
@@ -24,7 +24,7 @@ from legallens.schemas.drafts import (
     SectionProposalOut,
 )
 from legallens.schemas.jobs import JobAccepted
-from legallens.services import audit
+from legallens.services import ai_consent, audit
 from legallens.services import drafts as svc
 
 router = APIRouter(prefix="/drafts", tags=["G · Drafts"])
@@ -121,9 +121,10 @@ def update_draft(draft_id: str, body: DraftPatch, me: CurrentUser, db: WriteDB) 
     responses=problem_responses(401, 403, 404, 409, 422),
 )
 def regenerate_section(
-    draft_id: str, section_id: str, body: RegenerateRequest, me: CurrentUser, db: WriteDB
+    draft_id: str, section_id: str, body: RegenerateRequest, me: CurrentUser, db: WriteDB, settings: AppSettings
 ) -> JobAccepted:
     """Regenerates one section as a background job; the result is a new version with a diff (DEC-44)."""
+    ai_consent.ensure(settings, me.user)
     draft, _ = load_in_matter(db, me, Draft, draft_id, writable=True, label="Draft")
     version = svc.current(db, draft)
     if version is None or draft.status in ("generating", "failed"):
@@ -156,10 +157,11 @@ def regenerate_section(
     responses=problem_responses(401, 403, 404, 409, 422),
 )
 def propose_section_rewrite(
-    draft_id: str, section_id: str, body: ProposalRequest, me: CurrentUser, db: WriteDB
+    draft_id: str, section_id: str, body: ProposalRequest, me: CurrentUser, db: WriteDB, settings: AppSettings
 ) -> SectionProposalOut:
     """A rewrite of one section as a preview with its diff (decision 3). Nothing changes until PATCH sends
     `accept_proposal`; a preview made before another change is refused with 409 proposal_stale."""
+    ai_consent.ensure(settings, me.user)
     draft, _ = load_in_matter(db, me, Draft, draft_id, writable=True, label="Draft")
     proposal = svc.propose_rewrite(db, me.user.id, draft, section_id, body.instruction)
     db.commit()
@@ -171,9 +173,12 @@ def propose_section_rewrite(
     operation_id="proposeClaimResponse",
     responses=problem_responses(401, 403, 404, 409, 422),
 )
-def propose_claim_response(draft_id: str, claim_id: str, me: CurrentUser, db: WriteDB) -> ClaimProposalOut:
+def propose_claim_response(
+    draft_id: str, claim_id: str, me: CurrentUser, db: WriteDB, settings: AppSettings
+) -> ClaimProposalOut:
     """A new section answering a point the draft doesn't answer yet (DEC-47), as a preview. Accepted with PATCH
     `accept_proposal`, which adds it before the closing."""
+    ai_consent.ensure(settings, me.user)
     draft, _ = load_in_matter(db, me, Draft, draft_id, writable=True, label="Draft")
     proposal = svc.propose_claim_response(db, me.user.id, draft, claim_id)
     db.commit()

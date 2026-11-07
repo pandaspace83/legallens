@@ -161,18 +161,25 @@ export function createHttpApiClient(): ApiClient {
     },
     async verifyMfa(code) {
       const me = await request<Wire['Me']>('/auth/mfa/verify', { method: 'POST', body: { code } })
-      return toUser(me.user, { session: me.session, app: me.app })
+      return toUser(me.user, { session: me.session, app: me.app, ai_consent: me.ai_consent })
     },
     async getMe() {
       const me = await request<Wire['Me']>('/auth/me')
-      return toUser(me.user, { session: me.session, app: me.app })
+      return toUser(me.user, { session: me.session, app: me.app, ai_consent: me.ai_consent })
     },
     async updateLicensingStates(states) {
       const me = await request<Wire['Me']>('/auth/me', {
         method: 'PATCH',
         body: { licensing_states: states },
       })
-      return toUser(me.user, { session: me.session, app: me.app })
+      return toUser(me.user, { session: me.session, app: me.app, ai_consent: me.ai_consent })
+    },
+    async acceptAiConsent(version) {
+      const me = await request<Wire['Me']>('/auth/ai-consent', {
+        method: 'POST',
+        body: { version },
+      })
+      return toUser(me.user, { session: me.session, app: me.app, ai_consent: me.ai_consent })
     },
     async signOut() {
       try {

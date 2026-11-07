@@ -133,10 +133,15 @@ runs somewhere else**. Three things change before any Xcode work:
       *Built 2026-11-07: setting `LEGALLENS_CORS_ORIGINS` (default `["capacitor://localhost"]`); outermost middleware;
       allows Authorization, Content-Type, X-LegalLens-Request, Idempotency-Key and Last-Event-ID; never credentials or
       `*`; exposes Content-Disposition and X-Request-ID. Other origins get no CORS headers and a 400 on preflight.*
-- [ ] **AS-3.5 Consent before anything reaches Claude.** Apple asks apps to say which third-party AI receives
+- [x] **AS-3.5 Consent before anything reaches Claude.** Apple asks apps to say which third-party AI receives
       personal data and to get permission first (guideline 5.1.2). Show "Where your data goes" before the first upload
       or question and store the answer in the AI consent record. *Check:* a new account cannot send anything to
       Claude before agreeing.
+      *Built 2026-11-07 as DEC-105: a full-screen "Where your data goes" agreement (tick box, Agree, or Sign out) shown
+      while Claude is the provider and the account has not agreed; stored on the user with a wording version; the
+      server answers 403 `ai_consent_required` on send, summarize, regenerate and both proposals until then. Also
+      fixed: the UI's Sign out now ends the session on the server (it only navigated before). The wording is a
+      draft for the lawyer to approve.*
 - [x] **AS-3.6 Delete my account** (only if AS-0.6 chose sign-up): removes the user, their matters, documents and
       embeddings, and says what happens to backups. *Check:* a test proves the rows and files are gone.
       *Not needed 2026-11-01: accounts are invite-only (DEC-102).*

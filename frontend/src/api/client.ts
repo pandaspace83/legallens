@@ -41,6 +41,8 @@ export interface ApiClient {
   getMe(): Promise<User>
   /** PATCH /auth/me: the states the lawyer is licensed in (DEC-29, INT-3.10). */
   updateLicensingStates(states: string[]): Promise<User>
+  /** POST /auth/ai-consent: the lawyer agreed to text going to the AI company (AS-3.5). */
+  acceptAiConsent(version: string): Promise<User>
   /** POST /auth/logout */
   signOut(): Promise<void>
 

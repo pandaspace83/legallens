@@ -8,6 +8,8 @@ from legallens.config import Settings
 from legallens.db.models import AuthSession, User
 from legallens.errors import ApiError
 from legallens.schemas.auth import (
+    AiConsentAccept,
+    AiConsentState,
     AppInfo,
     DevSessionRequest,
     LoginRequest,
@@ -19,8 +21,10 @@ from legallens.schemas.auth import (
     UserOut,
 )
 from legallens.schemas.common import problem_responses
+from legallens.services import ai_consent, audit
 from legallens.services import auth as auth_service
 from legallens.services.auth import COOKIE_NAME, Principal, request_token
+from legallens.timeutil import utcnow
 
 router = APIRouter(prefix="/auth", tags=["A · Auth"])
 
@@ -51,6 +55,11 @@ def build_me(user: User, expires_at: object, settings: Settings) -> Me:
         session=SessionInfo(expires_at=expires_at, idle_timeout_s=settings.session_idle_minutes * 60),  # type: ignore[arg-type]
         auth_mode=settings.auth_mode,
         app=app_info(settings),
+        ai_consent=AiConsentState(
+            required=ai_consent.required(settings, user),
+            version=ai_consent.CURRENT_VERSION,
+            given_at=user.ai_consent_at,
+        ),
     )
 
 
@@ -130,6 +139,28 @@ def update_me(body: MeUpdate, me: CurrentUser, db: WriteDB, settings: AppSetting
     if user is None:  # pragma: no cover - the session's user always exists
         raise ApiError(401, "not_authenticated", "Sign in again.")
     user.licensing_states = body.licensing_states
+    db.commit()
+    return build_me(user, me.expires_at, settings)
+
+
+@router.post("/ai-consent", operation_id="acceptAiConsent", responses=problem_responses(401, 409, 422))
+def accept_ai_consent(body: AiConsentAccept, me: CurrentUser, db: WriteDB, settings: AppSettings) -> Me:
+    """Records that this lawyer read "Where your data goes" and agreed to text going to Anthropic (AS-3.5)."""
+    if body.version != ai_consent.CURRENT_VERSION:
+        raise ApiError(409, "consent_version_changed", "The wording has changed. Read it again and agree.")
+    user = db.get(User, me.user.id)
+    if user is None:  # pragma: no cover - the session's user always exists
+        raise ApiError(401, "not_authenticated", "Sign in again.")
+    user.ai_consent_at = utcnow()
+    user.ai_consent_version = ai_consent.CURRENT_VERSION
+    audit.append(
+        db,
+        action="ai_consent_given",
+        entity_type="user",
+        entity_id=user.id,
+        user_id=user.id,
+        details={"version": ai_consent.CURRENT_VERSION, "provider": settings.llm_provider},
+    )
     db.commit()
     return build_me(user, me.expires_at, settings)
 

@@ -12,7 +12,7 @@ from legallens.errors import ApiError
 from legallens.orchestrator import get_orchestrator
 from legallens.schemas.chat import FeedbackIn, FeedbackOut, RunStatusOut, SendMessage, SendMessageAccepted
 from legallens.schemas.common import problem_responses
-from legallens.services import audit
+from legallens.services import ai_consent, audit
 from legallens.services.auth import Principal
 from legallens.services.chat import create_turn, done_payload_from_db, dumps, stream_url
 from legallens.timeutil import utcnow
@@ -52,6 +52,7 @@ async def send_message(
         raise ApiError(428, "idempotency_key_required", "Send an Idempotency-Key header with each new message.")
     app = request.app
     database, settings = app.state.database, app.state.settings
+    ai_consent.ensure(settings, me.user)
 
     def _create():  # type: ignore[no-untyped-def]
         with database.write_session() as db:
