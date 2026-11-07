@@ -128,7 +128,7 @@ Order matters: A, B and then C need the documents from B. D and E need them too.
   Check: progress and "Ready" appear without reloading (events now stream over fetch, AS-3.3). Turn Wi-Fi off for a few seconds and on again: updates resume.
 
 - [ ] **TC-31 Agreement before Claude.** With Claude on and a new account (or `ai_consent_version` cleared in the database), sign in.
-  Check: a full-screen "Where your data goes" appears before anything else; it names Anthropic, says what is sent and what stays, and repeats "public or synthetic documents only". Agree is disabled until the box is ticked. Press Escape and click outside: it does not close. Tick, Agree: you reach the matters list and it does not return on reload.
+  Check: a full-screen "Where your data goes" appears before anything else; it names Anthropic and says what is sent and what stays. Agree is disabled until the box is ticked. Press Escape and click outside: it does not close. Tick, Agree: you reach the matters list and it does not return on reload.
 - [ ] **TC-32 Declining sends nothing.** On the same screen press Sign out, sign in again.
   Check: the screen comes back. Ask nothing; in a terminal, `curl` a message send with your session and see 403 `ai_consent_required` (the automated test does this for all five routes).
 - [ ] **TC-33 Sign out ends the session.** Sign out from the account menu, then press the browser Back button.

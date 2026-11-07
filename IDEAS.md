@@ -509,8 +509,8 @@ The answers to AS-0 in `APPSTORE_TODO.md`.
   answer 403 `ai_consent_required` until the lawyer has agreed, so a modified client cannot skip the screen. Reading,
   uploading and browsing are not blocked (nothing is sent to Claude). Agreeing writes an audit entry (version and
   provider only). The wording has a version; when it changes materially the version is bumped and everyone is asked
-  again. Declining signs the lawyer out. The screen also repeats DEC-95: use only public or synthetic documents in the
-  demo. Decided 2026-11-07.
+  again. Declining signs the lawyer out. The screen does not restrict which documents may be used: the app is for
+  attorneys, who decide that themselves (removed at the lawyer's request, 2026-11-07). Decided 2026-11-07.
 
 ---
 

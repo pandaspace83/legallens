@@ -75,11 +75,6 @@ export function AiConsentGate() {
                 </ul>
               </section>
 
-              <p className="mt-6 rounded-control border border-line bg-surface px-3.5 py-3 text-[13.5px] leading-relaxed text-fg-muted">
-                In this version, use only public or synthetic documents. Do not enter real client
-                information.
-              </p>
-
               {accept.error ? (
                 <div
                   role="alert"
