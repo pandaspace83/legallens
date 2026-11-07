@@ -1643,6 +1643,12 @@ export interface components {
             email: string;
             /** Password */
             password: string;
+            /**
+             * Session Transport
+             * @default cookie
+             * @enum {string}
+             */
+            session_transport: "cookie" | "bearer";
         };
         /** LoginResponse */
         LoginResponse: {
@@ -1651,6 +1657,8 @@ export interface components {
              * @default true
              */
             mfa_required: boolean;
+            /** Token */
+            token?: string | null;
         };
         /** LowConfidencePage */
         LowConfidencePage: {

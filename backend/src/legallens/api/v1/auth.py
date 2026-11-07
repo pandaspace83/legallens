@@ -20,7 +20,7 @@ from legallens.schemas.auth import (
 )
 from legallens.schemas.common import problem_responses
 from legallens.services import auth as auth_service
-from legallens.services.auth import COOKIE_NAME, Principal
+from legallens.services.auth import COOKIE_NAME, Principal, request_token
 
 router = APIRouter(prefix="/auth", tags=["A · Auth"])
 
@@ -66,7 +66,9 @@ def _set_cookie(response: Response, settings: Settings, token: str) -> None:
     )
 
 
-@router.post("/login", operation_id="login", responses=problem_responses(401, 422, 423))
+@router.post(
+    "/login", operation_id="login", response_model_exclude_none=True, responses=problem_responses(401, 422, 423)
+)
 def login(body: LoginRequest, response: Response, db: WriteDB, settings: AppSettings) -> LoginResponse:
     """Checks the password and starts the MFA step. The cookie it sets is not usable until the code is verified."""
     user = auth_service.find_user(db, body.email)
@@ -78,6 +80,10 @@ def login(body: LoginRequest, response: Response, db: WriteDB, settings: AppSett
         raise ApiError(401, "invalid_credentials", "The email or password is not correct.")
     token, _ = auth_service.create_session(db, settings, user, mfa_verified=False)
     db.commit()
+    if body.session_transport == "bearer":
+        # A token in a body must never be stored by a cache along the way (as RFC 6749 asks of token responses).
+        response.headers["Cache-Control"] = "no-store"
+        return LoginResponse(mfa_required=True, token=token)
     _set_cookie(response, settings, token)
     return LoginResponse(mfa_required=True)
 
@@ -86,7 +92,7 @@ def login(body: LoginRequest, response: Response, db: WriteDB, settings: AppSett
 def verify_mfa(
     body: MfaVerifyRequest, request: Request, db: WriteDB, database: AppDatabase, settings: AppSettings
 ) -> Me:
-    pending = auth_service.resolve(database, settings, request.cookies.get(COOKIE_NAME), require_mfa=False)
+    pending = auth_service.resolve(database, settings, request_token(request), require_mfa=False)
     session_row = db.get(AuthSession, pending.session_id)
     user = db.get(User, pending.user.id)
     if session_row is None or user is None:

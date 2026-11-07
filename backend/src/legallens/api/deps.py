@@ -17,7 +17,7 @@ from legallens.db.engine import Database
 from legallens.db.models import Matter
 from legallens.db.scope import set_scope, unscoped
 from legallens.errors import forbidden_matter, matter_closed, not_found
-from legallens.services.auth import COOKIE_NAME, Principal, resolve
+from legallens.services.auth import Principal, request_token, resolve
 
 T = TypeVar("T")
 
@@ -48,7 +48,7 @@ def write_db(request: Request) -> Iterator[Session]:
 
 
 def current_principal(request: Request) -> Principal:
-    return resolve(get_database(request), get_app_settings(request), request.cookies.get(COOKIE_NAME))
+    return resolve(get_database(request), get_app_settings(request), request_token(request))
 
 
 ReadDB = Annotated[Session, Depends(read_db)]
