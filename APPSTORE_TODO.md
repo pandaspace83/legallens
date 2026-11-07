@@ -128,8 +128,11 @@ runs somewhere else**. Three things change before any Xcode work:
       *Built 2026-11-07: `subscribeMatterEvents` reads over `readSse` (Authorization header, `Last-Event-ID` resume,
       retries without limit while the page listens, stops on unsubscribe). Tests cover the bearer header, the resume
       and the stop. The cellular check waits for AS-4.*
-- [ ] **AS-3.4 CORS for the app's origin only** (`capacitor://localhost`). *Check:* a request from any other origin
+- [x] **AS-3.4 CORS for the app's origin only** (`capacitor://localhost`). *Check:* a request from any other origin
       is refused.
+      *Built 2026-11-07: setting `LEGALLENS_CORS_ORIGINS` (default `["capacitor://localhost"]`); outermost middleware;
+      allows Authorization, Content-Type, X-LegalLens-Request, Idempotency-Key and Last-Event-ID; never credentials or
+      `*`; exposes Content-Disposition and X-Request-ID. Other origins get no CORS headers and a 400 on preflight.*
 - [ ] **AS-3.5 Consent before anything reaches Claude.** Apple asks apps to say which third-party AI receives
       personal data and to get permission first (guideline 5.1.2). Show "Where your data goes" before the first upload
       or question and store the answer in the AI consent record. *Check:* a new account cannot send anything to

@@ -37,6 +37,9 @@ class Settings(BaseSettings):
     session_idle_minutes: int = 30
     session_max_hours: int = 12
     cookie_secure: bool = False
+    # Origins other than the API's own that may call it from a browser (AS-3.4): the iOS app's WebView and nothing
+    # else. Never "*", and credentials (cookies) are never allowed cross-origin; the app sends a bearer token.
+    cors_origins: list[str] = ["capacitor://localhost"]
 
     # The built frontend (`npm run build:app` in frontend/), served from the same origin as the API (INT-5.1).
     # Defaults to <repo>/frontend/dist when that folder exists; the API alone runs without it.

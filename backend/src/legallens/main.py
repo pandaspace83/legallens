@@ -6,6 +6,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.telemetry import TelemetryConfig
 from starlette.types import ASGIApp, Receive, Scope, Send
 
@@ -130,6 +131,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     if settings.auth_mode == "real":
         app.add_middleware(RequireCsrfHeader)
     app.add_middleware(RequestContextMiddleware)
+    # Outermost, so a preflight is answered before anything else and error replies carry the headers too (AS-3.4).
+    if settings.cors_origins:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=settings.cors_origins,
+            allow_credentials=False,
+            allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+            allow_headers=["Authorization", "Content-Type", "X-LegalLens-Request", "Idempotency-Key", "Last-Event-ID"],
+            expose_headers=["Content-Disposition", "X-Request-ID"],
+            max_age=600,
+        )
     app.include_router(api_router, prefix="/api/v1")
     # Last, so the API, /docs and /openapi.json keep their own paths.
     frontend = settings.frontend_path
