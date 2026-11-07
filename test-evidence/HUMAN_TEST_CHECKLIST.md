@@ -111,11 +111,43 @@ Order matters: A, B and then C need the documents from B. D and E need them too.
 
 ---
 
+## I · Claude provider and the iPhone groundwork (added 2026-11-07)
+
+> Covers CN-2.1 to CN-2.5 and AS-3.1 to AS-3.4. Only public or synthetic documents go to Claude (DEC-95).
+> Do these with the default local setup first (TC-26), then with `LEGALLENS_LLM_PROVIDER=claude` (TC-27 to TC-29).
+
+- [ ] **TC-26 Local stays the default.** Start the app with no provider setting. Open *Where your data goes* and *Settings → About*.
+  Check: the page still says nothing leaves the computer, the badge says local, and About shows the provider as local.
+- [ ] **TC-27 Claude switched on.** Put the key in the Keychain item `legallens-anthropic`, start with `LEGALLENS_LLM_PROVIDER=claude`, open *Where your data goes*.
+  Check: the page and the badge say text is sent to Anthropic's Claude, in plain words, and About shows the provider as Claude.
+- [ ] **TC-28 Provider on the consent record.** With Claude on, create a matter and accept the AI consent, then open the matter details.
+  Check: the consent record names the provider that was in force. It was set by the server, not the browser.
+- [ ] **TC-29 A real Ask on Claude.** On a public document (the Iowa opinion), ask a factual question. *This costs about $0.001.*
+  Check: the answer is correct, complete (not cut off) and cited; the cost shown matches the Anthropic console. Recorded 2026-11-06: $0.000821, then $0.000630 after the answer-length fix.
+- [ ] **TC-30 Matter events without a reload.** Upload a document and stay on the page.
+  Check: progress and "Ready" appear without reloading (events now stream over fetch, AS-3.3). Turn Wi-Fi off for a few seconds and on again: updates resume.
+
+**Waiting for the iPhone build (AS-4):** an Ask streams on cellular; the app stays signed in after quitting; sign-in with the token on a real device.
+
+**Automated evidence (no human step needed)**
+
+| Step | What is checked | Where |
+|---|---|---|
+| CN-2.4 | Claude calls reach only api.anthropic.com; provider on the consent record; fake client checked against the real SDK signature | `tests/security/test_hygiene.py`, `tests/llm/test_claude_chat.py`, `tests/api/test_provider_record.py` |
+| AS-3.1 | The API address comes from `VITE_API_BASE`; unset changes nothing | `frontend/src/api/http/request.test.ts` |
+| AS-3.2 | Token only after password; useless before the code; header is the only credential; no `?token=`; logout, idle limit, CSRF and lockout hold; `no-store` on the token reply; a dead token is forgotten safely | `tests/security/test_bearer_auth.py`, `frontend/src/api/http/token.test.ts` |
+| AS-3.3 | Matter events carry the bearer header, resume with Last-Event-ID, and stop on unsubscribe | `frontend/src/api/http/HttpApiClient.test.ts` |
+| AS-3.4 | Only `capacitor://localhost` is allowed; other origins, headers and methods are refused; no credentials | `tests/security/test_cors.py` |
+
+Last full run 2026-11-07: backend 298 passed, frontend 121 passed.
+
+---
+
 ## Result
 
 | | Count |
 |---|---|
-| Passed | __ / 33 |
+| Passed | __ / 38 |
 | Failed | __ |
 | Blocked | __ |
 
