@@ -500,6 +500,28 @@ The answers to AS-0 in `APPSTORE_TODO.md`.
   Keychain, wired in at AS-4.1 once Capacitor exists; until then the client's token store is an interface with an
   in-memory version for tests. CORS (AS-3.4) allows the headers this needs and never allows credentials. Decided
   2026-11-06.
+- **DEC-105 Each lawyer agrees to "Where your data goes" before any text reaches Claude (AS-3.5).** *(accepted
+  2026-11-07)* Apple (guideline 5.1.2) wants the app to say which third-party AI receives personal data and to get
+  permission first. The agreement is the signed-in lawyer's own, once per account, stored on the user
+  (`ai_consent_at`, `ai_consent_version`); it is separate from the client's consent record on a matter (DEC-60). It
+  applies only while `llm_provider` is `claude`; with the local model nothing leaves the machine and nothing is asked.
+  The server enforces it: sending a message, creating a summary, regenerating a section and both proposal routes
+  answer 403 `ai_consent_required` until the lawyer has agreed, so a modified client cannot skip the screen. Reading,
+  uploading and browsing are not blocked (nothing is sent to Claude). Agreeing writes an audit entry (version and
+  provider only). The wording has a version; when it changes materially the version is bumped and everyone is asked
+  again. Declining signs the lawyer out. The screen does not restrict which documents may be used: the app is for
+  attorneys, who decide that themselves (removed at the lawyer's request, 2026-11-07). Decided 2026-11-07.
+- **DEC-106 Phase A is the invite-only TestFlight demo; real attorneys wait for Phase B.** *(accepted 2026-11-07)*
+  LegalLens's sole purpose is to help licensed attorneys analyze and summarize legal documents in plain language; it
+  does not gather, sell or circulate data (no analytics, advertising, tracking or third-party SDKs, building on DEC-55
+  and DEC-56). **Phase A (now):** finish the TestFlight demo (AS-4 to AS-6) with invite-only accounts (DEC-102) on the
+  synthetic sample matter; DEC-94, DEC-95 and DEC-97 stay in force, so no real client document is used. **Phase B
+  (before the App Store or any real client document):** the RL-1 to RL-9 checklist in APPSTORE_TODO.md: a legal
+  entity and insurance (Apple 5.1.1(ix); replaces DEC-100), a zero-data-retention agreement with Anthropic (DEF-23),
+  attorney-reviewed terms and privacy policy, a bar-license check before each invite (DEF-26), honest copy for a
+  hosted app, "verify the output" notices (Anthropic Commercial Terms D.3), keys outside the data folder, delete-all-
+  my-data, breach notice to attorneys, and Unlisted App Distribution. Found by the Opus review of 2026-11-07.
+  Decided 2026-11-07.
 
 ---
 

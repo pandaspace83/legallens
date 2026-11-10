@@ -19,6 +19,12 @@
     "converter": "docling",
     "scanner": "clamd",
     "model_id": "stub-orchestrator",
-    "prompt_version": "stub-0"
+    "prompt_version": "stub-0",
+    "llm_provider": "local"
+  },
+  "ai_consent": {
+    "required": false,
+    "version": "1",
+    "given_at": null
   }
 }

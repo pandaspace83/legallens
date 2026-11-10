@@ -47,6 +47,16 @@ describe('people and matters', () => {
     expect(toUser({ ...as<Wire['Me']>(me).user, name: 'Madonna' }).initials).toBe('M')
   })
 
+  it('carries whether the AI agreement is still needed (AS-3.5)', () => {
+    const wire = as<Wire['Me']>(me)
+    expect(toUser(wire.user, { ai_consent: wire.ai_consent })).toMatchObject({
+      aiConsentRequired: false,
+      aiConsentVersion: '1',
+    })
+    const asked = { required: true, version: '2', given_at: null }
+    expect(toUser(wire.user, { ai_consent: asked }).aiConsentRequired).toBe(true)
+  })
+
   it('maps a list row and the detail to the same view model', () => {
     const row = as<Wire['Page_MatterSummaryOut_']>(matters).items.find((m) =>
       m.name.includes('Smith'),

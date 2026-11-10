@@ -36,7 +36,11 @@ type Wire = components['schemas']
 
 export function toUser(
   wire: Wire['UserOut'],
-  extra: { session?: Wire['SessionInfo']; app?: Wire['AppInfo'] } = {},
+  extra: {
+    session?: Wire['SessionInfo']
+    app?: Wire['AppInfo']
+    ai_consent?: Wire['AiConsentState']
+  } = {},
 ): User {
   const words = wire.name.trim().split(/\s+/).filter(Boolean)
   const initial = (word: string | undefined) => (word ? ([...word][0] ?? '').toUpperCase() : '')
@@ -50,6 +54,8 @@ export function toUser(
     idleTimeoutMs: extra.session ? extra.session.idle_timeout_s * 1000 : undefined,
     standInEngine: extra.app ? extra.app.orchestrator === 'stub' : undefined,
     llmProvider: extra.app?.llm_provider,
+    aiConsentRequired: extra.ai_consent?.required,
+    aiConsentVersion: extra.ai_consent?.version,
   }
 }
 

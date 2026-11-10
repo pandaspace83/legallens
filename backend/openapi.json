@@ -144,6 +144,51 @@
         "title": "AiConsent",
         "type": "object"
       },
+      "AiConsentAccept": {
+        "additionalProperties": false,
+        "properties": {
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version"
+        ],
+        "title": "AiConsentAccept",
+        "type": "object"
+      },
+      "AiConsentState": {
+        "description": "Whether this account may send text to the AI (AS-3.5). `required` is true until it has agreed.",
+        "properties": {
+          "given_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Given At"
+          },
+          "required": {
+            "title": "Required",
+            "type": "boolean"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "required",
+          "version"
+        ],
+        "title": "AiConsentState",
+        "type": "object"
+      },
       "AppInfo": {
         "properties": {
           "converter": {
@@ -3085,6 +3130,9 @@
       },
       "Me": {
         "properties": {
+          "ai_consent": {
+            "$ref": "#/components/schemas/AiConsentState"
+          },
           "app": {
             "$ref": "#/components/schemas/AppInfo"
           },
@@ -3107,7 +3155,8 @@
           "user",
           "session",
           "auth_mode",
-          "app"
+          "app",
+          "ai_consent"
         ],
         "title": "Me",
         "type": "object"
@@ -4788,6 +4837,71 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/auth/ai-consent": {
+      "post": {
+        "description": "Records that this lawyer read \"Where your data goes\" and agreed to text going to Anthropic (AS-3.5).",
+        "operationId": "acceptAiConsent",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AiConsentAccept"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              },
+              "application/problem+json": {}
+            },
+            "description": "Problem"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              },
+              "application/problem+json": {}
+            },
+            "description": "Problem"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              },
+              "application/problem+json": {}
+            },
+            "description": "Problem"
+          }
+        },
+        "summary": "Accept Ai Consent",
+        "tags": [
+          "A \u00b7 Auth"
+        ]
+      }
+    },
     "/api/v1/auth/dev-session": {
       "post": {
         "description": "Dev mode only: signs in with one call (both steps), for Swagger UI and curl.",

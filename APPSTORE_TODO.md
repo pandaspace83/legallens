@@ -133,10 +133,15 @@ runs somewhere else**. Three things change before any Xcode work:
       *Built 2026-11-07: setting `LEGALLENS_CORS_ORIGINS` (default `["capacitor://localhost"]`); outermost middleware;
       allows Authorization, Content-Type, X-LegalLens-Request, Idempotency-Key and Last-Event-ID; never credentials or
       `*`; exposes Content-Disposition and X-Request-ID. Other origins get no CORS headers and a 400 on preflight.*
-- [ ] **AS-3.5 Consent before anything reaches Claude.** Apple asks apps to say which third-party AI receives
+- [x] **AS-3.5 Consent before anything reaches Claude.** Apple asks apps to say which third-party AI receives
       personal data and to get permission first (guideline 5.1.2). Show "Where your data goes" before the first upload
       or question and store the answer in the AI consent record. *Check:* a new account cannot send anything to
       Claude before agreeing.
+      *Built 2026-11-07 as DEC-105: a full-screen "Where your data goes" agreement (tick box, Agree, or Sign out) shown
+      while Claude is the provider and the account has not agreed; stored on the user with a wording version; the
+      server answers 403 `ai_consent_required` on send, summarize, regenerate and both proposals until then. Also
+      fixed: the UI's Sign out now ends the session on the server (it only navigated before). The wording is a
+      draft for the lawyer to approve.*
 - [x] **AS-3.6 Delete my account** (only if AS-0.6 chose sign-up): removes the user, their matters, documents and
       embeddings, and says what happens to backups. *Check:* a test proves the rows and files are gone.
       *Not needed 2026-11-01: accounts are invite-only (DEC-102).*
@@ -216,6 +221,42 @@ runs somewhere else**. Three things change before any Xcode work:
 - [ ] **AS-8.3 iOS builds in CI** (optional): Xcode Cloud or GitHub Actions on macOS, with signing kept in secrets.
 - [ ] **AS-8.4 Renew the membership yearly;** the app leaves the store if it lapses.
 - [ ] **AS-8.5 Write down the real cost** next to the estimates, add a line to BUILD_HISTORY.md, and tag the release.
+
+## Phase B: before real attorneys (DEC-106) · Opus to decide, Sonnet to build
+
+Nothing here blocks the TestFlight demo (Phase A). All of it comes before the App Store listing or any real client
+document. From the review of 2026-11-07; Apple guideline numbers are from the 2026-10-16 guidelines and Anthropic's
+terms were read on 2026-11-07. A licensed attorney finalizes every legal document.
+
+- [ ] **RL-1 A legal entity and insurance.** Publish as a company, not an individual: Apple 5.1.1(ix) asks apps that
+      need sensitive information to come from a legal entity, and a company keeps claims away from personal assets.
+      Tech errors-and-omissions and cyber insurance. Replaces DEC-100 (an Organization developer account, D-U-N-S).
+      *You do it.*
+- [ ] **RL-2 Zero data retention with Anthropic.** By default API inputs are deleted within 30 days (up to 2 years if
+      flagged by safety systems); no training on API data by contract. ZDR is by approval through Anthropic sales.
+      Until approved, DEC-95 holds. Then update the agreement wording and bump its version. *You apply; Claude checks
+      the console setting.*
+- [ ] **RL-3 Terms of service, privacy policy, data processing addendum, security summary.** Terms: license
+      attestation, not legal advice, warranties, limitation of liability, indemnity, the attorney's duty to get client
+      consent (Anthropic Commercial Terms K.2, L.1; ABA Formal Opinion 512). Privacy policy per Apple 5.1.1(i): what is
+      collected and why, Anthropic named with equal protection, retention and deletion, how to revoke consent.
+      *Claude drafts; a licensed attorney finalizes.*
+- [ ] **RL-4 A bar-license check before each invite** (DEF-26): the state bar's public directory, name, bar number
+      and state; a firm email preferred; date recorded; re-checked yearly. *You do it; Claude can add the record.*
+- [ ] **RL-5 Honest copy for a hosted app.** 18 frontend files say "on this computer" or similar, which is untrue
+      once the backend is hosted and Claude answers. Rewrite for the hosted, Claude-on build; keep the local wording
+      for the local build. *Claude can build. Do this before external TestFlight testers too.*
+- [ ] **RL-6 "Not legal advice; check the output"** on first run, answers, summaries and drafts (AS-3.8; Anthropic
+      Commercial Terms D.3 requires telling users to verify outputs). *Claude can build.*
+- [ ] **RL-7 Keys out of the data folder.** The database and file keys come from Azure Key Vault (or the
+      environment), never a file beside the data; no admin tool that browses content; access to the server logged.
+      *Claude can build at AS-2.2.*
+- [ ] **RL-8 Delete my data.** `legallens user delete` removes the account, its matters, files, chunks, index entries
+      and sessions, keeps a content-free audit line, and the backup schedule says when backups roll off. *Claude can
+      build.*
+- [ ] **RL-9 Breach notice and distribution.** INCIDENT_PLAN.md promises to tell affected attorneys quickly (their own
+      duties under ABA Formal Opinion 483 depend on it). Request Unlisted App Distribution at submission, so only
+      people with the link find the app. *Claude drafts; you approve and request.*
 
 ## Order
 
