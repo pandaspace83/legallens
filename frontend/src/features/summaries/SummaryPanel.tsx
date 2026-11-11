@@ -9,6 +9,7 @@ import {
   X,
 } from 'lucide-react'
 import { useState } from 'react'
+import { CheckOutputNote } from '@/components/common/CheckOutputNote'
 import { toast } from 'sonner'
 import {
   useCreateSummary,
@@ -235,6 +236,7 @@ export function SummaryPanel({ matterId }: { matterId: ID }) {
                 {summary.mismatch}
               </p>
             ) : null}
+            <CheckOutputNote className="mb-5 text-[12.5px] leading-snug text-fg-subtle" />
             <div className="space-y-5">
               {summary.sections.map((section) => (
                 <section key={section.key} aria-label={section.title}>

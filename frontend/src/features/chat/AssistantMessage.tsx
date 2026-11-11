@@ -6,6 +6,7 @@ import { LogoMark } from '@/components/common/Logo'
 import { useAsk } from '@/features/composer/useAsk'
 import { AnswerBody } from '@/features/chat/AnswerBody'
 import { AnswerStateBadge } from '@/features/chat/AnswerStateBadge'
+import { CheckOutputNote } from '@/components/common/CheckOutputNote'
 import { JobCard } from '@/features/chat/JobCard'
 import { DraftJobCard } from '@/features/drafts/DraftJobCard'
 import { MessageActions } from '@/features/chat/MessageActions'
@@ -85,6 +86,7 @@ export function AssistantMessage({ answer }: { answer: AnswerView }) {
 
       {settled && answer.outsideLaw ? <OutsideLawNotice /> : null}
       {settled && answer.citations.length ? <SourcesList citations={answer.citations} /> : null}
+      {settled && !answer.error && !answer.job && answer.text ? <CheckOutputNote /> : null}
 
       {settled && !answer.error && !answer.job ? (
         <SearchedRoot className="mt-3">

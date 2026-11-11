@@ -147,13 +147,13 @@ runs somewhere else**. Three things change before any Xcode work:
       *Not needed 2026-11-01: accounts are invite-only (DEC-102).*
 - [ ] **AS-3.7 A way in for App Review.** A review account on the synthetic sample matter, in real mode, with TOTP
       off for that account only. *Check:* a fresh simulator signs in using only what goes in the review notes.
-- [ ] **AS-3.8 "Not legal advice."** The first-run guide and each answer and draft say a lawyer must review them.
-      *Check:* both visible on a phone.
+- [x] **AS-3.8 "Not legal advice."** The first-run guide and each answer, summary and draft say a lawyer must review them
+      (also covers RL-6; not added to exports). *Check:* both visible on a phone (TC-34 to TC-36).
 
 ## AS-4: The iOS shell (Capacitor) · Sonnet
 
 - [ ] **AS-4.1 Add Capacitor** to `frontend/` (`@capacitor/core`, `@capacitor/cli`, `@capacitor/ios`), run `npx cap
-      init` with the app name and a bundle ID such as `com.<you>.legallens` (it can't change after the first upload),
+      init` with the app name and the bundle ID `com.newpandaworld.legallens` (chosen 2026-11-10; it can't change after the first upload),
       then `npx cap add ios`, which creates `frontend/ios/`. *Check:* `npx cap run ios` shows the sign-in screen in the
       simulator.
 - [ ] **AS-4.2 Native touches.** The iOS document picker for PDF and DOCX, "Open in LegalLens" from Files and Mail,
@@ -246,8 +246,8 @@ terms were read on 2026-11-07. A licensed attorney finalizes every legal documen
 - [ ] **RL-5 Honest copy for a hosted app.** 18 frontend files say "on this computer" or similar, which is untrue
       once the backend is hosted and Claude answers. Rewrite for the hosted, Claude-on build; keep the local wording
       for the local build. *Claude can build. Do this before external TestFlight testers too.*
-- [ ] **RL-6 "Not legal advice; check the output"** on first run, answers, summaries and drafts (AS-3.8; Anthropic
-      Commercial Terms D.3 requires telling users to verify outputs). *Claude can build.*
+- [x] **RL-6 "Not legal advice; check the output"** on first run, answers, summaries and drafts (AS-3.8; Anthropic
+      Commercial Terms D.3 requires telling users to verify outputs). *Built 2026-11-10.*
 - [ ] **RL-7 Keys out of the data folder.** The database and file keys come from Azure Key Vault (or the
       environment), never a file beside the data; no admin tool that browses content; access to the server logged.
       *Claude can build at AS-2.2.*
