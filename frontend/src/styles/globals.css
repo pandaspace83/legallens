@@ -42,10 +42,11 @@
   }
 }
 
-/* Full-height screens count the padding above, so they do not scroll by the height of the safe areas (AS-4.2). */
-.h-dvh {
+/* Full-height screens count the padding above, so they do not scroll by the height of the safe areas (AS-4.2).
+   Defined as utilities, so responsive variants such as lg:h-auto still override them. */
+@utility h-dvh {
   height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
 }
-.min-h-dvh {
+@utility min-h-dvh {
   min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
 }
