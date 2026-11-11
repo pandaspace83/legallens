@@ -139,6 +139,8 @@ Order matters: A, B and then C need the documents from B. D and E need them too.
   Check: the summary shows the line above its sections; the draft's "AI draft · not reviewed" band says to check every statement against its source and that it is not legal advice. Export the draft: the exported file does not contain the notice.
 - [ ] **TC-36 First-run guide.** Open a matter with no documents.
   Check: "Getting started" says you are the lawyer and should check every answer against its sources, and no longer says everything stays on this computer.
+- [ ] **TC-37 The app opens in the iPhone simulator.** In `frontend/`: `VITE_API_BASE=http://127.0.0.1:8000 npm run ios:sync`, then `npx cap open ios`, pick an iPhone simulator and press Run (with the backend running).
+  Check: the LegalLens sign-in screen appears. (Known, fixed in AS-4.2: the top text sits under the status bar, and the keyboard covers the screen.)
 
 **Waiting for the iPhone build (AS-4):** an Ask streams on cellular; the app stays signed in after quitting; sign-in with the token on a real device.
 
@@ -162,7 +164,7 @@ Last full run 2026-11-07: backend 306 passed, frontend 124 passed.
 
 | | Count |
 |---|---|
-| Passed | __ / 44 |
+| Passed | __ / 45 |
 | Failed | __ |
 | Blocked | __ |
 
