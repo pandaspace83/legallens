@@ -100,7 +100,7 @@ The backend address defaults to the page's own origin. Set `VITE_API_BASE=https:
 AS-3.1) to call a hosted backend instead; with it set, the backend must also allow that origin (AS-3.4) and accept a
 token in place of the cookie. Set `VITE_AUTH=bearer` to sign in with a token (AS-3.2, DEC-104): login asks for a
 bearer session, the token is sent as `Authorization` and no cookie is used. The default is the cookie, which the web app
-and the Docker image keep. Until the iOS Keychain is wired in (AS-4.1) the token is held in memory only.
+and the Docker image keep. Until the iOS Keychain is wired in (AS-4.2) the token is held in memory only.
 
 The first run of `test:e2e` needs the test browser: `npx playwright install chromium`. The browser tests start
 their own mock-data server on port 5174, so a dev server on 5173 doesn't affect them. If the backend's API changes,
@@ -146,3 +146,16 @@ To find what's left in a phase, search for its ID: `grep -rn "FE-4" src`.
 pass, and every new screen is screenshot-reviewed at 1440 px and at least one narrower width. As of 2026-10-10 (Phase 9): 59 unit tests and 51 Playwright
 tests, with no axe violations. The browser tests include an accessibility sweep of every screen, keyboard-only
 flows, narrow screens and large-data mode.
+
+## iPhone app (Capacitor, AS-4.1)
+
+The React app runs inside a native iOS shell (`ios/`, bundle ID `com.newpandaworld.legallens`, DEC-99). From `frontend/`:
+
+```
+VITE_API_BASE=http://127.0.0.1:8000 npm run ios:sync   # builds with token sign-in, copies dist/ into ios/
+npx cap open ios                                       # then Run in Xcode, on a simulator
+```
+
+`ios:sync` sets `VITE_AUTH=bearer`, because the app's origin is `capacitor://localhost`, which the backend's CORS allows
+and which cannot use SameSite cookies. Run it again after every web change; `ios/App/App/public` is generated and
+not committed.

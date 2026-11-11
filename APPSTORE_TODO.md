@@ -152,10 +152,12 @@ runs somewhere else**. Three things change before any Xcode work:
 
 ## AS-4: The iOS shell (Capacitor) · Sonnet
 
-- [ ] **AS-4.1 Add Capacitor** to `frontend/` (`@capacitor/core`, `@capacitor/cli`, `@capacitor/ios`), run `npx cap
+- [x] **AS-4.1 Add Capacitor** to `frontend/` (`@capacitor/core`, `@capacitor/cli`, `@capacitor/ios`), run `npx cap
       init` with the app name and the bundle ID `com.newpandaworld.legallens` (chosen 2026-11-10; it can't change after the first upload),
       then `npx cap add ios`, which creates `frontend/ios/`. *Check:* `npx cap run ios` shows the sign-in screen in the
       simulator.
+      *Done 2026-11-10: Capacitor 8.6.0; `npm run ios:sync` builds the bearer-token web app and copies it into
+      `frontend/ios/`; the sign-in screen showed in the iPhone 18 Pro simulator. Safe areas and keyboard are AS-4.2.*
 - [ ] **AS-4.2 Native touches.** The iOS document picker for PDF and DOCX, "Open in LegalLens" from Files and Mail,
       Face ID for the lock screen (screen 20), safe areas, and the keyboard not covering the composer. *Check:* upload
       a synthetic PDF from Files on your iPhone.
