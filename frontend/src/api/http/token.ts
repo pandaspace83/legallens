@@ -7,7 +7,7 @@ export interface TokenStore {
   clear(): void
 }
 
-/** The default store: memory only. The iOS Keychain store replaces it at AS-4.1. */
+/** The default store: memory only. The iOS build replaces it with a Keychain-backed store at startup (AS-4.2, src/native). */
 export function memoryTokenStore(): TokenStore {
   let token: string | null = null
   return {

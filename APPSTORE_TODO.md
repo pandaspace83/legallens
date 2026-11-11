@@ -158,7 +158,7 @@ runs somewhere else**. Three things change before any Xcode work:
       simulator.
       *Done 2026-11-10: Capacitor 8.6.0; `npm run ios:sync` builds the bearer-token web app and copies it into
       `frontend/ios/`; the sign-in screen showed in the iPhone 18 Pro simulator. Safe areas and keyboard are AS-4.2.*
-- [ ] **AS-4.2 Native touches.** The iOS document picker for PDF and DOCX, "Open in LegalLens" from Files and Mail,
+- [ ] **AS-4.2 Native touches** (in parts: *4.2a done 2026-11-11:* safe areas, keyboard resize, token in the Keychain; *still to do:* Face ID, "Open in LegalLens", file picker check). The iOS document picker for PDF and DOCX, "Open in LegalLens" from Files and Mail,
       Face ID for the lock screen (screen 20), safe areas, and the keyboard not covering the composer. *Check:* upload
       a synthetic PDF from Files on your iPhone.
 - [ ] **AS-4.3 Icon and launch screen.** A 1024 × 1024 icon with no transparency. *Check:* the home screen shows it.

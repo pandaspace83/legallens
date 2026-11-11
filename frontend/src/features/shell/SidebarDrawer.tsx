@@ -31,7 +31,7 @@ export function SidebarDrawer() {
             event.preventDefault()
             ;(event.target as HTMLElement | null)?.focus()
           }}
-          className="fixed inset-y-0 left-0 z-40 flex w-[min(300px,85vw)] animate-slide-in-left flex-col bg-sidebar shadow-overlay outline-none"
+          className="fixed inset-y-0 left-0 z-40 flex w-[min(300px,85vw)] animate-slide-in-left flex-col bg-sidebar pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] shadow-overlay outline-none"
         >
           <Radix.Title className="sr-only">Chats and documents</Radix.Title>
           <div className="flex h-[var(--height-topbar)] shrink-0 items-center justify-between border-b border-line pr-2 pl-4">
