@@ -38,7 +38,7 @@ export function AiConsentGate() {
           onEscapeKeyDown={(e) => e.preventDefault()}
           onPointerDownOutside={(e) => e.preventDefault()}
           onInteractOutside={(e) => e.preventDefault()}
-          className="fixed inset-0 z-[60] flex animate-fade-in flex-col overflow-y-auto bg-app outline-none"
+          className="fixed inset-0 z-[60] flex animate-fade-in flex-col overflow-y-auto bg-app pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] outline-none"
         >
           <div className="px-6 py-7 sm:px-12">
             <Logo />

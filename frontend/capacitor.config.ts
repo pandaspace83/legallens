@@ -7,6 +7,10 @@ const config: CapacitorConfig = {
   appId: 'com.newpandaworld.legallens',
   appName: 'LegalLens',
   webDir: 'dist',
+  // Safe areas are handled in the page's CSS (viewport-fit=cover); contentInset does nothing for a page that does not scroll.
+  ios: { backgroundColor: '#FBFBFA' },
+  // The page shrinks to what is above the keyboard, so the field being typed in and the composer stay visible.
+  plugins: { Keyboard: { resize: 'native' } },
 }
 
 export default config

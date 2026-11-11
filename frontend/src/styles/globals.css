@@ -3,6 +3,10 @@
 
 @layer base {
   html {
+    /* On the iPhone the page runs edge to edge (viewport-fit=cover); this keeps it clear of the status bar, the home
+       indicator and the notch (AS-4.2). Each value is 0 on the web. */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
     font-family: var(--font-sans);
     color: var(--color-fg);
     background: var(--color-app);
@@ -12,7 +16,7 @@
   }
 
   body {
-    min-height: 100dvh;
+    min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
     font-size: 0.875rem;
     line-height: 1.5;
   }
@@ -36,4 +40,13 @@
       scroll-behavior: auto !important;
     }
   }
+}
+
+/* Full-height screens count the padding above, so they do not scroll by the height of the safe areas (AS-4.2).
+   Defined as utilities, so responsive variants such as lg:h-auto still override them. */
+@utility h-dvh {
+  height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+}
+@utility min-h-dvh {
+  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
 }

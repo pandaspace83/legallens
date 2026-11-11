@@ -100,7 +100,7 @@ The backend address defaults to the page's own origin. Set `VITE_API_BASE=https:
 AS-3.1) to call a hosted backend instead; with it set, the backend must also allow that origin (AS-3.4) and accept a
 token in place of the cookie. Set `VITE_AUTH=bearer` to sign in with a token (AS-3.2, DEC-104): login asks for a
 bearer session, the token is sent as `Authorization` and no cookie is used. The default is the cookie, which the web app
-and the Docker image keep. Until the iOS Keychain is wired in (AS-4.2) the token is held in memory only.
+and the Docker image keep. On iOS the token is kept in the Keychain (AS-4.2); elsewhere it is held in memory only.
 
 The first run of `test:e2e` needs the test browser: `npx playwright install chromium`. The browser tests start
 their own mock-data server on port 5174, so a dev server on 5173 doesn't affect them. If the backend's API changes,

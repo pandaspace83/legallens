@@ -129,7 +129,7 @@ export function ContextPanel() {
             if (returnFocus.current?.isConnected) returnFocus.current.focus()
           }}
           className={cn(
-            'fixed inset-y-0 right-0 z-40 flex animate-slide-in-right flex-col overflow-hidden border-l border-line bg-sidebar shadow-overlay outline-none',
+            'fixed inset-y-0 right-0 z-40 flex animate-slide-in-right flex-col overflow-hidden border-l border-line bg-sidebar pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] shadow-overlay outline-none',
             showing === 'draft' ? 'w-[min(760px,100vw)]' : 'w-[min(600px,100vw)]',
           )}
         >
