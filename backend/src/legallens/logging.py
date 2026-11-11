@@ -9,6 +9,7 @@ import json
 import logging
 import sys
 import time
+import traceback
 import uuid
 from contextvars import ContextVar
 from typing import Any
@@ -37,6 +38,12 @@ class JsonFormatter(logging.Formatter):
         if record.exc_info and record.exc_info[0] is not None:
             # The exception type only: messages and tracebacks can carry client text.
             entry["error_type"] = record.exc_info[0].__name__
+            # Where it happened: file, line and function names from our own code path. No message, no source
+            # line and no variables, so nothing a client wrote can appear.
+            entry["frames"] = [
+                f"{frame.filename.rsplit('/', 1)[-1]}:{frame.lineno}:{frame.name}"
+                for frame in traceback.extract_tb(record.exc_info[2], limit=-8)
+            ]
         return json.dumps(entry, default=str)
 
 

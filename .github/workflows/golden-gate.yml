@@ -11,6 +11,10 @@ name: Golden-set gate
 on:
   workflow_dispatch: {}
 
+# No job writes to the repository, so the token can only read it.
+permissions:
+  contents: read
+
 concurrency:
   group: golden-gate
   cancel-in-progress: false

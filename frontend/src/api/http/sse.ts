@@ -62,6 +62,8 @@ export interface ReadSseOptions {
 
 /** Reads a stream to its end, reconnecting with Last-Event-ID when the connection drops before `onMessage`
  * says it is finished. Resolves when finished or aborted; rejects with an ApiError otherwise. */
+const MAX_BACKOFF_MS = 15_000
+
 export async function readSse(options: ReadSseOptions): Promise<void> {
   const { path, query, signal, onMessage, retries = 5, backoffMs = 400 } = options
   let lastId: string | undefined
@@ -78,6 +80,8 @@ export async function readSse(options: ReadSseOptions): Promise<void> {
           ...(lastId ? { 'last-event-id': lastId } : {}),
         },
       })
+      // A 5xx is the server or its proxy restarting (a deploy): the same as a dropped connection, so try again.
+      if (response.status >= 500) throw new Error(`Stream answered ${response.status}`)
       if (!response.ok) throw await problemFrom(response)
       if (!response.body) throw new Error('No response body')
       const parser = new SseParser()
@@ -109,6 +113,9 @@ export async function readSse(options: ReadSseOptions): Promise<void> {
         detail: 'The connection to LegalLens dropped and could not be restored. Try again.',
       })
     }
-    await new Promise((resolve) => setTimeout(resolve, backoffMs * failures))
+    // Doubling, capped, with jitter: a phone changing networks or a server restart needs more than a few
+    // hundred milliseconds, and many clients must not all return at the same instant.
+    const delay = Math.min(backoffMs * 2 ** (failures - 1), MAX_BACKOFF_MS)
+    await new Promise((resolve) => setTimeout(resolve, delay / 2 + Math.random() * (delay / 2)))
   }
 }

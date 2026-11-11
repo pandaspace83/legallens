@@ -172,6 +172,13 @@ def end_session(db: Session, session_id: str, user_id: str) -> None:
     audit.append(db, action="logout", entity_type="user", entity_id=user_id, user_id=user_id)
 
 
+def end_all_sessions(db: Session, user_id: str) -> int:
+    """Signs the account out everywhere. Used when its password or authenticator is reset: whoever held the old
+    one must not keep a session that was opened with it."""
+    result = db.execute(delete(AuthSession).where(AuthSession.user_id == user_id))
+    return int(getattr(result, "rowcount", 0) or 0)
+
+
 def resolve(database: Database, settings: Settings, token: str | None, *, require_mfa: bool = True) -> Principal:
     """Looks up the session on its own short connections, never the request's transaction."""
     if not token:

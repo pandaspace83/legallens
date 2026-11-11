@@ -72,6 +72,16 @@ describe('readSse', () => {
     ).rejects.toMatchObject({ code: 'stream_lost' })
   })
 
+  it('treats a 5xx as a dropped connection and reconnects', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response('bad gateway', { status: 502 }))
+      .mockImplementationOnce(async () => streamOf(['id: 1\nevent: done\ndata: {}\n\n']))
+    vi.stubGlobal('fetch', fetchMock)
+    await readSse({ path: '/x', backoffMs: 1, onMessage: (m) => m.event === 'done' })
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+  })
+
   it('does not reconnect once the server has answered with a problem', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(JSON.stringify({ code: 'not_found', detail: 'Run not found.', status: 404 }), {

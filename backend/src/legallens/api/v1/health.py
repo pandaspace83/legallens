@@ -5,6 +5,7 @@ import shutil
 import time
 
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 from sqlalchemy import select, text
 
 from legallens import __version__
@@ -39,7 +40,7 @@ def health(database: AppDatabase, settings: AppSettings) -> HealthOut:
 
     heartbeat = settings.worker_heartbeat_path
     age = time.time() - heartbeat.stat().st_mtime if heartbeat.exists() else None
-    worker_ok = age is not None and age < max(10.0, settings.worker_poll_seconds * 10)
+    worker_ok = _worker_alive(settings)
     worker = ComponentHealth(
         kind="worker", ok=worker_ok, detail=f"last heartbeat {age:.0f}s ago" if age is not None else "not running"
     )
@@ -86,6 +87,33 @@ def health(database: AppDatabase, settings: AppSettings) -> HealthOut:
         orchestrator=orchestrator,
         storage=storage,
     )
+
+
+def _worker_alive(settings: Settings) -> bool:
+    heartbeat = settings.worker_heartbeat_path
+    age = time.time() - heartbeat.stat().st_mtime if heartbeat.exists() else None
+    return age is not None and age < max(10.0, settings.worker_poll_seconds * 10)
+
+
+# Probes for a container platform. /health above is a status page for people (always 200, so the app can show what
+# is degraded); these answer with the status code alone and say nothing about versions, models or spend.
+@router.get("/livez", include_in_schema=False)
+def livez() -> JSONResponse:
+    """The process answers. Restart the container only when this fails."""
+    return JSONResponse({"status": "ok"})
+
+
+@router.get("/readyz", include_in_schema=False)
+def readyz(database: AppDatabase, settings: AppSettings) -> JSONResponse:
+    """The database opens and the worker is beating. It never depends on the model provider or the scanner: an
+    outage there degrades answers, and restarting the only replica would not fix it."""
+    try:
+        with database.read() as db:
+            db.execute(text("SELECT 1"))
+        ready = _worker_alive(settings)
+    except Exception:
+        ready = False
+    return JSONResponse({"status": "ok" if ready else "unavailable"}, status_code=200 if ready else 503)
 
 
 _LOW_FREE_BYTES = 2 * 1024**3

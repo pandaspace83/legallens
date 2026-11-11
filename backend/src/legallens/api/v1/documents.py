@@ -1,6 +1,7 @@
 """E · Documents: upload, list, status and coverage, the original file, viewer pages, citations, delete."""
 
 from typing import Literal
+from urllib.parse import quote
 
 from fastapi import APIRouter, File, Form, Query, UploadFile
 from fastapi.responses import FileResponse, Response
@@ -125,7 +126,7 @@ def get_document_file(document_id: str, me: CurrentUser, db: ReadDB, settings: A
         return Response(  # type: ignore[return-value]
             store.read(document.storage_path),
             media_type=document.mime,
-            headers={**headers, "Content-Disposition": f'inline; filename="{document.filename}"'},
+            headers={**headers, "Content-Disposition": f"inline; filename*=utf-8''{quote(document.filename)}"},
         )
     return FileResponse(
         path,

@@ -81,12 +81,16 @@ def _set_cookie(response: Response, settings: Settings, token: str) -> None:
 def login(body: LoginRequest, response: Response, db: WriteDB, settings: AppSettings) -> LoginResponse:
     """Checks the password and starts the MFA step. The cookie it sets is not usable until the code is verified."""
     user = auth_service.find_user(db, body.email)
-    auth_service.ensure_not_locked(user)
-    if user is None or not auth_service.check_password(settings, user, body.password):
-        if user is not None and settings.auth_mode == "real":
+    # Checked before anything is decided, so an unknown email costs the same hash as a known one.
+    password_ok = auth_service.check_password(settings, user, body.password)
+    if user is None or not password_ok:
+        # A locked account answers a wrong password like any other, and does not count it: "locked" would tell a
+        # stranger the email exists, and counting would let them keep it locked.
+        if user is not None and settings.auth_mode == "real" and auth_service.locked_until(user) is None:
             auth_service.register_failure(settings, user)
             db.commit()
         raise ApiError(401, "invalid_credentials", "The email or password is not correct.")
+    auth_service.ensure_not_locked(user)
     token, _ = auth_service.create_session(db, settings, user, mfa_verified=False)
     db.commit()
     if body.session_transport == "bearer":

@@ -2,6 +2,7 @@
 
 from datetime import timedelta
 
+import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import update
 
@@ -43,14 +44,24 @@ class TestAuth:
         response = api.client.get("/api/v1/auth/me")
         assert (response.status_code, response.json()["code"]) == (401, "session_expired")
 
-    def test_dev_session_is_unavailable_in_prod(self, tmp_path, template_db) -> None:  # type: ignore[no-untyped-def]
+    def test_prod_refuses_to_start_with_dev_sign_in_or_a_plain_cookie(self, tmp_path) -> None:  # type: ignore[no-untyped-def]
+        # Dev sign-in accepts any password, so a prod start with it must fail instead of serving (and with it the
+        # one-call dev session, which is also refused in real mode: see test_real_auth).
+        with pytest.raises(RuntimeError, match="LEGALLENS_AUTH_MODE=real"):
+            create_app(make_settings(tmp_path / "data", env="prod"))
+        with pytest.raises(RuntimeError, match="LEGALLENS_COOKIE_SECURE=true"):
+            create_app(make_settings(tmp_path / "data", env="prod", auth_mode="real"))
+
+    def test_prod_refuses_a_database_that_is_not_encrypted(self, tmp_path, template_db) -> None:  # type: ignore[no-untyped-def]
         import shutil
 
-        settings = make_settings(tmp_path / "data", env="prod")
+        settings = make_settings(tmp_path / "data", env="prod", auth_mode="real", cookie_secure=True)
         settings.ensure_dirs()
         shutil.copy(template_db, settings.db_path)
-        with TestClient(create_app(settings)) as client:
-            assert client.post("/api/v1/auth/dev-session", json={}).status_code == 404
+        app = create_app(settings)
+        assert app.docs_url is None and app.openapi_url is None  # the route list is not published in prod
+        with pytest.raises(RuntimeError, match="encrypted database"), TestClient(app):
+            pass
 
     def test_errors_are_problem_json(self, api: Api) -> None:
         response = api.client.post("/api/v1/matters", json={"name": ""})

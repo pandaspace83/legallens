@@ -108,23 +108,23 @@ def execute_with_heartbeat(
 
 def run_worker(database: Database, settings: Settings, stop: threading.Event) -> None:
     log.info("worker_started")
-    _housekeeping(database, settings)
-    last_housekeeping = time.monotonic()
+    last_housekeeping = float("-inf")  # so the first turn does the housekeeping
     while not stop.is_set():
-        _touch_heartbeat(settings)
+        # Nothing restarts this thread, so no single failure (a busy database, a full disk) may end it: queued
+        # jobs would wait until the whole app restarted.
         try:
+            _touch_heartbeat(settings)
+            if time.monotonic() - last_housekeeping > HOUSEKEEPING_SECONDS:
+                last_housekeeping = time.monotonic()
+                _housekeeping(database, settings)
             job = claim(database)
+            if job is not None:
+                execute_with_heartbeat(database, settings, job)
+            else:
+                stop.wait(settings.worker_poll_seconds)
         except Exception:
-            log.exception("claim_failed")
+            log.exception("worker_loop_failed")
             stop.wait(settings.worker_poll_seconds * 4)
-            continue
-        if job is not None:
-            execute_with_heartbeat(database, settings, job)
-        else:
-            stop.wait(settings.worker_poll_seconds)
-        if time.monotonic() - last_housekeeping > HOUSEKEEPING_SECONDS:
-            _housekeeping(database, settings)
-            last_housekeeping = time.monotonic()
     log.info("worker_stopped")
 
 

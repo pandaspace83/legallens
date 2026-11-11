@@ -232,7 +232,7 @@ class Chunk(MatterScoped, Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)  # rowid of FTS5 and vec0
     document_id: Mapped[str] = mapped_column(ForeignKey("documents.id", ondelete="CASCADE"))
-    parent_chunk_id: Mapped[int | None] = mapped_column(ForeignKey("chunks.id", ondelete="CASCADE"))
+    parent_chunk_id: Mapped[int | None] = mapped_column(ForeignKey("chunks.id", ondelete="CASCADE"), index=True)
     kind: Mapped[str]  # section (parent, not indexed) | text | table | footnote
     seq: Mapped[int]  # reading order within the document
     section_path: Mapped[str | None]
@@ -252,7 +252,7 @@ class DefinedTerm(MatterScoped, Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     document_id: Mapped[str] = mapped_column(ForeignKey("documents.id", ondelete="CASCADE"), index=True)
     term: Mapped[str]
-    definition_chunk_id: Mapped[int | None] = mapped_column(ForeignKey("chunks.id", ondelete="CASCADE"))
+    definition_chunk_id: Mapped[int | None] = mapped_column(ForeignKey("chunks.id", ondelete="CASCADE"), index=True)
     definition_text: Mapped[str] = mapped_column(Text, default="")
 
 

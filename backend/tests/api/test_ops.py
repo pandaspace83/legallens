@@ -141,3 +141,12 @@ def test_cli_end_to_end(tmp_path, monkeypatch: pytest.MonkeyPatch) -> None:  # t
         assert runner.invoke(app, ["seed"]).output.count("Matter exists") == 3  # idempotent
     finally:
         get_settings.cache_clear()
+
+
+def test_probes_answer_with_a_status_code_and_nothing_else(api: Api) -> None:
+    assert api.client.get("/api/v1/livez").json() == {"status": "ok"}
+    not_ready = api.client.get("/api/v1/readyz")  # no worker has beaten yet
+    assert (not_ready.status_code, not_ready.json()) == (503, {"status": "unavailable"})
+    api.settings.worker_heartbeat_path.touch()
+    ready = api.client.get("/api/v1/readyz")
+    assert (ready.status_code, ready.json()) == (200, {"status": "ok"})

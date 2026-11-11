@@ -34,6 +34,16 @@ def _write_json(zf: zipfile.ZipFile, path: str, data: Any) -> None:
 
 
 def run(ctx: JobContext) -> dict[str, Any]:
+    partial = (ctx.settings.exports_dir / ctx.matter_id / f"{ctx.job.id}.zip").with_suffix(".partial")
+    try:
+        return _run(ctx)
+    except BaseException:
+        # A failed or cancelled export must not leave a half-written copy of the matter's documents on disk.
+        partial.unlink(missing_ok=True)
+        raise
+
+
+def _run(ctx: JobContext) -> dict[str, Any]:
     settings = ctx.settings
     folder = settings.exports_dir / ctx.matter_id
     folder.mkdir(parents=True, exist_ok=True)

@@ -180,6 +180,23 @@ class Settings(BaseSettings):
             self.data_dir.chmod(0o700)  # client data: owner only
 
 
+def unsafe_production_settings(settings: Settings) -> list[str]:
+    """Why these settings must not serve real users, as a list of fixes; empty when `env` is not "prod".
+
+    The defaults suit one computer (dev sign-in accepts any password, the cookie travels over plain http), so a
+    hosted start has to opt out of each one. `create_app` refuses to start while this list is not empty."""
+    if settings.env != "prod":
+        return []
+    problems: list[str] = []
+    if settings.auth_mode != "real":
+        problems.append("set LEGALLENS_AUTH_MODE=real (dev sign-in accepts any password)")
+    if not settings.cookie_secure:
+        problems.append("set LEGALLENS_COOKIE_SECURE=true (the session cookie must never travel over plain http)")
+    if "*" in settings.cors_origins:
+        problems.append("remove '*' from LEGALLENS_CORS_ORIGINS")
+    return problems
+
+
 @lru_cache
 def get_settings() -> Settings:
     return Settings()

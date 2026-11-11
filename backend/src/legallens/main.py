@@ -12,7 +12,7 @@ from starlette.types import ASGIApp, Receive, Scope, Send
 
 from legallens import __version__
 from legallens.api.v1 import api_router
-from legallens.config import Settings, get_settings
+from legallens.config import Settings, get_settings, unsafe_production_settings
 from legallens.db.engine import Database
 from legallens.db.migrate import current_revision, head_revision
 from legallens.errors import install_error_handlers
@@ -34,6 +34,7 @@ NO_TELEMETRY: TelemetryConfig = {
 os.environ.setdefault("OTEL_SDK_DISABLED", "true")
 
 UPLOAD_OVERHEAD_BYTES = 1024 * 1024
+LOOPBACK_HOSTS = {"127.0.0.1", "localhost", "::1"}
 
 
 class UploadSizeLimit:
@@ -88,11 +89,21 @@ class RequireCsrfHeader:
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or get_settings()
     configure_logging()
+    problems = unsafe_production_settings(settings)
+    if problems:
+        raise RuntimeError("Unsafe settings for LEGALLENS_ENV=prod: " + "; ".join(problems))
+    if settings.auth_mode == "dev" and settings.host not in LOOPBACK_HOSTS:
+        log.warning("dev_sign_in_on_a_public_address", extra={"host": settings.host})
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         settings.ensure_dirs()
         database = Database(settings.db_path)
+        if settings.env == "prod" and not database.encrypted:
+            database.dispose()
+            raise RuntimeError(
+                "LEGALLENS_ENV=prod needs an encrypted database: set LEGALLENS_DB_KEY or run `legallens db encrypt`."
+            )
         if current_revision(database) != head_revision():
             database.dispose()
             raise RuntimeError("The database schema is not up to date. Run: uv run legallens db upgrade")
@@ -120,9 +131,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         version=__version__,
         summary="Local backend for LegalLens: matters, documents, chat over SSE, summaries and drafts.",
         lifespan=lifespan,
-        docs_url="/docs",
+        # The interactive docs describe every route; a hosted app does not publish them.
+        docs_url=None if settings.env == "prod" else "/docs",
         redoc_url=None,
-        openapi_url="/openapi.json",
+        openapi_url=None if settings.env == "prod" else "/openapi.json",
         telemetry=NO_TELEMETRY,
     )
     app.state.settings = settings

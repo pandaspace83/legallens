@@ -366,7 +366,8 @@ def user_reset_password(
             raise typer.BadParameter("No such account.")
         user.password_hash = auth_service.hash_password(password)
         auth_service.register_success(user)
-    typer.echo("Password changed.")
+        ended = auth_service.end_all_sessions(db, user.id)
+    typer.echo(f"Password changed. {ended} open session(s) ended.")
 
 
 @user_app.command("reset-mfa")
@@ -381,6 +382,7 @@ def user_reset_mfa(email: str) -> None:
         if user is None:
             raise typer.BadParameter("No such account.")
         user.totp_secret = sealed
+        auth_service.end_all_sessions(db, user.id)
     typer.echo(f"  Secret: {seed_text}")
     typer.echo(f"  URI:    {uri}")
 

@@ -96,5 +96,5 @@ def install_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(Exception)
     async def _unhandled(request: Request, exc: Exception) -> JSONResponse:
         # Log the type and route only; exception messages can carry document text.
-        log.error("unhandled_error", extra={"error_type": type(exc).__name__, "path": request.url.path})
+        log.error("unhandled_error", exc_info=exc, extra={"path": request.url.path})
         return problem(request, 500, "internal_error", "Something went wrong. Try again.")

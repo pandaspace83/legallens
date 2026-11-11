@@ -90,3 +90,36 @@ def test_the_totp_seed_is_not_stored_in_the_clear(real) -> None:  # type: ignore
     with database.read() as db:
         stored = db.query(User).one().totp_secret
     assert stored is not None and totp.secret.encode() not in stored
+
+
+def test_a_locked_account_looks_like_any_other_to_a_wrong_password(real) -> None:  # type: ignore[no-untyped-def]
+    client, _, settings = real
+    for _ in range(3):
+        assert login(client, "nope").status_code == 401
+    # Still 401, not 423: "locked" would tell a stranger that the email exists.
+    again = login(client, "nope")
+    assert again.status_code == 401 and again.json()["code"] == "invalid_credentials"
+    # And the wrong attempt was not counted, so a stranger cannot keep the account locked.
+    database = Database(settings.db_path)
+    try:
+        with database.read() as db:
+            user = auth_service.find_user(db, "lawyer@example.com")
+            assert user is not None and user.failed_logins == 0
+    finally:
+        database.dispose()
+
+
+def test_a_reset_ends_every_open_session(real) -> None:  # type: ignore[no-untyped-def]
+    client, totp, settings = real
+    assert login(client).status_code == 200
+    assert client.post("/api/v1/auth/mfa/verify", json={"code": totp.now()}, headers=HEADERS).status_code == 200
+    assert client.get("/api/v1/matters").status_code == 200
+    database = Database(settings.db_path)
+    try:
+        with database.write() as db:
+            user = auth_service.find_user(db, "lawyer@example.com")
+            assert user is not None
+            assert auth_service.end_all_sessions(db, user.id) == 1
+    finally:
+        database.dispose()
+    assert client.get("/api/v1/matters").status_code == 401

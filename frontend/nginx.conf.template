@@ -2,6 +2,10 @@ server {
     listen 8080;
     root /usr/share/nginx/html;
 
+    # nginx refuses a request body over 1 MB unless told otherwise. Keep that for everything except the API, where
+    # uploads go: the app's own limit is 50 MB (LEGALLENS_MAX_UPLOAD_MB) plus 1 MB of multipart overhead.
+    client_max_body_size 1m;
+
     location = /healthz {
         access_log off;
         return 200 "ok\n";
@@ -9,6 +13,7 @@ server {
 
     # Same origin as the page, so the session cookie works and there is no CORS (as in vite.config.ts).
     location /api/ {
+        client_max_body_size 51m;
         proxy_pass ${API_UPSTREAM};
         proxy_http_version 1.1;
         proxy_set_header Host $host;
@@ -19,14 +24,22 @@ server {
         proxy_read_timeout 1h;
     }
 
+    # The headers below match backend/src/legallens/web.py, which sends them when FastAPI serves the app itself;
+    # change both together. nginx drops inherited add_header lines in a location that has its own, so each
+    # location repeats them.
+
     # Hashed build files never change, so they can be cached for a year.
     location /assets/ {
         add_header Cache-Control "public, max-age=31536000, immutable";
+        add_header X-Content-Type-Options "nosniff" always;
     }
 
     # Single-page app: unknown paths (/m/smith, /settings) load index.html and the router takes over.
     location / {
         add_header Cache-Control "no-cache";
+        add_header Content-Security-Policy "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Referrer-Policy "no-referrer" always;
         try_files $uri /index.html;
     }
 }
