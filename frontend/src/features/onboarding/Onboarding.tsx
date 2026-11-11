@@ -75,7 +75,8 @@ export function Onboarding({ matterId, matterName }: { matterId: ID; matterName:
         <div>
           <h2 className="font-serif text-[19px] text-fg">Getting started</h2>
           <p className="text-[12.5px] text-fg-subtle">
-            {done} of 3 done · you are the lawyer: check every answer against its sources before you rely on it
+            {done} of 3 done · you are the lawyer: check every answer against its sources before you
+            rely on it
           </p>
         </div>
         <button
