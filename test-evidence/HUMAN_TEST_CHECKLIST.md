@@ -139,11 +139,15 @@ Order matters: A, B and then C need the documents from B. D and E need them too.
   Check: the summary shows the line above its sections; the draft's "AI draft · not reviewed" band says to check every statement against its source and that it is not legal advice. Export the draft: the exported file does not contain the notice.
 - [ ] **TC-36 First-run guide.** Open a matter with no documents.
   Check: "Getting started" says you are the lawyer and should check every answer against its sources, and no longer says everything stays on this computer.
-- [ ] **TC-37 The app opens in the iPhone simulator.** In `frontend/`: `VITE_API_BASE=http://127.0.0.1:8000 npm run ios:sync`, then `npx cap open ios`, pick an iPhone simulator and press Run (with the backend running).
+- [x] **TC-37 The app opens in the iPhone simulator.** *(Passed 2026-11-11.)* In `frontend/`: `VITE_API_BASE=http://127.0.0.1:8001 npm run ios:sync`, then `npx cap open ios`, pick an iPhone simulator and press Run (with the backend running).
   Check: the LegalLens sign-in screen appears. (Known, fixed in AS-4.2: the top text sits under the status bar, and the keyboard covers the screen.)
-- [ ] **TC-38 Stay signed in after quitting (simulator).** Sign in on the simulator (backend running), swipe the app away, open it again.
-  Check: you are still signed in, no password asked. Sign out, quit, reopen: the sign-in screen shows.
-- [ ] **TC-39 Safe areas and keyboard (simulator).** On the sign-in screen and a matter's chat.
+- [ ] **TC-38 Stay signed in after quitting, behind Face ID (simulator).** In the simulator menu turn on Face ID enrolment (Features, Face ID, Enrolled). Sign in, swipe the app away, open it again. *(Without Face ID this passed 2026-11-11 for AS-4.2a; Face ID changed it, so test again.)*
+  Check: the Face ID prompt appears before anything loads; choose Matching Face: you are signed in, no password asked. Sign out, quit, reopen: the sign-in screen shows and Face ID is not asked.
+- [ ] **TC-40 Face ID cancelled or not matched (simulator).** Signed in, quit and reopen; at the prompt choose Non-matching Face (then Cancel).
+  Check: the sign-in screen shows. Quit and reopen again: Face ID is asked again, and a match signs you straight in.
+- [ ] **TC-41 No passcode, nothing saved (real iPhone, at AS-4.6).** On a test iPhone with no passcode, sign in, quit, reopen.
+  Check: the sign-in screen shows every time and no Face ID is asked.
+- [x] **TC-39 Safe areas and keyboard (simulator).** *(Passed 2026-11-11.)* On the sign-in screen and a matter's chat.
   Check: nothing sits under the status bar or the home indicator when the keyboard is closed; with it open, the field or the composer you are typing in stays visible above it.
 
 **Waiting for the iPhone build (AS-4):** an Ask streams on cellular; the app stays signed in after quitting; sign-in with the token on a real device.
@@ -157,6 +161,7 @@ Order matters: A, B and then C need the documents from B. D and E need them too.
 | AS-3.2 | Token only after password; useless before the code; header is the only credential; no `?token=`; logout, idle limit, CSRF and lockout hold; `no-store` on the token reply; a dead token is forgotten safely | `tests/security/test_bearer_auth.py`, `frontend/src/api/http/token.test.ts` |
 | AS-3.3 | Matter events carry the bearer header, resume with Last-Event-ID, and stop on unsubscribe | `frontend/src/api/http/HttpApiClient.test.ts` |
 | AS-3.4 | Only `capacitor://localhost` is allowed; other origins, headers and methods are refused; no credentials | `tests/security/test_cors.py` |
+| AS-4.2b | A cancelled Face ID starts signed out and keeps the saved token | `frontend/src/native/keychainTokenStore.test.ts` |
 | AS-4.2a | The saved token loads at startup on a device only, writes through to the Keychain, clears on sign-out, and a Keychain failure only means signing in again | `frontend/src/native/keychainTokenStore.test.ts` |
 | AS-3.8 | The notice text says to check the output and that it is not legal advice (where it appears is TC-34 to TC-36) | `frontend/src/components/common/CheckOutputNote.test.tsx` |
 | AS-3.5 | The five routes that reach Claude refuse until the lawyer agrees; agreeing is audited; old wording is refused; local mode asks nothing; the screen needs the box ticked and sends the version it showed | `tests/security/test_ai_consent.py`, `frontend/src/features/auth/AiConsentGate.test.tsx` |
@@ -169,7 +174,7 @@ Last full run 2026-11-07: backend 306 passed, frontend 124 passed.
 
 | | Count |
 |---|---|
-| Passed | __ / 47 |
+| Passed | __ / 49 |
 | Failed | __ |
 | Blocked | __ |
 
