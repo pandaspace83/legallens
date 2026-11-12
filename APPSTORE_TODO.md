@@ -158,7 +158,9 @@ runs somewhere else**. Three things change before any Xcode work:
       simulator.
       *Done 2026-11-10: Capacitor 8.6.0; `npm run ios:sync` builds the bearer-token web app and copies it into
       `frontend/ios/`; the sign-in screen showed in the iPhone 18 Pro simulator. Safe areas and keyboard are AS-4.2.*
-- [ ] **AS-4.2 Native touches** (in parts: *4.2a done 2026-11-11:* safe areas, keyboard resize, token in the Keychain; *still to do:* Face ID, "Open in LegalLens", file picker check). The iOS document picker for PDF and DOCX, "Open in LegalLens" from Files and Mail,
+- [ ] **AS-4.2 Native touches** (in parts: *4.2a done 2026-11-11:* safe areas, keyboard resize, token in the Keychain; *4.2b done 2026-11-11:* Face ID guards
+      the saved sign-in at launch (DEC-107; the idle lock still needs password and code); *still to do:* "Open in
+      LegalLens", file picker check). The iOS document picker for PDF and DOCX, "Open in LegalLens" from Files and Mail,
       Face ID for the lock screen (screen 20), safe areas, and the keyboard not covering the composer. *Check:* upload
       a synthetic PDF from Files on your iPhone.
 - [ ] **AS-4.3 Icon and launch screen.** A 1024 × 1024 icon with no transparency. *Check:* the home screen shows it.
@@ -246,7 +248,8 @@ terms were read on 2026-11-07. A licensed attorney finalizes every legal documen
 - [ ] **RL-4 A bar-license check before each invite** (DEF-26): the state bar's public directory, name, bar number
       and state; a firm email preferred; date recorded; re-checked yearly. *You do it; Claude can add the record.*
 - [ ] **RL-5 Honest copy for a hosted app.** 18 frontend files say "on this computer" or similar, which is untrue
-      once the backend is hosted and Claude answers. Rewrite for the hosted, Claude-on build; keep the local wording
+      once the backend is hosted and Claude answers. The sign-in page also prefills a demo email
+      (`LoginPage.tsx`); the app must start with it empty. Rewrite for the hosted, Claude-on build; keep the local wording
       for the local build. *Claude can build. Do this before external TestFlight testers too.*
 - [x] **RL-6 "Not legal advice; check the output"** on first run, answers, summaries and drafts (AS-3.8; Anthropic
       Commercial Terms D.3 requires telling users to verify outputs). *Built 2026-11-10.*

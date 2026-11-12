@@ -1,10 +1,20 @@
 import Capacitor
 import Foundation
+import LocalAuthentication
 import Security
 
-// Keeps the session token in the iOS Keychain (AS-4.2, DEC-104). It is only readable after the first unlock, stays
-// on this device (not in backups, not synced to iCloud) and is removed with the app. The web side holds the token in
-// memory and writes it through here, so signing in survives quitting the app.
+// Keeps the session token in the iOS Keychain (AS-4.2, DEC-104), behind Face ID (AS-4.2b, DEC-107).
+//
+// - Reading the token needs the device owner: Face ID, or the device passcode if Face ID fails or is off. The read
+//   happens once, at launch, so opening the app asks for Face ID before anything loads. The prompt is an explicit
+//   LocalAuthentication check (the simulator does not enforce Keychain access control, so the item's guard alone
+//   could not be tested there); on a device the item's access control enforces it as well.
+// - Writing and deleting do not prompt.
+// - The item exists only while the iPhone has a passcode (WhenPasscodeSetThisDeviceOnly): it is never in a backup,
+//   never synced to iCloud, and iOS deletes it if the passcode is removed. With no passcode the token is not saved
+//   at all, so the lawyer signs in on every launch: an unlocked phone must not open client matters.
+// - A cancelled or failed Face ID resolves with no token and `canceled: true`; the app shows the sign-in screen and
+//   the saved token stays, so the next launch asks again.
 @objc(KeychainPlugin)
 public class KeychainPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "KeychainPlugin"
@@ -15,9 +25,11 @@ public class KeychainPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "remove", returnType: CAPPluginReturnPromise),
     ]
 
-    private let service = "com.newpandaworld.legallens.session"
+    private let service = "com.newpandaworld.legallens.session.v2"
+    // AS-4.2a stored the token without the Face ID guard. It is deleted, never read, so no unguarded copy survives.
+    private let legacyService = "com.newpandaworld.legallens.session"
 
-    private func query(_ key: String) -> [String: Any] {
+    private func query(_ key: String, service: String) -> [String: Any] {
         [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -25,35 +37,81 @@ public class KeychainPlugin: CAPPlugin, CAPBridgedPlugin {
         ]
     }
 
+    private func removeLegacy(_ key: String) {
+        SecItemDelete(query(key, service: legacyService) as CFDictionary)
+    }
+
+    /// Whether a saved sign-in exists, without reading it and without any prompt.
+    private func exists(_ key: String) -> Bool {
+        let silent = LAContext()
+        silent.interactionNotAllowed = true
+        var q = query(key, service: service)
+        q[kSecReturnAttributes as String] = true
+        q[kSecMatchLimit as String] = kSecMatchLimitOne
+        q[kSecUseAuthenticationContext as String] = silent
+        return SecItemCopyMatching(q as CFDictionary, nil) != errSecItemNotFound
+    }
+
+    // Two layers: an explicit Face ID (or passcode) check, then the read with that same authenticated context. The
+    // item's own access control still demands it on a device, so skipping the check cannot read the token. The check
+    // runs only when a sign-in is saved, so a first launch or a launch after signing out asks for nothing.
     @objc func get(_ call: CAPPluginCall) {
         guard let key = call.getString("key") else { return call.reject("key is required") }
-        var q = query(key)
-        q[kSecReturnData as String] = true
-        q[kSecMatchLimit as String] = kSecMatchLimitOne
-        var item: CFTypeRef?
-        let status = SecItemCopyMatching(q as CFDictionary, &item)
-        if status == errSecItemNotFound { return call.resolve(["value": NSNull()]) }
-        guard status == errSecSuccess, let data = item as? Data, let value = String(data: data, encoding: .utf8) else {
-            return call.reject("Keychain read failed (\(status))")
+        removeLegacy(key)
+        guard exists(key) else { return call.resolve(["value": NSNull()]) }
+        let context = LAContext()
+        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Unlock your LegalLens sign-in") { ok, _ in
+            // Cancelled, failed, locked out or no passcode any more: start at sign-in and keep the saved token.
+            guard ok else { return call.resolve(["value": NSNull(), "canceled": true]) }
+            var q = self.query(key, service: self.service)
+            q[kSecReturnData as String] = true
+            q[kSecMatchLimit as String] = kSecMatchLimitOne
+            q[kSecUseAuthenticationContext as String] = context
+            var item: CFTypeRef?
+            let status = SecItemCopyMatching(q as CFDictionary, &item)
+            switch status {
+            case errSecSuccess:
+                guard let data = item as? Data, let value = String(data: data, encoding: .utf8) else {
+                    return call.reject("Keychain item unreadable")
+                }
+                call.resolve(["value": value])
+            case errSecItemNotFound:
+                call.resolve(["value": NSNull()])
+            case errSecUserCanceled, errSecAuthFailed:
+                call.resolve(["value": NSNull(), "canceled": true])
+            default:
+                call.reject("Keychain read failed (\(status))")
+            }
         }
-        call.resolve(["value": value])
     }
 
     @objc func set(_ call: CAPPluginCall) {
         guard let key = call.getString("key"), let value = call.getString("value") else {
             return call.reject("key and value are required")
         }
-        SecItemDelete(query(key) as CFDictionary)
-        var q = query(key)
+        removeLegacy(key)
+        SecItemDelete(query(key, service: service) as CFDictionary)
+        // No passcode means no Face ID either, and no protection for a saved session: keep it in memory only.
+        guard LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) else {
+            return call.reject("Set a passcode on this iPhone to stay signed in", "no_passcode")
+        }
+        var error: Unmanaged<CFError>?
+        guard let access = SecAccessControlCreateWithFlags(
+            nil, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, .userPresence, &error
+        ) else {
+            return call.reject("Keychain access control unavailable")
+        }
+        var q = query(key, service: service)
         q[kSecValueData as String] = Data(value.utf8)
-        q[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        q[kSecAttrAccessControl as String] = access
         let status = SecItemAdd(q as CFDictionary, nil)
         if status == errSecSuccess { call.resolve() } else { call.reject("Keychain write failed (\(status))") }
     }
 
     @objc func remove(_ call: CAPPluginCall) {
         guard let key = call.getString("key") else { return call.reject("key is required") }
-        let status = SecItemDelete(query(key) as CFDictionary)
+        removeLegacy(key)
+        let status = SecItemDelete(query(key, service: service) as CFDictionary)
         if status == errSecSuccess || status == errSecItemNotFound { call.resolve() } else {
             call.reject("Keychain delete failed (\(status))")
         }

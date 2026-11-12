@@ -62,6 +62,17 @@ describe('Keychain token store', () => {
     setBearerMode(false)
   })
 
+  it('starts signed out when Face ID is cancelled, without deleting the saved token', async () => {
+    setBearerMode(true)
+    const { plugin } = fake('saved')
+    plugin.get = vi.fn(async () => ({ value: null, canceled: true }))
+    await loadKeychainTokenOnIos(plugin, true)
+    expect(currentToken()).toBeNull()
+    expect(plugin.remove).not.toHaveBeenCalled()
+    setTokenStore(memoryTokenStore())
+    setBearerMode(false)
+  })
+
   it('starts signed out if the Keychain cannot be read', async () => {
     setBearerMode(true)
     const { plugin } = fake()

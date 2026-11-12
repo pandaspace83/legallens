@@ -1,6 +1,7 @@
-import { createBrowserRouter, Navigate, type RouteObject } from 'react-router'
+import { createBrowserRouter, type RouteObject } from 'react-router'
 import { AppBoot } from '@/app/AppBoot'
 import { RouteError } from '@/app/RouteError'
+import { StartRoute } from '@/app/StartRoute'
 
 // Every screen is lazy-loaded so the first paint only ships the shell (FRONTEND_TODO.md §6).
 export const routes: RouteObject[] = [
@@ -8,7 +9,7 @@ export const routes: RouteObject[] = [
     errorElement: <RouteError />,
     hydrateFallbackElement: <AppBoot />,
     children: [
-      { index: true, element: <Navigate to="/login" replace /> },
+      { index: true, element: <StartRoute /> },
       {
         lazy: async () => ({ Component: (await import('@/app/layouts/AuthLayout')).AuthLayout }),
         children: [
