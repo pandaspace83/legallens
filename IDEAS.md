@@ -527,8 +527,9 @@ The answers to AS-0 in `APPSTORE_TODO.md`.
   `WhenPasscodeSetThisDeviceOnly`: never in backups or iCloud, deleted by iOS if the passcode is removed. Reading it at
   launch first runs an explicit Face ID (or passcode) check, only when a sign-in is saved, then reads the item with
   that authenticated context, so the item's own guard also enforces it on a device (the simulator does not enforce
-  Keychain access control, found 2026-11-11). A cancel or failure starts at the sign-in screen and keeps the saved
-  token. With no
+  Keychain access control, found 2026-11-11). With a restored sign-in the app opens on the matters list; the server
+  session limits still apply (30 minutes idle, 12 hours at most, DEC-86), so after them Face ID leads to sign-in. A
+  cancel or failure starts at the sign-in screen and keeps the saved token. With no
   passcode on the iPhone the token is held in memory only, so the lawyer signs in on every launch, because an
   unlocked phone must not open client matters. The unguarded item from AS-4.2a is deleted, never read. Chosen over a
   Face ID screen drawn over the app, which guards the view but leaves the token readable. The idle lock (DEC-54) is

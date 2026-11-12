@@ -248,7 +248,8 @@ terms were read on 2026-11-07. A licensed attorney finalizes every legal documen
 - [ ] **RL-4 A bar-license check before each invite** (DEF-26): the state bar's public directory, name, bar number
       and state; a firm email preferred; date recorded; re-checked yearly. *You do it; Claude can add the record.*
 - [ ] **RL-5 Honest copy for a hosted app.** 18 frontend files say "on this computer" or similar, which is untrue
-      once the backend is hosted and Claude answers. Rewrite for the hosted, Claude-on build; keep the local wording
+      once the backend is hosted and Claude answers. The sign-in page also prefills a demo email
+      (`LoginPage.tsx`); the app must start with it empty. Rewrite for the hosted, Claude-on build; keep the local wording
       for the local build. *Claude can build. Do this before external TestFlight testers too.*
 - [x] **RL-6 "Not legal advice; check the output"** on first run, answers, summaries and drafts (AS-3.8; Anthropic
       Commercial Terms D.3 requires telling users to verify outputs). *Built 2026-11-10.*
