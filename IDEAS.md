@@ -525,7 +525,10 @@ The answers to AS-0 in `APPSTORE_TODO.md`.
 - **DEC-107 Face ID guards the saved sign-in, and no passcode means nothing is saved.** *(accepted 2026-11-11)*
   On iOS the session token lives in the Keychain behind `.userPresence` (Face ID, or the device passcode) with
   `WhenPasscodeSetThisDeviceOnly`: never in backups or iCloud, deleted by iOS if the passcode is removed. Reading it at
-  launch shows the Face ID prompt; a cancel or failure starts at the sign-in screen and keeps the saved token. With no
+  launch first runs an explicit Face ID (or passcode) check, only when a sign-in is saved, then reads the item with
+  that authenticated context, so the item's own guard also enforces it on a device (the simulator does not enforce
+  Keychain access control, found 2026-11-11). A cancel or failure starts at the sign-in screen and keeps the saved
+  token. With no
   passcode on the iPhone the token is held in memory only, so the lawyer signs in on every launch, because an
   unlocked phone must not open client matters. The unguarded item from AS-4.2a is deleted, never read. Chosen over a
   Face ID screen drawn over the app, which guards the view but leaves the token readable. The idle lock (DEC-54) is

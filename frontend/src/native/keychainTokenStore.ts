@@ -13,6 +13,15 @@ export interface KeychainPlugin {
 
 export const KEY = 'session-token'
 
+// A failure never blocks the app, but it is logged (never the token) so a broken Keychain cannot hide: in AS-4.2a the
+// plugin was not registered at all and nothing said so.
+const warn = (step: string) => (error: unknown) => {
+  console.warn(
+    `LegalLens: Keychain ${step} failed:`,
+    error instanceof Error ? error.message : error,
+  )
+}
+
 /** Memory in front, the Keychain behind. A failed Keychain write (for example no passcode on the iPhone, so nothing
  * is saved by design) only means the next launch signs in again. */
 export function keychainTokenStore(keychain: KeychainPlugin, initial: string | null): TokenStore {
@@ -22,11 +31,11 @@ export function keychainTokenStore(keychain: KeychainPlugin, initial: string | n
     get: () => memory.get(),
     set(token) {
       memory.set(token)
-      void keychain.set({ key: KEY, value: token }).catch(() => {})
+      void keychain.set({ key: KEY, value: token }).catch(warn('save'))
     },
     clear() {
       memory.clear()
-      void keychain.remove({ key: KEY }).catch(() => {})
+      void keychain.remove({ key: KEY }).catch(warn('remove'))
     },
   }
 }
@@ -40,7 +49,8 @@ export async function loadKeychainTokenOnIos(
   let saved: string | null = null
   try {
     saved = (await keychain.get({ key: KEY })).value
-  } catch {
+  } catch (error) {
+    warn('read')(error)
     saved = null
   }
   setTokenStore(keychainTokenStore(keychain, saved))

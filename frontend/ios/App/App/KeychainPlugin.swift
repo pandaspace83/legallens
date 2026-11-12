@@ -6,7 +6,9 @@ import Security
 // Keeps the session token in the iOS Keychain (AS-4.2, DEC-104), behind Face ID (AS-4.2b, DEC-107).
 //
 // - Reading the token needs the device owner: Face ID, or the device passcode if Face ID fails or is off. The read
-//   happens once, at launch, so opening the app asks for Face ID before anything loads.
+//   happens once, at launch, so opening the app asks for Face ID before anything loads. The prompt is an explicit
+//   LocalAuthentication check (the simulator does not enforce Keychain access control, so the item's guard alone
+//   could not be tested there); on a device the item's access control enforces it as well.
 // - Writing and deleting do not prompt.
 // - The item exists only while the iPhone has a passcode (WhenPasscodeSetThisDeviceOnly): it is never in a backup,
 //   never synced to iCloud, and iOS deletes it if the passcode is removed. With no passcode the token is not saved
@@ -39,17 +41,32 @@ public class KeychainPlugin: CAPPlugin, CAPBridgedPlugin {
         SecItemDelete(query(key, service: legacyService) as CFDictionary)
     }
 
+    /// Whether a saved sign-in exists, without reading it and without any prompt.
+    private func exists(_ key: String) -> Bool {
+        let silent = LAContext()
+        silent.interactionNotAllowed = true
+        var q = query(key, service: service)
+        q[kSecReturnAttributes as String] = true
+        q[kSecMatchLimit as String] = kSecMatchLimitOne
+        q[kSecUseAuthenticationContext as String] = silent
+        return SecItemCopyMatching(q as CFDictionary, nil) != errSecItemNotFound
+    }
+
+    // Two layers: an explicit Face ID (or passcode) check, then the read with that same authenticated context. The
+    // item's own access control still demands it on a device, so skipping the check cannot read the token. The check
+    // runs only when a sign-in is saved, so a first launch or a launch after signing out asks for nothing.
     @objc func get(_ call: CAPPluginCall) {
         guard let key = call.getString("key") else { return call.reject("key is required") }
         removeLegacy(key)
+        guard exists(key) else { return call.resolve(["value": NSNull()]) }
         let context = LAContext()
-        context.localizedReason = "Unlock your LegalLens sign-in"
-        var q = query(key, service: service)
-        q[kSecReturnData as String] = true
-        q[kSecMatchLimit as String] = kSecMatchLimitOne
-        q[kSecUseAuthenticationContext as String] = context
-        // SecItemCopyMatching waits while the Face ID prompt is up, so it stays off the main thread.
-        DispatchQueue.global(qos: .userInitiated).async {
+        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Unlock your LegalLens sign-in") { ok, _ in
+            // Cancelled, failed, locked out or no passcode any more: start at sign-in and keep the saved token.
+            guard ok else { return call.resolve(["value": NSNull(), "canceled": true]) }
+            var q = self.query(key, service: self.service)
+            q[kSecReturnData as String] = true
+            q[kSecMatchLimit as String] = kSecMatchLimitOne
+            q[kSecUseAuthenticationContext as String] = context
             var item: CFTypeRef?
             let status = SecItemCopyMatching(q as CFDictionary, &item)
             switch status {
